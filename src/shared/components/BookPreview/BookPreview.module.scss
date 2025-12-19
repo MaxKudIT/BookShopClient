@@ -1,0 +1,27 @@
+.book_wrapper {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(158, 179, 229, 0.4);
+    border-radius: 30px;
+    row-gap: 40px;
+    height: 600px;
+    width: 400px;
+    cursor: pointer;
+   
+}
+
+.desc_wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+    row-gap: 15px;
+}
+
+.genre_wrapper {
+    padding: 10px;
+    background-color: rgb(28, 15, 209);
+    border-radius: 20px;
+    font-size: 14px;
+    width: fit-content;
+    color: rgba(255,255,255,0.9)
+}

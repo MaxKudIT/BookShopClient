@@ -12,7 +12,7 @@ import { MdClear, MdOutlineEmail, MdLockOutline, MdOutlineVisibilityOff, MdOutli
 import styles from './Authorization.module.scss'
 import { buttonStyles, textFieldStyles } from './muiStyles';
 import { useState } from 'react';
-import { useAuth } from '../../store/AuthStore';
+import { useAuth } from '../../store/context/AuthContext';
 import { validateEmail, validatePassword } from '../../shared/helpers/validateForm';
 
 

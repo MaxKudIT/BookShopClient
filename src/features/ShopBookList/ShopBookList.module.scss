@@ -1,0 +1,21 @@
+.books_global_style {
+    padding: 0 30px;
+    background: rgba(255,255,255,0.5);
+   padding-bottom: 30px;
+   overflow-x: hidden
+}
+
+.title_row {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    color: gray
+}
+
+.book_list_container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr; /* 3 ряда фиксированной высоты */
+    gap: 15px;
+    row-gap: 60px;
+}

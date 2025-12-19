@@ -3,19 +3,28 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import AuthPage from './pages/Auth/AuthPage'
 
 import './index.css'
-import { AuthProvider } from './store/AuthStore'
+import { AuthProvider } from './store/context/AuthContext'
+import HomePage from './pages/Home/HomePage'
+import { SearchingProvider } from './store/context/SearchContext'
 
 
 const router = createBrowserRouter([
     {
-        element: <AuthPage/>,
+        element: <AuthPage />,
+        path: '/1'
+    },
+    {
+        element: <HomePage />,
         path: '/'
     }
 ])
 
 createRoot(document.getElementById('root')!).render(
-    <AuthProvider>
-          <RouterProvider router={router}/>
-    </AuthProvider>
-  
+    <SearchingProvider>
+        <AuthProvider>
+            <RouterProvider router={router} />
+        </AuthProvider>
+    </SearchingProvider>
+
+
 )

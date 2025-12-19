@@ -10,7 +10,7 @@ import { MdClear, MdOutlineEmail, MdLockOutline, MdDriveFileRenameOutline, MdOut
 import styles from './Registration.module.scss'
 import { buttonStyles, textFieldStyles } from './muiStyle';
 import { useState } from 'react';
-import { useAuth } from '../../store/AuthStore';
+import { useAuth } from '../../store/context/AuthContext';
 import { validateEmail, validateLogin, validatePassword } from '../../shared/helpers/validateForm';
 
 
