@@ -1,0 +1,69 @@
+.registration_container {
+    height: 70%;
+    width: 25%;
+    background-color: rgb(240, 238, 238);
+    max-width: 600px;
+    min-width: 500px;
+    min-height: 500px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-top-right-radius: 50px;
+}
+
+.registration_wrapper_column {
+    height: 100%;
+    width: 80%;
+    padding: 70px 0;
+}   
+
+
+.head_text_block {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+   
+}
+
+.text_field_block {
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+    padding: 20px 0;
+}
+
+.href_block {
+    display: flex;
+    column-gap: 5px;
+    margin-top: 15px;
+    font-size: 14px;
+    p {
+        color: rgb(24, 23, 23)
+    }   
+    span {
+        color: rgb(14, 36, 238);
+        font-weight: bold;
+        cursor: pointer;
+    }
+ 
+}
+
+.unactive {
+    position: relative;
+    pointer-events: none !important; 
+}
+
+.unactive::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8); 
+    border-top-right-radius: 50px; 
+   
+    z-index: 3;
+}
