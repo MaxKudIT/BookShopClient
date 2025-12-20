@@ -10,6 +10,7 @@ export const textFieldStyles = {
 export const buttonStyles = {
   width: '100%',
   height: 45,
+  boxShadow: 'none',
   borderRadius: 2,
   letterSpacing: 0.7,
    textTransform: 'none',

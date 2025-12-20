@@ -7,8 +7,13 @@
     height: 600px;
     width: 400px;
     cursor: pointer;
-   
+    transition: all 0.4s;
+    &:hover {
+       background-color: rgba(64, 110, 216, 0.8);
+    }    
 }
+
+
 
 .desc_wrapper {
     display: flex;
