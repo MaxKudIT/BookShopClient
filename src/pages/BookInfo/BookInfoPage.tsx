@@ -2,16 +2,16 @@ import { Helmet } from "react-helmet";
 import { BookInfoModule } from "../../modules/BookInfo/BookInfo";
 
 
-const HomePage = () =>
+const BookInfo = () =>
   {
     return (
         <>
         <Helmet>
-           <title>Название книги будет</title>
+           <title>MaxBook</title>
         </Helmet>
         <BookInfoModule/> 
         </>
     )
   }
 
-  export default HomePage;
+  export default BookInfo;

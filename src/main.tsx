@@ -7,6 +7,8 @@ import { AuthProvider } from './store/context/AuthContext'
 import HomePage from './pages/Home/HomePage'
 import { SearchingProvider } from './store/context/SearchContext'
 import BookInfoPage from './pages/BookInfo/BookInfoPage'
+import MyBooksPage from './pages/MyBooks/MyBooksPage'
+import BookPage from './pages/BookPage/BookPage'
 
 
 const router = createBrowserRouter([
@@ -16,10 +18,18 @@ const router = createBrowserRouter([
     },
     {
         element: <HomePage />,
-        path: '/1'
+        path: '/11'
     },
     {
         element: <BookInfoPage/>,
+        path: '/2'
+    },
+    {
+        element: <MyBooksPage/>,
+        path: '/1'
+    },
+    {
+        element: <BookPage/>,
         path: '/'
     }
 ])

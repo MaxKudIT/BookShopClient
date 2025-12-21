@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type FC } from "react";
 import styles from './Header.module.scss'
 import { PiBooks, PiFunnelBold } from "react-icons/pi";
 import { MdOutlineAccountCircle } from "react-icons/md";
@@ -29,10 +29,15 @@ import {
 import { selectStyles, textFieldStyles } from "./muiStyles";
 import type { Genres } from "../../types";
 import { useSearch, type GenresDropDown } from "../../../store/context/SearchContext";
-
+import { IoBookOutline } from "react-icons/io5";
 export const genresKeys: GenresDropDown[] = ['Все жанры', 'Приключения', 'Драма', 'Ужасы', 'Исторические', 'Фантастика']
 
-const HeaderComponent = () => {
+export type HeaderProps = {
+  myBooksPage: boolean
+}
+
+
+const HeaderComponent: FC<HeaderProps> = ({myBooksPage}) => {
   const { setsearchingValue, setGenre } = useSearch()
   
   // Данные пользователя (можно вынести в контекст/стейт)
@@ -47,16 +52,26 @@ const HeaderComponent = () => {
       <div className={styles.header_first_row}>
         <div className={styles.first_start_block_wrapper}>
           <div style={{ background: 'rgba(255,255,255, 0.2)', borderRadius: 10, padding: 5, }}>
-            <PiBooks style={{ fontSize: 40, color: 'white' }} />
+            <IoBookOutline style={{ fontSize: 40, color: 'white' }} />
           </div>
 
-          <div className={styles.text_wrapper}>
+          {myBooksPage ? (
+             <div className={styles.text_wrapper}>
+            <p style={{ color: 'white', fontSize: 22 }}>Мои книги</p>
+            <p style={{ color: 'rgba(255,255,255, 0.5)' }}>Ваш мир литературы</p>
+          </div>
+          ) : (
+             <div className={styles.text_wrapper}>
             <p style={{ color: 'white', fontSize: 22 }}>Книжный магазин</p>
             <p style={{ color: 'rgba(255,255,255, 0.5)' }}>Каждый найдет книгу по душе</p>
           </div>
-        </div>
+          )}
 
-        <Tooltip
+        
+        </div>
+          <div style={{display: 'flex', alignItems: 'center', columnGap: 15}}>
+              <PiBooks style={{ fontSize: 35, color: 'white' }} />
+             <Tooltip
           title={
             <Box sx={{ p: 1, minWidth: 250 }}>
           
@@ -99,8 +114,8 @@ const HeaderComponent = () => {
                 </ListItem>
 
                 <Divider sx={{ my: 1 }} />
-
-                <ListItem 
+                {!myBooksPage && (
+                   <ListItem 
                   disablePadding
                  
                   onClick={() => console.log('Переход к моим книгам')}
@@ -117,6 +132,8 @@ const HeaderComponent = () => {
                     secondary={`${userData.booksCount} книг`}
                   />
                 </ListItem>
+                )}
+               
 
         
                 <ListItem 
@@ -168,6 +185,8 @@ const HeaderComponent = () => {
             />
           </IconButton>
         </Tooltip>
+          </div>
+       
       </div>
 
       <div className={styles.header_second_row}>
@@ -176,7 +195,7 @@ const HeaderComponent = () => {
           sx={textFieldStyles}
           variant="filled"
           label="Поиск"
-          placeholder="Остров сокровищ"
+          placeholder="Гарри Поттер"
           slotProps={{
             input: {
               startAdornment:

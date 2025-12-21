@@ -1,15 +1,17 @@
 import React from "react";
-import styles from './Home.module.scss'
+import styles from './MyBooks.module.scss'
+
 import ShopBookList from "../../features/ShopBookList/ShopBookList";
 import HeaderComponent from "../../shared/components/Header/HeaderComponent";
-const Home = () =>
+import MyBooksList from "../../features/MyBooks/MyBooksList";
+const MyBooks = () =>
   {
     return (
       <div className={styles.home_container}>
-        <HeaderComponent myBooksPage={false}/>
-        <ShopBookList/>
+        <HeaderComponent myBooksPage={true}/>
+        <MyBooksList/>
       </div>
     )
   }
 
-  export default Home;
+  export default MyBooks;
