@@ -53,7 +53,7 @@ export const buttonStyles = {
   borderRadius: 2,
   fontSize: '15px',
   fontWeight: 'bold',
-  color: '#2735f7ff',
+  color: 'rgba(46, 5, 160, 0.9)',
   boxShadow: 'none',
   position: 'relative',
 

@@ -5,7 +5,7 @@ export const textFieldStyles = {
   width: '65%',
   '& .MuiFilledInput-root': {   
     height: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+    backgroundColor: 'rgba(255, 255, 255, 0.1)', 
     borderRadius: 3, 
     
  
@@ -14,26 +14,29 @@ export const textFieldStyles = {
       display: 'none', 
     },
 
+    
+
     '&:hover': {
-      backgroundColor: 'rgba(231, 230, 230, 0.9)', 
+      backgroundColor: 'rgba(255, 255, 255, 0.2)', 
     },
     
     '&.Mui-focused': {
-      backgroundColor: '#ffffff',
+      backgroundColor: 'rgba(255, 255, 255, 0.2)',
      
     },
     
   },
   '& .MuiFilledInput-input': {
-    color: '#333333', 
+    color: 'rgba(255,255,255,0.9)', 
     fontSize: '14px',
     fontWeight: 400,
+    
 
   },
   '& .Mui-focused': {
   '& .MuiInputAdornment-root': {
     '& svg': {
-        color: '#0e7ac2ff !important'
+        color: 'rgba(168, 157, 223, 1) !important'
     },
   },
 },
@@ -41,16 +44,14 @@ export const textFieldStyles = {
     '& svg': {
       color: '#666666', 
     },
-     '&.Mui-focused': {
-      color: 'red !important', 
-    },
+   
   },
   
   '& .MuiInputLabel-root': {
     color: '#666666 !important',
     fontSize: 14,
     '&.Mui-focused': {
-      color: '#0e7ac2ff !important', 
+      color: 'rgba(168, 157, 223, 1) !important', 
     },
   },
 
@@ -71,22 +72,21 @@ export const textFieldStyles = {
 export const selectStyles = {
   formControl: {
     width: 250,
-  
     '& .MuiOutlinedInput-root': {
-      backgroundColor: '#FFFFFF', 
+      backgroundColor: 'rgba(255, 255, 255, 0.1)', 
       borderRadius: '8px',
-        fontSize: 15,
+        fontSize: 14,
       width: '100%',
       '&:hover': {
-        backgroundColor: 'rgba(231, 230, 230, 0.9)',
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
         '& .MuiOutlinedInput-notchedOutline': {
-          borderColor: '#BDBDBD',
+          border: 'none',
         },
       },
       
       '&.Mui-focused': {
-        backgroundColor: '#FFFFFF !important',
-        boxShadow: '0 0 0 2px rgba(13, 71, 161, 0.2)',
+        backgroundColor: 'rgba(255, 255, 255, 0.2) !important',
+        boxShadow: 'none',
         '& .MuiOutlinedInput-notchedOutline': {
        
           borderWidth: 0,
@@ -97,20 +97,21 @@ export const selectStyles = {
   
   inputLabel: {
     color: '#666666',
-    fontSize: 15,
+    fontSize: 14,
     '&.Mui-focused': {
-      color: '#0D47A1', 
-      fontWeight: 600,
+      color: 'rgba(255,255,255,0.9)', 
+   
     }
   },
   
   select: {
 
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    
     borderRadius: '8px',
     width: 300,
-    color: '#0D47A1', 
-    fontWeight: 500,
+    color: 'rgba(255,255,255,0.9)', 
+
     
     '&:before, &:after': { 
       display: 'none' 
@@ -118,10 +119,10 @@ export const selectStyles = {
     
     '& .MuiSelect-select': {
       padding: '12px 14px',
-      color: '#0D47A1',
+      color: 'rgba(255,255,255,0.9)',
       
       '&:hover': {
-        backgroundColor: 'rgba(13, 71, 161, 0.04)', 
+        backgroundColor: 'rgba(85, 70, 117, 0.9)', 
         borderRadius: '8px',
       },
       
@@ -133,7 +134,7 @@ export const selectStyles = {
     
  
     '& .MuiSelect-icon': {
-      color: '#0D47A1', 
+      color: 'rgba(255,255,255,0.9)', 
     },
   },
 
@@ -141,22 +142,22 @@ export const selectStyles = {
     marginTop: '8px',
     borderRadius: '8px',
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-
+    background: 'rgba(95, 97, 134, 1)',
     '& .MuiMenuItem-root': {
-      color: '#333333',
+      color: 'rgba(255,255,255, 1)',
+      borderBottom: '1px solid rgba(86, 86, 112, 0.7)',
       padding: '10px 16px',
-          fontSize: 15,
+          fontSize: 14,
       '&:hover': {
-        backgroundColor: 'rgba(13, 71, 161, 0.04)',
+        backgroundColor: 'rgba(255,255,255,0.2)',
       },
       
       '&.Mui-selected': {
-        backgroundColor: 'rgba(13, 71, 161, 0.08)',
-        color: '#0D47A1',
-        fontWeight: 500,
-        
+        backgroundColor: 'rgba(85, 70, 117, 0.9) !important',
+        color: '#ffffffff',
+
         '&:hover': {
-          backgroundColor: 'rgba(13, 71, 161, 0.12)',
+          backgroundColor: 'rgba(62, 29, 139, 0.4) !important',
         },
       },
     },

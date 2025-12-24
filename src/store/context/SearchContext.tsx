@@ -12,14 +12,49 @@ export const SearchingContext = createContext<{
     searchingValue: string,
     setsearchingValue: (value: string) => void,
     selectedGenre: GenresDropDown,
-    setGenre: (type: GenresDropDown) => void
+    setGenre: (type: GenresDropDown) => void,
 }
 >({
     searchingValue: '',
-    setsearchingValue: (value: string) => {},
+    setsearchingValue: () => {},
      selectedGenre: 'Все жанры',
      setGenre: () => {}
 })
+
+
+export const MyBooksSearchingContext = createContext<{
+    searchingValue: string,
+    setsearchingValue: (value: string) => void,
+    selectedGenre: GenresDropDown,
+    setGenre: (type: GenresDropDown) => void,
+}
+>({
+    searchingValue: '',
+    setsearchingValue: () => {},
+     selectedGenre: 'Все жанры',
+     setGenre: () => {}
+});
+
+
+
+
+export const MyBooksSearchingProvider: FC<{children: ReactNode}> = ({children}) => {
+
+    const [searchingValue, setsearchingValue] = useState<string>('')
+
+ 
+
+    const [selectedGenre, setGenre] = useState<GenresDropDown>('Все жанры')
+
+
+
+
+    return (
+        <MyBooksSearchingContext.Provider value={{searchingValue, setsearchingValue, selectedGenre, setGenre}}>
+            {children}
+        </MyBooksSearchingContext.Provider>
+    );
+};
 
 
 
@@ -43,3 +78,4 @@ export const SearchingProvider: FC<{children: ReactNode}> = ({children}) => {
 };
 
 export const useSearch = () => useContext(SearchingContext);
+export const useMyBooksSearch = () => useContext(MyBooksSearchingContext)

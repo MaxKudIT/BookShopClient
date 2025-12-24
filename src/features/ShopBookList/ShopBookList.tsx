@@ -59,7 +59,72 @@ const ShopBookList = () => {
       genre: 'Фантастика',
       price: 1599,
       isAvailable: false
-    }
+    },
+     {
+      id: '1',
+      title: 'Остров сокровищ',
+      image: 'https://avatars.mds.yandex.net/i?id=fabf4f0cae4cfa4ccd4cfa87485183dd_l-16509560-images-thumbs&n=13',
+      genre: 'Приключения',
+      price: 699,
+      isAvailable: true
+    },
+    {
+      id: '3',
+      title: 'Сердце пармы',
+      image: 'https://avatars.mds.yandex.net/get-mpic/5189780/2a00000193e3523c621eac68f04adc636ddb/orig',
+      genre: 'Исторические',
+      price: 0,
+      isAvailable: false
+    },
+    {
+      id: '4',
+      title: 'Оно',
+      image: 'https://avatars.mds.yandex.net/get-mpic/3980374/2a00000192064ba21f53d7ec034b6a20677f/orig',
+      genre: 'Ужасы',
+      price: 1299,
+      isAvailable: true
+    },
+   
+    {
+      id: '6',
+      title: 'Человек-паук',
+      image: 'https://cdn1.ozone.ru/s3/multimedia-3/c600/6799258983.jpg',
+      genre: 'Фантастика',
+      price: 1599,
+      isAvailable: false
+    },
+        {
+      id: '6',
+      title: 'Человек-паук',
+      image: 'https://cdn1.ozone.ru/s3/multimedia-3/c600/6799258983.jpg',
+      genre: 'Фантастика',
+      price: 1599,
+      isAvailable: false
+    },
+     {
+      id: '1',
+      title: 'Остров сокровищ',
+      image: 'https://avatars.mds.yandex.net/i?id=fabf4f0cae4cfa4ccd4cfa87485183dd_l-16509560-images-thumbs&n=13',
+      genre: 'Приключения',
+      price: 699,
+      isAvailable: true
+    },
+    {
+      id: '3',
+      title: 'Сердце пармы',
+      image: 'https://avatars.mds.yandex.net/get-mpic/5189780/2a00000193e3523c621eac68f04adc636ddb/orig',
+      genre: 'Исторические',
+      price: 0,
+      isAvailable: false
+    },
+        {
+      id: '5',
+      title: 'Исторические драмы',
+      image: 'https://avatars.mds.yandex.net/get-marketpic/196254/picefcf81316b763403498926747a41346b/orig',
+      genre: 'Драма',
+      price: 399,
+      isAvailable: false
+    },
   ]
 
 

@@ -1,11 +1,11 @@
 .authorization_container {
-    height: 70%;
-    width: 25%;
+    height: 65%;
+    width: 20%;
     background: linear-gradient(45deg, rgb(3, 6, 49), rgb(10, 4, 100));
     background: linear-gradient(145deg, 
-      rgb(3, 6, 49, 0.9) 0%, 
-      rgb(8, 5, 160, 0.9) 30%, 
-      rgb(38, 6, 156, 0.9) 70%
+      rgba(17, 3, 49, 0.9) 0%, 
+      rgba(46, 5, 160, 0.9) 30%, 
+      rgba(63, 6, 156, 0.9) 70%
     );
     max-width: 600px;
     min-width: 500px;
@@ -48,9 +48,10 @@
         color: white
     }   
     span {
-        color: rgb(38, 149, 240);
+        color: rgb(213, 116, 226);
         cursor: pointer;
         font-weight: bold;
+
     }
  
 }

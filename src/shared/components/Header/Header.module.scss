@@ -2,14 +2,16 @@
     width: 100%;
     height: 180px;
      background: linear-gradient(145deg, 
-      rgb(3, 6, 49, 0.9) 0%, 
-      rgb(8, 5, 160, 0.8) 30%, 
-      rgb(38, 6, 156, 0.8) 70%
+      rgba(9, 7, 54, 0.4) 0%, 
+      rgba(16, 11, 102, 0.4) 30%, 
+      rgba(22, 9, 58, 0.4) 70%
     );
+    background-color: rgba(9, 7, 54, 0.9);
     padding: 20px 30px;
     display: flex;
     flex-direction: column;
     row-gap: 20px;
+    border-bottom: 2px solid rgba(205,205,205,0.1);
 }
 
 .header_first_row {

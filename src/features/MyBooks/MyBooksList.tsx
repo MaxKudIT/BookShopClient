@@ -3,13 +3,13 @@ import styles from './MyBooksList.module.scss'
 import type { BookPreviewT, Genres } from "../../shared/types";
 import BookPreview from "../../shared/components/BookPreview/BookPreview";
 import { searchByPartial } from "../../shared/helpers/searchByPartial";
-import { useSearch } from "../../store/context/SearchContext";
+import { useMyBooksSearch, useSearch } from "../../store/context/SearchContext";
 
 
 
 const MyBooksList = () => {
 
-  const { searchingValue, selectedGenre } = useSearch()
+  const { searchingValue, selectedGenre } = useMyBooksSearch()
 
   const books: BookPreviewT[] = [
     {

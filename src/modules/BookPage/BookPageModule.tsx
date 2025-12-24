@@ -6,9 +6,10 @@ import { Box, Button, Divider, IconButton, List, ListItem, ListItemIcon, ListIte
 import { MdEmail, MdExitToApp, MdLibraryBooks, MdOutlineAccountCircle, MdPerson } from "react-icons/md";
 import { PiBooks } from "react-icons/pi";
 import LinearProgress from '@mui/material/LinearProgress';
-import { buttonStyles } from "./muiStyles";
+
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import ButtonForPage from "../../shared/components/ui/Button/Button";
+import { AiOutlineShopping } from "react-icons/ai";
 const BookPageModule = () => {
     return (
         <div className={styles.book_page_style}>
@@ -32,7 +33,7 @@ const BookPageModule = () => {
                         </div>
                     </div>
                     <div className={styles.header_second_block}>
-                        <PiBooks style={{ fontSize: 35, color: 'white' }} />
+                        <AiOutlineShopping  style={{ fontSize: 35, color: 'white' }} />
                         <Tooltip
                             title={
                                 <Box sx={{ p: 1, minWidth: 250 }}>

@@ -8,7 +8,7 @@ export const ColorChoiceFunc = (genre: Genres): string => {
         case 'Исторические': 
             return 'rgba(160, 95, 10, 1)'
         case 'Фантастика': 
-            return 'rgb(28, 15, 209)'
+            return 'rgba(48, 62, 189, 1)'
         case 'Ужасы': 
             return 'rgba(182, 11, 11, 1)'
         case 'Приключения': 
