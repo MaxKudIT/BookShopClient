@@ -4,6 +4,7 @@ import {
   Button,
   textFieldClasses,
   IconButton,
+  Alert,
 } from '@mui/material';
 import cn from 'classnames';
 import { MdClear, MdOutlineEmail, MdLockOutline, MdDriveFileRenameOutline, MdOutlineVisibilityOff, MdOutlineVisibility } from "react-icons/md";
@@ -12,6 +13,9 @@ import { buttonStyles, textFieldStyles } from './muiStyle';
 import { useState } from 'react';
 import { useAuth } from '../../store/context/AuthContext';
 import { validateEmail, validateLogin, validatePassword } from '../../shared/helpers/validateForm';
+import { useFirebaseAuth } from '../../shared/hooks/useFirebaseAuth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../shared/hooks/configs/firebase-config';
 
 
 export type RegFormType = {
@@ -23,6 +27,10 @@ export type RegFormType = {
 
 
 const Registration = () => {
+
+  const { register, loading, error, clearError } = useFirebaseAuth();
+
+  
 
 
   const [input, setInput] = useState<RegFormType>({ email: '', login: '', pass: '' })
@@ -38,6 +46,8 @@ const Registration = () => {
     pass: '',
   });
 
+
+  const [submitError, setSubmitError] = useState<string>('');
 
   const onChangeLogin = (e: any) => {
     const value = e.target.value;
@@ -60,6 +70,47 @@ const Registration = () => {
 
   }
 
+    const isFormValid = () => {
+    return (
+      input.email.length > 0 &&
+      input.login.length > 0 &&
+      input.pass.length > 0 &&
+      !errors.email &&
+      !errors.login &&
+      !errors.pass
+    );
+  };
+
+
+    const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+   
+    if (!isFormValid() || loading) {
+      return;
+    }
+    
+    try {
+    
+      const user = await register(input);
+      console.log(user)
+      
+      
+      setInput({ email: '', login: '', pass: '' });
+      setErrors({ login: '', email: '', pass: '' });
+      
+      
+    } catch (err: any) {
+    
+      console.error('Ошибка регистрации:', err);
+      setSubmitError(err.message || 'Произошла ошибка при регистрации');
+    }
+  };
+
+
+
+
+
+
 
   return (
     <div className={cn(
@@ -71,6 +122,17 @@ const Registration = () => {
           <p style={{ fontSize: 20 }}>Регистрация</p>
           <p style={{ color: '#535252ff', fontSize: 15, opacity: '0.8' }}>Создайте новый аккаунт</p>
         </div>
+
+          {(error || submitError) && (
+            <Alert 
+              severity="error" 
+              sx={{ width: '100%', background: 'rgba(216, 135, 124, 0.3)', borderRadius: 3, marginTop: 2 }}
+              onClose={() => { clearError(); setSubmitError(''); }}
+            >
+              {error || submitError}
+            </Alert>
+          )}
+
 
         <div className={styles.text_field_block}>
 
@@ -164,7 +226,9 @@ const Registration = () => {
         <Button
           sx={buttonStyles}
           variant="contained"
-          style={errors.login || errors.email || errors.pass || !input.email || !input.login || !input.pass ? {pointerEvents: 'none', opacity: 0.6 } : {pointerEvents: 'auto', opacity: 1}}
+          onClick={handleSubmit}
+          
+          style={(!isFormValid() || loading) ? {pointerEvents: 'none', opacity: 0.6 } : {pointerEvents: 'auto', opacity: 1}}
           >
             
           Зарегистрироваться
@@ -175,7 +239,10 @@ const Registration = () => {
           <span onClick={() => {
             setInput({email: '', pass: '', login: ''})
             setErrors({pass: '', login: '', email: ''})
+            clearError()
             setCurrentForm('login')
+            
+            setSubmitError('');
           } }>Войти</span>
         </div>
 

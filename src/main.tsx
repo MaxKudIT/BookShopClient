@@ -14,23 +14,23 @@ import BookPage from './pages/BookPage/BookPage'
 const router = createBrowserRouter([
     {
         element: <AuthPage />,
-        path: '/31'
-    },
-    {
-        element: <HomePage />,
-        path: '/1'
-    },
-    {
-        element: <BookInfoPage />,
         path: '/'
     },
     {
+        element: <HomePage />,
+        path: '/homepage'
+    },
+    {
+        element: <BookInfoPage />,
+        path: '/1'
+    },
+    {
         element: <MyBooksPage />,
-        path: '/21'
+        path: '/2'
     },
     {
         element: <BookPage />,
-        path: '/11'
+        path: '/2'
     }
 ])
 

@@ -2,6 +2,21 @@ export const textFieldStyles = {
     height: 43,
     '& .MuiInputBase-root': {   
         height: '100%',
+         '&:-webkit-autofill': {
+        WebkitTextFillColor: 'white',
+        WebkitBoxShadow: '0 0 0px 1000px transparent inset',
+        transition: 'background-color 5000s ease-in-out 0s',
+      },
+      
+      '&:-webkit-autofill:hover': {
+        WebkitTextFillColor: 'white',
+        WebkitBoxShadow: '0 0 0px 1000px transparent inset',
+      },
+      
+      '&:-webkit-autofill:focus': {
+        WebkitTextFillColor: 'white',
+        WebkitBoxShadow: '0 0 0px 1000px transparent inset',
+      },
     },
     
     
