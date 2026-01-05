@@ -153,7 +153,7 @@ export const selectStyles = {
       },
       
       '&.Mui-selected': {
-        backgroundColor: 'rgba(85, 70, 117, 0.9) !important',
+        backgroundColor: 'rgba(82, 72, 104, 0.9) !important',
         color: '#ffffffff',
 
         '&:hover': {

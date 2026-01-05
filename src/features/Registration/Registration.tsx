@@ -5,17 +5,22 @@ import {
   textFieldClasses,
   IconButton,
   Alert,
+  CircularProgress,
 } from '@mui/material';
 import cn from 'classnames';
 import { MdClear, MdOutlineEmail, MdLockOutline, MdDriveFileRenameOutline, MdOutlineVisibilityOff, MdOutlineVisibility } from "react-icons/md";
 import styles from './Registration.module.scss'
 import { buttonStyles, textFieldStyles } from './muiStyle';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../../store/context/AuthContext';
 import { validateEmail, validateLogin, validatePassword } from '../../shared/helpers/validateForm';
 import { useFirebaseAuth } from '../../shared/hooks/useFirebaseAuth';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+
 import { auth } from '../../shared/hooks/configs/firebase-config';
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from 'react-router-dom';
+import { usePost } from '../../shared/hooks/queries';
+
 
 
 export type RegFormType = {
@@ -28,9 +33,19 @@ export type RegFormType = {
 
 const Registration = () => {
 
+  const navigate = useNavigate();
+
+  const [user] = useAuthState(auth)
+
+    const {post} = usePost<{FirebaseId: string}, {id: string}>('/users/create');
+
   const { register, loading, error, clearError } = useFirebaseAuth();
 
-  
+  useEffect(() => {
+    if (user) {
+      console.log('вошел', user)
+    }
+  }, [user])
 
 
   const [input, setInput] = useState<RegFormType>({ email: '', login: '', pass: '' })
@@ -38,7 +53,7 @@ const Registration = () => {
   const [passIsVisible, setPassVisible] = useState<boolean>(false)
 
 
-  const {setCurrentForm, isCurrentForm} = useAuth()
+  const { setCurrentForm, isCurrentForm } = useAuth()
 
   const [errors, setErrors] = useState({
     login: '',
@@ -70,7 +85,7 @@ const Registration = () => {
 
   }
 
-    const isFormValid = () => {
+  const isFormValid = () => {
     return (
       input.email.length > 0 &&
       input.login.length > 0 &&
@@ -82,25 +97,30 @@ const Registration = () => {
   };
 
 
-    const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-   
+
     if (!isFormValid() || loading) {
       return;
     }
-    
+
     try {
-    
+
       const user = await register(input);
-      console.log(user)
+      await post({FirebaseId: user.uid})
       
-      
+
+      if (user) {
+        navigate('/', { replace: true })
+      }
+
+
       setInput({ email: '', login: '', pass: '' });
       setErrors({ login: '', email: '', pass: '' });
-      
-      
+
+
     } catch (err: any) {
-    
+
       console.error('Ошибка регистрации:', err);
       setSubmitError(err.message || 'Произошла ошибка при регистрации');
     }
@@ -115,7 +135,7 @@ const Registration = () => {
   return (
     <div className={cn(
       styles.registration_container,
-       isCurrentForm === 'login' && styles.unactive
+      isCurrentForm === 'login' && styles.unactive
     )}>
       <div className={styles.registration_wrapper_column}>
         <div className={styles.head_text_block}>
@@ -123,15 +143,15 @@ const Registration = () => {
           <p style={{ color: '#535252ff', fontSize: 15, opacity: '0.8' }}>Создайте новый аккаунт</p>
         </div>
 
-          {(error || submitError) && (
-            <Alert 
-              severity="error" 
-              sx={{ width: '100%', background: 'rgba(216, 135, 124, 0.3)', borderRadius: 3, marginTop: 2 }}
-              onClose={() => { clearError(); setSubmitError(''); }}
-            >
-              {error || submitError}
-            </Alert>
-          )}
+        {(error || submitError) && (
+          <Alert
+            severity="error"
+            sx={{ width: '100%', background: 'rgba(216, 135, 124, 0.3)', borderRadius: 3, marginTop: 2 }}
+            onClose={() => { clearError(); setSubmitError(''); }}
+          >
+            {error || submitError}
+          </Alert>
+        )}
 
 
         <div className={styles.text_field_block}>
@@ -144,9 +164,9 @@ const Registration = () => {
             onChange={onChangeLogin}
             fullWidth
             margin="normal"
-             helperText={errors.login}
-              error={!!errors.login}
-              
+            helperText={errors.login}
+            error={!!errors.login}
+
             slotProps={{
               input: {
                 startAdornment: (
@@ -161,10 +181,10 @@ const Registration = () => {
 
           <TextField
             sx={textFieldStyles}
-             value={input.email}
+            value={input.email}
             label="Почта"
-               
-            
+
+
             onChange={onChangeEmail}
             fullWidth
             margin="normal"
@@ -185,14 +205,14 @@ const Registration = () => {
           <TextField
 
             sx={textFieldStyles}
-              value={input.pass}
+            value={input.pass}
 
             label="Пароль"
             onChange={onChangePassword}
             type={passIsVisible ? 'text' : 'password'}
             fullWidth
             margin="normal"
-         
+
             error={!!errors.pass}
             helperText={errors.pass}
 
@@ -207,12 +227,12 @@ const Registration = () => {
                   <InputAdornment position="end">
                     <IconButton
                       onClick={() => setPassVisible(prev => !prev)}
-                      edge="end"     
+                      edge="end"
                       size="small"
                       aria-label={passIsVisible ? "Скрыть пароль" : "Показать пароль"}
-                     
+
                     >
-                      {passIsVisible ? <MdOutlineVisibilityOff color='gray'/> : <MdOutlineVisibility color='gray'/>}
+                      {passIsVisible ? <MdOutlineVisibilityOff color='gray' /> : <MdOutlineVisibility color='gray' />}
                     </IconButton>
                   </InputAdornment>
                 )
@@ -227,23 +247,31 @@ const Registration = () => {
           sx={buttonStyles}
           variant="contained"
           onClick={handleSubmit}
-          
-          style={(!isFormValid() || loading) ? {pointerEvents: 'none', opacity: 0.6 } : {pointerEvents: 'auto', opacity: 1}}
-          >
-            
-          Зарегистрироваться
+
+          style={(!isFormValid()) ? { pointerEvents: 'none', opacity: 0.6 } : { pointerEvents: 'auto', opacity: 1 }}
+        >
+          {loading ? <CircularProgress
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: 1,
+              color: 'white'
+            }}
+
+          /> : 'Зарегистрироваться'}
         </Button>
 
         <div className={styles.href_block}>
           <p>Уже есть аккаунт?</p>
           <span onClick={() => {
-            setInput({email: '', pass: '', login: ''})
-            setErrors({pass: '', login: '', email: ''})
+            setInput({ email: '', pass: '', login: '' })
+            setErrors({ pass: '', login: '', email: '' })
             clearError()
             setCurrentForm('login')
-            
+
             setSubmitError('');
-          } }>Войти</span>
+          }}>Войти</span>
         </div>
 
 

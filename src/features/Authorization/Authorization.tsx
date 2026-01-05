@@ -5,6 +5,7 @@ import {
   textFieldClasses,
   IconButton,
   Alert,
+  CircularProgress,
 } from '@mui/material';
 
 
@@ -17,6 +18,7 @@ import { useAuth } from '../../store/context/AuthContext';
 import { validateEmail, validatePassword } from '../../shared/helpers/validateForm';
 import { useNavigate } from 'react-router-dom';
 import { useFirebaseAuth } from '../../shared/hooks/useFirebaseAuth';
+import { usePost } from '../../shared/hooks/queries';
 
 
 export type LoginFormType = {
@@ -70,15 +72,22 @@ const Authorization = () => {
     try {
     
       const user = await login(input);      
-      
+   
+
+      if (user) {
+        navigate('/', {replace: true})
+      }
+
       setInput({ email: '', pass: '' });
       setErrors({email: '', pass: '' });
       
+
+
       
     } catch (err: any) {
     
-      console.error('Ошибка регистрации:', err);
-      setSubmitError(err.message || 'Произошла ошибка при регистрации');
+      console.error('Ошибка аутентификации:', err);
+      setSubmitError(err.message || 'Произошла ошибка при аутентификации');
     }
   };
 
@@ -208,7 +217,16 @@ const Authorization = () => {
           onClick={handleSubmit}
           style={errors.email || errors.pass || !input.email || !input.pass ? { pointerEvents: 'none', opacity: 0.6 } : { pointerEvents: 'auto', opacity: 1 }}
         >
-          Войти
+          {loading ? <CircularProgress
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: 1,
+              color: 'blue'
+            }}
+
+          /> : 'Войти'}
         </Button>
 
         <div className={styles.href_block}>

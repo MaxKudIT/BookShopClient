@@ -17,7 +17,8 @@ import {
   ListItemIcon,
   Divider,
   Box,
-  Typography
+  Typography,
+  ListItemButton
 } from "@mui/material";
 import { IoMdSearch } from "react-icons/io";
 import {
@@ -31,6 +32,10 @@ import { IoHomeOutline } from "react-icons/io5";
 import { useMyBooksSearch, useSearch, type GenresDropDown } from "../../../store/context/SearchContext";
 import { IoBookOutline } from "react-icons/io5";
 import { AiOutlineShopping } from "react-icons/ai";
+import { useFirebaseAuth } from "../../hooks/useFirebaseAuth";
+import { useNavigate } from "react-router-dom";
+import { getAuth } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 export const genresKeys: GenresDropDown[] = ['Все жанры', 'Приключения', 'Драма', 'Ужасы', 'Исторические', 'Фантастика']
 
 export type HeaderProps = {
@@ -40,14 +45,14 @@ export type HeaderProps = {
 
 const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
   const { setsearchingValue, setGenre } = useSearch()
-  const { setsearchingValue: setSearchingValueMy, setGenre: setGenreMy } = useMyBooksSearch()
-  // Данные пользователя (можно вынести в контекст/стейт)
-  const userData = {
-    email: "user@example.com",
-    login: "ivan_ivanov",
-    booksCount: 5
-  }
+  const { logout } = useFirebaseAuth()
+  const navigate = useNavigate();
 
+  const { setsearchingValue: setSearchingValueMy, setGenre: setGenreMy } = useMyBooksSearch()
+
+  const auth = getAuth();
+
+  const [user] = useAuthState(auth)
 
 
   useEffect(() => {
@@ -90,110 +95,140 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', columnGap: 25 }}>
           {myBooksPage ? (
-             <AiOutlineShopping style={{ fontSize: 35, color: 'white' }} />
+            <AiOutlineShopping onClick={() => {navigate('/')}} style={{ fontSize: 35, color: 'white', cursor: 'pointer' }} />
           ) : (
-             <IoHomeOutline style={{ fontSize: 30, color: 'white' }} />
+            <IoHomeOutline onClick={() => {navigate('/mybooks')}} style={{ fontSize: 30, color: 'white', cursor: 'pointer' }} />
           )}
-         
+
           <Tooltip
+
             title={
-              <Box sx={{ p: 1, minWidth: 250 }}>
+              <Box sx={{
+                borderRadius: 2,
+                pb: 1, pt: 1, background: 'rgba(95, 97, 134, 1)',
+                '& svg': {
+                  color: 'rgba(153, 154, 179, 1)',
+                  fontSize: '20px',
 
-                <List dense disablePadding>
-                  <ListItem disablePadding sx={{ mb: 1 }}>
-                    <ListItemIcon sx={{ minWidth: 36 }}>
-                      <MdEmail fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={
-                        <Typography variant="body2" color="text.secondary">
-                          Email
-                        </Typography>
-                      }
-                      secondary={
-                        <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
-                          {userData.email}
-                        </Typography>
-                      }
-                    />
-                  </ListItem>
+                }
 
 
-                  <ListItem disablePadding sx={{ mb: 2 }}>
-                    <ListItemIcon sx={{ minWidth: 36 }}>
-                      <MdPerson fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={
-                        <Typography variant="body2" color="text.secondary">
-                          Логин
-                        </Typography>
-                      }
-                      secondary={
-                        <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
-                          {userData.login}
-                        </Typography>
-                      }
-                    />
-                  </ListItem>
-
-                  <Divider sx={{ my: 1 }} />
-                  {!myBooksPage && (
-                    <ListItem
-                      disablePadding
-
-                      onClick={() => console.log('Переход к моим книгам')}
-                      sx={{
-                        borderRadius: 1,
-                        '&:hover': { backgroundColor: 'action.hover' }
-                      }}
-                    >
-                      <ListItemIcon sx={{ minWidth: 36 }}>
-                        <MdLibraryBooks fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText
-                        primary="Мои книги"
-                        secondary={`${userData.booksCount} книг`}
-                      />
-                    </ListItem>
-                  )}
+              }}>
 
 
+                <ListItem sx={{pl: 1.5, pr: 1.5}} disablePadding>
+                  <ListItemIcon sx={{ minWidth: 36 }}>
+                    <MdEmail fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Typography fontSize={14} color='rgba(211, 211, 221, 1)'>
+                        Email
+                      </Typography>
+                    }
+                    secondary={
+                      <Typography fontSize={14} sx={{ fontWeight: 'medium' }}>
+                        {user?.email}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
 
-                  <ListItem
-                    disablePadding
 
-                    onClick={() => console.log('Выход')}
+                <ListItem sx={{pl: 1.5, pr: 1.5}} disablePadding>
+                  <ListItemIcon sx={{ minWidth: 36 }}>
+                    <MdPerson fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Typography fontSize={14} color='rgba(211, 211, 221, 1)'>
+                        Логин
+                      </Typography>
+                    }
+                    secondary={
+                      <Typography fontSize={14} sx={{ fontWeight: 'medium' }}>
+                        {user?.displayName}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+
+                <Divider sx={{ my: 1 }} />
+                {!myBooksPage && (
+                  <ListItemButton
+
+                    onClick={() => {navigate('/mybooks')}}
                     sx={{
-                      borderRadius: 1,
+                  
                       mt: 1,
-                      '&:hover': { backgroundColor: 'action.hover' }
+                      pt: 0,
+                      pb: 0,
+                      pl: 1.5,
+                      pr: 1.5,
+                      height: 40,
+                      '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
                     }}
                   >
                     <ListItemIcon sx={{ minWidth: 36 }}>
-                      <MdExitToApp fontSize="small" />
+                      <MdLibraryBooks fontSize="small" />
                     </ListItemIcon>
                     <ListItemText
-                      primary="Выйти"
-                      primaryTypographyProps={{
-                        color: 'error.main'
+                      sx={{
+                        '& .MuiListItemText-primary': {
+                          fontSize: 14,
+                        },
+                  
                       }}
+                      primary="Мои книги"
+
+
                     />
-                  </ListItem>
-                </List>
+                  </ListItemButton>
+                )}
+
+
+                <Divider sx={{ my: 1 }} />
+
+                <ListItemButton
+            
+                  onClick={() => { logout(); navigate('/auth') }}
+                  sx={{
+                   
+                    mt: 1,
+                    pb: 0,
+                    pt: 0,
+                    pl: 1.5,
+                    pr: 1.5,
+                    height: 40,
+                    '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
+                  }}
+                >
+                  <ListItemIcon sx={{ minWidth: 36 }}>
+                    <MdExitToApp fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText sx={{
+                    '& .MuiListItemText-primary': {
+                      fontSize: 14,
+                    }
+                  }} primary="Выйти" />
+                </ListItemButton>
+
               </Box>
             }
             placement="bottom-end"
             arrow
-            componentsProps={{
+            slotProps={{
               tooltip: {
                 sx: {
-                  backgroundColor: 'white',
-                  color: 'text.primary',
-                  boxShadow: 3,
+
+                  backgroundColor: 'transparent',
+                  padding: 0,
+                  boxShadow: 'none',
+                  maxWidth: 'none',
                   '& .MuiTooltip-arrow': {
-                    color: 'white',
-                  }
+                    color: 'rgba(153, 154, 179, 1)',
+                  },
+
                 }
               }
             }}

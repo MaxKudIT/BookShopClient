@@ -121,35 +121,7 @@ export const useFirebaseAuth = () => {
 
 
 
-  const getCurrentUser = useCallback(async () => {
-    try {
-      setLoading(true);
-      const currentUser = auth.currentUser;
-      
-      if (!currentUser) {
-        return null;
-      }
-
-
-      const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-      
-      if (userDoc.exists()) {
-        const userData = {
-          ...currentUser,
-          ...userDoc.data()
-        };
-        setUser(userData);
-        return userData;
-      }
-
-      return currentUser;
-    } catch (err) {
-      setError('Ошибка получения данных пользователя');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  
 
 
   const clearError = useCallback(() => {
@@ -165,7 +137,7 @@ export const useFirebaseAuth = () => {
     register,
     login,
     logout,
-    getCurrentUser,
+
     clearError
   };
 };

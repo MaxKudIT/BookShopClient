@@ -9,37 +9,46 @@ import { MyBooksSearchingProvider, SearchingProvider } from './store/context/Sea
 import BookInfoPage from './pages/BookInfo/BookInfoPage'
 import MyBooksPage from './pages/MyBooks/MyBooksPage'
 import BookPage from './pages/BookPage/BookPage'
+import { protectedLoader, publicLoader } from './shared/routing/loaders'
 
 
 const router = createBrowserRouter([
     {
         element: <AuthPage />,
-        path: '/'
+        path: '/auth',
+        loader: publicLoader 
     },
     {
         element: <HomePage />,
-        path: '/homepage'
+        path: '/',
+        loader: protectedLoader
     },
     {
         element: <BookInfoPage />,
-        path: '/1'
+        path: '/bookinfo',
+       loader: protectedLoader
     },
     {
         element: <MyBooksPage />,
-        path: '/2'
+        path: '/mybooks',
+       loader: protectedLoader
     },
     {
         element: <BookPage />,
-        path: '/2'
+        path: '/:id',
+       loader: protectedLoader
     }
 ])
 
 createRoot(document.getElementById('root')!).render(
     <SearchingProvider>
         <MyBooksSearchingProvider>
-            <AuthProvider>
+         
+                 <AuthProvider>
                 <RouterProvider router={router} />
             </AuthProvider>
+           
+           
         </MyBooksSearchingProvider>
 
     </SearchingProvider>

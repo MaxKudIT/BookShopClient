@@ -8,10 +8,11 @@ export type Genres =
 
 
 export type BookPreviewT = {
-    id: string
-    title: string
-    genre: Genres
-    image: string,
-    price: number,
-    isAvailable: boolean
+    Id: string
+    Title: string
+    Genre: Genres
+    Price: number
+    ImageUrl: string,
+    Discount: number,
+    IsMine: boolean
 }
