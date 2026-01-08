@@ -92,6 +92,7 @@ export const useFirebaseAuth = () => {
     } catch (err: any) {
       console.log(err)
       const errorMessage = getErrorMessage(err.code, 'login');
+      console.log(errorMessage)
       setError(errorMessage);
       throw new Error(errorMessage);
     } finally {
@@ -154,6 +155,7 @@ type RegisterErrors = {
 
 
 type LoginErrors = {
+      'auth/invalid-credential': string,
      'auth/user-not-found': string,
       'auth/wrong-password': string,
       'auth/invalid-email': string,
@@ -177,6 +179,7 @@ const getErrorMessage = (errorCode: FirebaseAuthErrorCode, action: 'register' | 
       'default': 'Ошибка при регистрации'
     },
     login: {
+      'auth/invalid-credential': 'Введены некорректные данные',
       'auth/user-not-found': 'Пользователь не найден',
       'auth/wrong-password': 'Неверный пароль',
       'auth/invalid-email': 'Неверный формат email',

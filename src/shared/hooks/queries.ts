@@ -30,7 +30,7 @@ export const usePost = <Req, Res>(path: string): UsePostResult<Req, Res> => {
       return result;
 
     } catch (err: any) {
-      const errorMessage = err?.response?.data?.error || 'Произошла ошибка';
+      const errorMessage = err?.response?.data?.error || 'Сервер не активен, немного подождите...';
       setError(errorMessage);
       throw err;
 
@@ -81,7 +81,7 @@ export const useGet = <Res>(path: string): UseGetResult<Res> => {
 
     } catch (err: any) {
 
-      const errorMessage = err?.response?.data?.error || 'Произошла ошибка';
+      const errorMessage = err?.response?.data?.error || 'Сервер не активен, немного подождите...';
       setError(errorMessage);
       throw err;
 

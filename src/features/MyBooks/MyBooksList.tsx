@@ -1,18 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styles from './MyBooksList.module.scss'
 import type { BookPreviewT, Genres } from "../../shared/types";
-import BookPreview from "../../shared/components/BookPreview/BookPreview";
-import { searchByPartial } from "../../shared/helpers/searchByPartial";
-import { useMyBooksSearch, useSearch } from "../../store/context/SearchContext";
 import { useGet } from "../../shared/hooks/queries";
 import { getAuth } from "firebase/auth";
 import { CircularProgress } from "@mui/material";
+import BookList from "../../shared/components/BookList/BookList";
 
 
 
 const MyBooksList = () => {
 
- const { searchingValue, selectedGenre } = useSearch()
+
   const { get, loading, error } = useGet<{Books: BookPreviewT[]}>('books/my');
   
   const [books, setBooks] = useState<BookPreviewT[]>([])
@@ -40,38 +38,6 @@ const MyBooksList = () => {
 
 
 
-  function filterBySearch(books: BookPreviewT[], searchValue: string): BookPreviewT[] {
-    if (!searchValue) return books;
-    return books.filter(({ Title }: BookPreviewT) => searchByPartial(searchValue, Title));
-  }
-
-  function filterByCategory(books: BookPreviewT[], genreSelected: Genres | 'Все жанры'): BookPreviewT[] {
-    if (genreSelected === 'Все жанры') {
-      return books
-    }
-    return books.filter(({ Genre }: BookPreviewT) => Genre === genreSelected);
-  }
-
-
-  const filteredBooks = useMemo(() => {
-    
-    let result: BookPreviewT[] = books;
-    console.log(result)
-    if (searchingValue) {
-      result = filterBySearch(books, searchingValue)
-    }
-
-
-    if (selectedGenre !== 'Все жанры') {
-      result = filterByCategory(result, selectedGenre)
-    }
-    
-    return result;
-  }, [books, searchingValue, selectedGenre, loading]);
-
-
-
-  const countFoundBooks = filteredBooks.length;
 
   if (loading) {
     return (
@@ -102,26 +68,7 @@ const MyBooksList = () => {
 
   return (
     <div className={styles.books_global_style}>
-      <div className={styles.title_row}>
-        Найдено книг: {countFoundBooks}
-      </div>
-
-      <div className={styles.book_list_container}>
-        {
-          filteredBooks.map(book => (
-            <BookPreview
-              Price={book.Price}
-              IsMine={book.IsMine}
-              key={book.Id}
-              Id={book.Id}
-              Genre={book.Genre}
-              Title={book.Title}
-              ImageUrl={book.ImageUrl}
-              Discount={book.Discount}
-            />
-          ))
-        }
-      </div>
+      <BookList viewPage="home" list={books}/>
     </div>
   )
 }

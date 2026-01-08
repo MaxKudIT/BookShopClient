@@ -173,7 +173,8 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
 
                 <Divider sx={{ my: 1 }} />
                 {!myBooksPage && (
-                  <ListItemButton
+                  <>
+                     <ListItemButton
 
                     onClick={() => {navigate('/mybooks')}}
                     sx={{
@@ -202,10 +203,13 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
 
                     />
                   </ListItemButton>
+                  <Divider sx={{ my: 1 }} />
+                  </>
+                 
                 )}
 
 
-                <Divider sx={{ my: 1 }} />
+              
 
                 <ListItemButton
             

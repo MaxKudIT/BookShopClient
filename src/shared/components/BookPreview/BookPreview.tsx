@@ -7,13 +7,16 @@ import { ColorChoiceFunc } from '../../helpers/colorChoice';
 import { IoCheckmarkCircle } from "react-icons/io5";
 import { FaRubleSign } from "react-icons/fa6";
 import { MdCurrencyRuble } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 
-const Book: FC<BookPreviewT> = ({ Id, Title, Genre, ImageUrl, Price, IsMine, Discount }) => {
+const Book: FC<BookPreviewT & {PageView: 'shop' | 'home'}> = ({ Id, Title, Genre, ImageUrl, Price, IsMine, Discount, PageView }) => {
 
-    const DiscountPrice = Math.floor(Price - (Price / 100 * Discount))
+    const navigate = useNavigate();
 
+
+    const DiscountPrice = Math.floor(Price - (Price / 100 * Discount))    
     return (
-        <div className={styles.book_wrapper}>
+        <div onClick={() => navigate(`/books/${Id}`)} className={styles.book_wrapper}>
             <img
                 style={{
                     width: '100%',
@@ -28,7 +31,8 @@ const Book: FC<BookPreviewT> = ({ Id, Title, Genre, ImageUrl, Price, IsMine, Dis
                     <div style={{ background: ColorChoiceFunc(Genre) }} className={styles.genre_wrapper}>
                         <p>{Genre}</p>
                     </div>
-                    {IsMine ? (
+                    {PageView === 'shop' && (
+                          IsMine ? (
                         <div style={{ display: 'flex', columnGap: 5, alignItems: 'center', position: 'absolute', left: 140, top: 30 }}>
                             <IoCheckmarkCircle style={{ color: '#cecb13ff', fontSize: 25 }} />
                             <p style={{ color: '#cecb13ff', fontWeight: '500' }}>В наличии</p>
@@ -61,7 +65,9 @@ const Book: FC<BookPreviewT> = ({ Id, Title, Genre, ImageUrl, Price, IsMine, Dis
                                 -{Discount}%
                             </div>
                         </div>
-                    )}
+                    ))}
+                    
+                  
 
 
                 </div>

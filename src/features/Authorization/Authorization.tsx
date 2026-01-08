@@ -18,7 +18,6 @@ import { useAuth } from '../../store/context/AuthContext';
 import { validateEmail, validatePassword } from '../../shared/helpers/validateForm';
 import { useNavigate } from 'react-router-dom';
 import { useFirebaseAuth } from '../../shared/hooks/useFirebaseAuth';
-import { usePost } from '../../shared/hooks/queries';
 
 
 export type LoginFormType = {

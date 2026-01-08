@@ -8,25 +8,26 @@ import { useGet } from "../../shared/hooks/queries";
 import { Avatar, CircularProgress, Dialog } from "@mui/material";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import BookList from "../../shared/components/BookList/BookList";
 
- export const booksPlaceholder = [
-    'Гарри Поттер',
-    'Человек-паук', 
-    'Властелин колец',
-    'Голодные игры',
-    'Убить пересмешника',
-    'Сто лет одиночества'
-  ];
+export const booksPlaceholder = [
+  'Гарри Поттер',
+  'Человек-паук',
+  'Властелин колец',
+  'Голодные игры',
+  'Убить пересмешника',
+  'Сто лет одиночества'
+];
 
 const ShopBookList = () => {
 
 
-  
 
 
-  const { searchingValue, selectedGenre } = useSearch()
-  const { get, loading, error } = useGet<{Books: BookPreviewT[]}>('books/all');
-  
+
+
+  const { get, loading, error } = useGet<{ Books: BookPreviewT[] }>('books/all');
+
   const [books, setBooks] = useState<BookPreviewT[]>([])
 
   const auth = getAuth()
@@ -52,37 +53,6 @@ const ShopBookList = () => {
 
 
 
-  function filterBySearch(books: BookPreviewT[], searchValue: string): BookPreviewT[] {
-    if (!searchValue) return books;
-    return books.filter(({ Title }: BookPreviewT) => searchByPartial(searchValue, Title));
-  }
-
-  function filterByCategory(books: BookPreviewT[], genreSelected: Genres | 'Все жанры'): BookPreviewT[] {
-    if (genreSelected === 'Все жанры') {
-      return books
-    }
-    return books.filter(({ Genre }: BookPreviewT) => Genre === genreSelected);
-  }
-
-
-  const filteredBooks = useMemo(() => {
-    
-    let result: BookPreviewT[] = books;
-    console.log(result)
-    if (searchingValue) {
-      result = filterBySearch(books, searchingValue)
-    }
-
-
-    if (selectedGenre !== 'Все жанры') {
-      result = filterByCategory(result, selectedGenre)
-    }
-    
-    return result;
-  }, [books, searchingValue, selectedGenre, loading]);
-
-
-  const countFoundBooks = filteredBooks.length;
 
   if (loading) {
     return (
@@ -113,26 +83,7 @@ const ShopBookList = () => {
 
   return (
     <div className={styles.books_global_style}>
-      <div className={styles.title_row}>
-        Найдено книг: {countFoundBooks}
-      </div>
-
-      <div className={styles.book_list_container}>
-        {
-          filteredBooks.map(book => (
-            <BookPreview
-              Price={book.Price}
-              IsMine={book.IsMine}
-              key={book.Id}
-              Id={book.Id}
-              Genre={book.Genre}
-              Title={book.Title}
-              ImageUrl={book.ImageUrl}
-              Discount={book.Discount}
-            />
-          ))
-        }
-      </div>
+      <BookList viewPage="shop" list={books}/>
     </div>
   )
 }

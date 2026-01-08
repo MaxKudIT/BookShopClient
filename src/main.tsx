@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     {
         element: <AuthPage />,
         path: '/auth',
-        loader: publicLoader 
+        loader: publicLoader
     },
     {
         element: <HomePage />,
@@ -25,30 +25,30 @@ const router = createBrowserRouter([
     },
     {
         element: <BookInfoPage />,
-        path: '/bookinfo',
-       loader: protectedLoader
+        path: 'books/:id',
+        loader: protectedLoader
     },
     {
         element: <MyBooksPage />,
         path: '/mybooks',
-       loader: protectedLoader
+        loader: protectedLoader
     },
     {
         element: <BookPage />,
         path: '/:id',
-       loader: protectedLoader
+        loader: protectedLoader
     }
 ])
 
 createRoot(document.getElementById('root')!).render(
     <SearchingProvider>
         <MyBooksSearchingProvider>
-         
-                 <AuthProvider>
+
+            <AuthProvider>
                 <RouterProvider router={router} />
             </AuthProvider>
-           
-           
+
+
         </MyBooksSearchingProvider>
 
     </SearchingProvider>

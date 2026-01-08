@@ -1,9 +1,9 @@
-export type Genres = 
-| 'Приключения'
-| 'Ужасы'
-| 'Драма'
-| 'Исторические'
-| 'Фантастика'
+export type Genres =
+    | 'Приключения'
+    | 'Ужасы'
+    | 'Драма'
+    | 'Исторические'
+    | 'Фантастика'
 
 
 
@@ -15,4 +15,21 @@ export type BookPreviewT = {
     ImageUrl: string,
     Discount: number,
     IsMine: boolean
+}
+
+export type BookInfoT = {
+    Title: string
+    PagesCount: number
+    Description: string
+    AboutBook: string
+    Quote: string
+    CreatedDate: string
+    ReadingTime: string
+    Price: number
+    Discount: number //в процентах
+    Author: string
+    Genre: string
+    ImageUrl: string
+    Rate: number
+    IsMine: number
 }
