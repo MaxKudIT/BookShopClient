@@ -38,12 +38,30 @@ import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 export const genresKeys: GenresDropDown[] = ['Все жанры', 'Приключения', 'Драма', 'Ужасы', 'Исторические', 'Фантастика']
 
+
+
+const booksPlaceholder = [
+  'Гарри Поттер',
+  'Человек-паук', 
+  'Властелин колец',
+  'Голодные игры',
+  'Убить пересмешника',
+  'Сто лет одиночества'
+];
+
 export type HeaderProps = {
   myBooksPage: boolean
 }
 
 
+
 const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
+
+
+  const randomPl = booksPlaceholder[Math.floor(Math.random() * booksPlaceholder.length)]
+  
+
+
   const { setsearchingValue, setGenre } = useSearch()
   const { logout } = useFirebaseAuth()
   const navigate = useNavigate();
@@ -262,7 +280,7 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
           sx={textFieldStyles}
           variant="filled"
           label="Поиск"
-          placeholder="Гарри Поттер"
+          placeholder={randomPl}
           slotProps={{
             input: {
               startAdornment:

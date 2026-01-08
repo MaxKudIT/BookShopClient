@@ -9,7 +9,14 @@ import { Avatar, CircularProgress, Dialog } from "@mui/material";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
-
+ export const booksPlaceholder = [
+    'Гарри Поттер',
+    'Человек-паук', 
+    'Властелин колец',
+    'Голодные игры',
+    'Убить пересмешника',
+    'Сто лет одиночества'
+  ];
 
 const ShopBookList = () => {
 
