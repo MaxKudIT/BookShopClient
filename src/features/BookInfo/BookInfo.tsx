@@ -5,6 +5,8 @@ import { useCallback, useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { useStores } from "../../store/context/GloabalContext";
 import { observer } from 'mobx-react-lite';
+import { usePost } from "../../shared/hooks/queries";
+import { getAuth } from "firebase/auth";
 
 const BookInfo = observer(() => {
 
@@ -35,6 +37,28 @@ const BookInfo = observer(() => {
       handleGetBook()
     
   }, [handleGetBook]);
+
+
+    const {loading, error, post} = usePost('/ub/buy');
+
+
+    const auth = getAuth();
+
+    const handleBuy = useCallback(async () => {
+    try {
+      
+       if (id) {
+        const idToken = await auth.currentUser?.getIdToken();
+        await post({ BookId:  id}, {idToken: idToken});
+
+    } else {
+      console.error('Параметр id не найден')
+    }
+
+    } catch (err) {
+      console.error('Ошибка покупки книг:', err);
+    }
+  }, [post]);
 
 
 
@@ -86,7 +110,11 @@ const BookInfo = observer(() => {
        Author={book.Author} 
        ImageUrl={book.ImageUrl} 
        Rate={book.Rate} 
-       IsMine={book.IsMine} />
+       IsMine={book.IsMine} 
+       loading={loading}
+       handleBuy={handleBuy}
+       error={error}
+       />
     )
 })
 

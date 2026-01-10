@@ -2,10 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import styles from './BookPage.module.scss'
 import DynamicMarkdownContent from "../../shared/components/DynamicMarkdownContent/DynamicMarkdownContent";
-import { useParams } from "react-router-dom";
-import { useGet } from "../../shared/hooks/queries";
-import type { PageInfoT } from "../../shared/types";
-import { getAuth } from "firebase/auth";
+import { useNavigate, useParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import { useStores } from "../../store/context/GloabalContext";
 import BPHeader from "../../shared/components/Header/BookPage/BPHeader";
@@ -19,6 +16,16 @@ const BookPageF = observer(() => {
 
 
     const {id, pageNumber} = useParams()
+    const navigate = useNavigate();
+    
+    
+    const onPageChange = (page: number) => {
+        if (!id || !page) {
+            console.error('Параметров не обнаружено');
+            return
+        }
+        navigate(`/books/${id}/pages/${page}`)
+    }
 
     const {
        bookPageStore: {
@@ -83,6 +90,16 @@ const BookPageF = observer(() => {
         )
     }
 
+    if (!book || !page || !pagesCount) {
+        return (
+            <p style={{ color: 'orange', marginTop: 20, fontSize: 20 }}>
+                Данные не найдены
+            </p>
+        );
+    }
+
+    const currentPage = parseInt(pageNumber || '1');
+
     if (book && page && pagesCount) {
         return (
             <>
@@ -92,7 +109,7 @@ const BookPageF = observer(() => {
                         <DynamicMarkdownContent content={page.Text} />
                     </div>
                 </div>
-                <BookPageFooter totalPages={pagesCount} currentPage={1}/>
+                <BookPageFooter onPageChange={onPageChange} totalPages={pagesCount} currentPage={currentPage}/>
             </>
 
         )
