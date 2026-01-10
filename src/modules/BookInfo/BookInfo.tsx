@@ -1,5 +1,5 @@
 import React from "react";
-import { BookInfo } from "../../features/BookInfo/BookInfo";
+import BookInfo  from "../../features/BookInfo/BookInfo";
 import styles from './BookInfo.module.scss'
 import { Box, Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Tooltip, Typography } from "@mui/material";
 import { MdEmail, MdExitToApp, MdLibraryBooks, MdOutlineAccountCircle, MdPerson } from "react-icons/md";

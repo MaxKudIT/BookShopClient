@@ -1,44 +1,47 @@
 import { useParams } from "react-router-dom";
 import BookInfoView from "../../shared/components/BookInfoView/BookInfoView";
-import { useGet } from "../../shared/hooks/queries";
 import type { BookInfoT } from "../../shared/types";
 import { useCallback, useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
 import { CircularProgress } from "@mui/material";
-const BookInfo = () => {
+import { useStores } from "../../store/context/GloabalContext";
+import { observer } from 'mobx-react-lite';
+
+const BookInfo = observer(() => {
 
     const {id} = useParams<{id: string}>()
 
-     const { get, loading, error } = useGet<{ book: BookInfoT }>(`/books/${id}`);
 
-  const [book, setBook] = useState<BookInfoT>()
     
-  const auth = getAuth()
-
-  const handleData = useCallback(async () => {
-    try {
-
-      const idToken = await auth.currentUser?.getIdToken();
-
-      const bookData = await get({ idToken: idToken });
-      console.log
-      setBook(bookData.book);
-    } catch (err) {
-      console.error('Ошибка загрузки книги:', err);
+  const {
+    bookInfoStore: {
+      book,
+      getBookById,
+      getBookState
     }
-  }, [get]);
+  } = useStores()
 
+
+
+  const handleGetBook = useCallback(async () => {
+     if (id) {
+      await getBookById(id)
+
+    } else {
+      console.error('Параметр id не найден')
+    }
+  }, [getBookById]) 
 
   useEffect(() => {
-    handleData();
-  }, [handleData]);
+      handleGetBook()
+    
+  }, [handleGetBook]);
 
 
 
 
 
 
-  if (loading ) {
+  if (getBookState.loading) {
     return (
     
         <CircularProgress
@@ -57,9 +60,9 @@ const BookInfo = () => {
     )
   }
 
-  if (error) {
+  if (getBookState.error) {
     return (
-        <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>{error}</p>
+        <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>{getBookState.error}</p>
     )
   }
 
@@ -69,6 +72,7 @@ const BookInfo = () => {
 
     return (
        <BookInfoView 
+       Id={id!}
        Genre={book.Genre} 
        Title={book.Title} 
        PagesCount={book.PagesCount} 
@@ -84,6 +88,6 @@ const BookInfo = () => {
        Rate={book.Rate} 
        IsMine={book.IsMine} />
     )
-}
+})
 
-export { BookInfo };
+export default BookInfo;

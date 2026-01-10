@@ -18,6 +18,7 @@ export type BookPreviewT = {
 }
 
 export type BookInfoT = {
+    Id: string
     Title: string
     PagesCount: number
     Description: string
@@ -32,4 +33,18 @@ export type BookInfoT = {
     ImageUrl: string
     Rate: number
     IsMine: number
+}
+
+export type PageInfoT = {
+    Id: string
+    Number: number
+    Text: string
+}
+
+
+export type ErrorResponse = string
+
+export type AxiosSolt = {
+    loading: boolean
+    error: string | null
 }

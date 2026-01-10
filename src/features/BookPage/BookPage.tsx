@@ -1,46 +1,105 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import styles from './BookPage.module.scss'
 import DynamicMarkdownContent from "../../shared/components/DynamicMarkdownContent/DynamicMarkdownContent";
+import { useParams } from "react-router-dom";
+import { useGet } from "../../shared/hooks/queries";
+import type { PageInfoT } from "../../shared/types";
+import { getAuth } from "firebase/auth";
+import { CircularProgress } from "@mui/material";
+import { useStores } from "../../store/context/GloabalContext";
+import BPHeader from "../../shared/components/Header/BookPage/BPHeader";
+import { observer } from "mobx-react-lite";
+import BookPageFooter from "../../shared/components/Footer/BookPageFooter";
 
-const BookPageF = () => {
-    return (
-        <div className={styles.book_page_block_style}>
-            <div className={styles.book_page_block_style_inner}>
-                 <DynamicMarkdownContent content="Обеспечивают интеграцию и возможность участия в сводных каталогах.
-ГОСТ 7.1-2003 «Библиографическая запись. Библиографическое описание. Общие требования и правила составления». Фундаментальный стандарт для содержательного наполнения АИС.
 
-ГОСТ Р 7.0.100-2018 «Библиографическая запись. Кодирование форматов библиографических данных...». Описывает применение форматов RUSMARC (российская версия MARC) для обмена библиографическими записями. Качество АИС во многом определяется правильностью и полнотой реализации поддержки RUSMARC.
 
-ГОСТ Р ИСО 15836-2017 «Информация и документация. Метаданные элементов набора Дублинского ядра». Используется для описания электронных ресурсов
 
-Обеспечивают интеграцию и возможность участия в сводных каталогах.
+const BookPageF = observer(() => {
 
-ГОСТ 7.1-2003 «Библиографическая запись. Библиографическое описание. Общие требования и правила составления». Фундаментальный стандарт для содержательного наполнения АИС.
 
-ГОСТ Р 7.0.100-2018 «Библиографическая запись. Кодирование форматов библиографических данных...». Описывает применение форматов RUSMARC (российская версия MARC) для обмена библиографическими записями. Качество АИС во многом определяется правильностью и полнотой реализации поддержки RUSMARC.
+    const {id, pageNumber} = useParams()
 
-ГОСТ Р ИСО 15836-2017 «Информация и документация. Метаданные элементов набора
-Обеспечивают интеграцию и возможность участия в сводных каталогах.
-Обеспечивают интеграцию и возможность участия в сводных каталогах.
+    const {
+       bookPageStore: {
+        page,
+        pagesCount,        
 
-ГОСТ 7.1-2003 «Библиографическая запись. Библиографическое описание. Общие требования и правила составления». Фундаментальный стандарт для содержательного наполнения АИС.
+         getPageById,
+         getPageState,
+         getPagesCount,
+         getPagesCountState
+       },
+       bookInfoStore: {
+        book
+       }
+    } = useStores()
 
-ГОСТ Р 7.0.100-2018 «Библиографическая запись. Кодирование форматов библиографических данных...». Описывает применение форматов RUSMARC (российская версия MARC) для обмена библиографическими записями. Качество АИС во многом определяется правильностью и полнотой реализации поддержки RUSMARC.
 
-ГОСТ Р ИСО 15836-2017 «Информация и документация. Метаданные элементов набора
-Обеспечивают интеграцию и возможность участия в сводных каталогах.
 
-ГОСТ Р ИСО 15836-2017 «Информация и документация. Метаданные элементов набора
-Обеспечивают интеграцию и возможность участия в сводных каталогах.
-
-ГОСТ Р ИСО 15836-2017 «Информация и документация. Метаданные элементов набора
-Обеспечивают интеграцию и возможность участия в сводных каталогах.
-"/>
-            </div>
+    const handleGetBook = useCallback(async () => {
+        if (id && pageNumber) {
+            await Promise.all([
+            getPageById(id, pageNumber),
+            getPagesCount(id)
+        ]);
         
-        </div>
-    )
-}
+        console.log('Оба запроса завершены');
+        } else {
+            console.error('Параметр id или pageNumber не найден')
+        }
+    }, [id, pageNumber, getPagesCount, getPageById])
+
+    useEffect(() => {
+        handleGetBook()
+
+    }, [handleGetBook]);
+
+
+
+
+    if (getPageState.loading || getPagesCountState.loading) {
+        return (
+
+            <CircularProgress
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    justifySelf: 'center',
+                    marginTop: 10,
+                    alignItems: 'center',
+                    padding: 0.5,
+                    color: 'white'
+                }}
+
+            />
+
+        )
+    }
+
+    if (getPageState.error || getPagesCountState.error) {
+        return (
+            <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>{getPageState.error || getPagesCountState.error}</p>
+        )
+    }
+
+    if (book && page && pagesCount) {
+        return (
+            <>
+                <BPHeader title={book.Title} author={book.Author} />
+                <div className={styles.book_page_block_style}>
+                    <div className={styles.book_page_block_style_inner}>
+                        <DynamicMarkdownContent content={page.Text} />
+                    </div>
+                </div>
+                <BookPageFooter totalPages={pagesCount} currentPage={1}/>
+            </>
+
+        )
+    }
+
+
+
+})
 
 export default BookPageF;
