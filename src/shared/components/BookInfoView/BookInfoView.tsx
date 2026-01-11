@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState, type FC, type JSX } from "react";
+import React, { useCallback, useEffect, useMemo, useState, type FC, type JSX } from "react";
 import styles from './BookInfoView.module.scss'
-import type { BookInfoT } from "../../types";
+import type { BookInfoT, Genres } from "../../types";
 import { FaRegStar, FaRegUser } from "react-icons/fa6";
 import { FaStar } from "react-icons/fa"
 import { FaStarHalfAlt } from "react-icons/fa";
@@ -10,10 +10,11 @@ import { IoBookOutline, IoCheckmarkCircle, IoTimeOutline } from "react-icons/io5
 import BookInfoComponent from "../BookInfoComponent/BookInfoComponent";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton } from "@mui/material";
 import { buttonStyles } from "./muiStyles";
-import { formatDateToRussian, getHoursWord, getPagesWord } from "../../helpers/format";
+import { formatDateToRussian, getHoursWord, getMinutesWord, getPagesWord } from "../../helpers/format";
 import { LuBookOpenText } from "react-icons/lu";
 import { IoClose } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { ColorChoiceFunc, ColorChoiceFuncForBookInfo } from "../../helpers/colorChoice";
 
 
 export type RequestingState = {
@@ -103,6 +104,13 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
     };
 
 
+    const calculateFormat = useMemo(() => {
+        if (ReadingTime.trim().endsWith('m')) {
+            const rt = ReadingTime.slice(0, -1)
+            return getMinutesWord(Number(rt))
+        }
+        return getHoursWord(Number(ReadingTime))
+    }, [ReadingTime])
 
 
     const firstRowComponent = [
@@ -111,7 +119,7 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
     ]
     const secondRowComponent = [
         { title: 'Страниц', info: getPagesWord(PagesCount), icon: IoBookOutline },
-        { title: 'Время чтения', info: `~${getHoursWord(Number(ReadingTime))}`, icon: IoTimeOutline }
+        { title: 'Время чтения', info: calculateFormat, icon: IoTimeOutline }
     ]
 
 
@@ -205,13 +213,14 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
 
                 <div className={styles.book_info_second_column}>
                     <div style={{ display: 'flex', flexDirection: 'column', rowGap: 4 }}>
-                        <p style={{ fontSize: 26, fontWeight: 'bold', color: 'white' }}>{Title}</p>
-                        <div style={{ display: 'flex', columnGap: 5 }}>
-                            <FaRegUser style={{ fontSize: 14, color: '#c386ebff' }} />
-                            <p style={{ fontSize: 14, letterSpacing: 0.2, color: '#c386ebff' }}>{Author}</p>
+                        <p style={{ fontSize: 27, fontWeight: 'bold', color: ColorChoiceFuncForBookInfo(Genre as Genres) }}>{Title}</p>
+                        <div style={{ display: 'flex', columnGap: 7, marginTop: 7 }}>
+                            <FaRegUser style={{ fontSize: 15, color: 'white' }} />
+                            <p style={{ fontSize: 15, letterSpacing: 0.2, color: 'white' }}>{Author}</p>
                         </div>
                     </div>
-                    <p style={{ color: 'rgba(255,255,255,0.6', fontSize: 14, letterSpacing: 0.2, textAlign: 'justify', lineHeight: 1.5 }}>
+                     <Divider sx={{ my: 2, borderColor: 'rgba(94, 67, 156, 1)' }} />
+                    <p style={{ color: 'rgba(255,255,255,0.6', fontSize: 14, letterSpacing: 0.2, textAlign: 'justify', lineHeight: 1.5, marginBottom: 15 }}>
                         {Description}
                     </p>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -297,7 +306,7 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
 
             <div className={styles.book_second_block}>
                 <p style={{ fontSize: 20, fontWeight: '500', color: 'white' }}>Об этой книге</p>
-                <p style={{ color: 'rgba(255,255,255,0.6', fontSize: 14, letterSpacing: 0.2, textAlign: 'justify', lineHeight: 1.5 }}>
+                <p style={{ color: 'rgba(255,255,255,0.6', fontSize: 15, letterSpacing: 0.2, textAlign: 'justify', lineHeight: 1.5 }}>
                     {AboutBook}
                 </p>
                 <div className={styles.quote_style}>

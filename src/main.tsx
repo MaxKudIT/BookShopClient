@@ -9,7 +9,7 @@ import { MyBooksSearchingProvider, SearchingProvider } from './store/context/Sea
 import BookInfoPage from './pages/BookInfo/BookInfoPage'
 import MyBooksPage from './pages/MyBooks/MyBooksPage'
 import BookPage from './pages/BookPage/BookPage'
-import { protectedLoader, publicLoader } from './shared/routing/loaders'
+import { protectedLoader, protectedPurchaseLoader, publicLoader } from './shared/routing/loaders'
 import { StoreContext } from './store/context/GloabalContext'
 import { stores } from './store/stores'
 
@@ -38,7 +38,7 @@ const router = createBrowserRouter([
     {
         element: <BookPage />,
         path: '/books/:id/pages/:pageNumber',
-        loader: protectedLoader
+        loader: protectedPurchaseLoader
     }
 ])
 

@@ -4,37 +4,32 @@ function DynamicMarkdownContent({ content }: {content: string}) {
 
   const formatContent = (text: string) => {
     if (!text) return text;
-    
-    const gostRegex = /(ГОСТ(?:\s+Р)?(?:\s+ИСО)?\s+[\d.-]+(?:\s+«[^»]+»)?[^.]*\.)/g;
-    const matches = text.match(gostRegex);
-    
-    if (!matches || matches.length === 0) {
 
-      return text;
-    }
+    const sentences = text.split(/(?<=\.)\s+/);
     
-
-    let formatted = text;
-    
-  
-    matches.forEach((gost, index) => {
-
-      formatted = formatted.replace(
-        gost, 
-        `\n\n- **${gost.trim()}**`
-      );
-    });
-    
-    return formatted;
-  };
-
+    return sentences.map(sentence => {
+        const gostMatch = sentence.match(/^(ГОСТ(?:\s+Р)?(?:\s+ИСО)?\s+[\d.-]+(?:\s+«[^»]+»)?[^.]*\.)/);
+        
+        if (gostMatch) {
+       
+            return `- **${gostMatch[1].trim()}**${sentence.slice(gostMatch[1].length)}`;
+        }
+        
+        const withFormattedGosts = sentence.replace(
+            /(ГОСТ(?:\s+Р)?(?:\s+ИСО)?\s+[\d.-]+(?:\s+«[^»]+»)?)([^.]*\.)/g,
+            '**$1**$2'
+        );
+        
+        return withFormattedGosts;
+    }).join('\n\n');
+};
   const formattedContent = formatContent(content);
 
   return (
-    <div style={{ color: 'white', opacity: 0.9, letterSpacing: 0.2, lineHeight: 1.5 }}>
+    <div style={{ color: 'white', opacity: 0.8, letterSpacing: 0.2, lineHeight: 1.5 }}>
       <ReactMarkdown
         components={{
-          p: ({ node, ...props }) => <p style={{ marginBottom: '12px' }} {...props} />,
+          p: ({ node, ...props }) => <p style={{ marginBottom: '15px', fontSize: 16 }} {...props} />,
           strong: ({ node, ...props }) => <strong style={{ fontWeight: 600 }} {...props} />,
           ul: ({ node, ...props }) => <ul style={{ 
             marginLeft: '20px', 

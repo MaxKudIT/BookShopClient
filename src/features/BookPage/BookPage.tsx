@@ -8,6 +8,7 @@ import { useStores } from "../../store/context/GloabalContext";
 import BPHeader from "../../shared/components/Header/BookPage/BPHeader";
 import { observer } from "mobx-react-lite";
 import BookPageFooter from "../../shared/components/Footer/BookPageFooter";
+import type { Genres } from "../../shared/types";
 
 
 
@@ -24,6 +25,7 @@ const BookPageF = observer(() => {
             console.error('Параметров не обнаружено');
             return
         }
+        
         navigate(`/books/${id}/pages/${page}`)
     }
 
@@ -92,7 +94,7 @@ const BookPageF = observer(() => {
 
     if (!book || !page || !pagesCount) {
         return (
-            <p style={{ color: 'orange', marginTop: 20, fontSize: 20 }}>
+            <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>
                 Данные не найдены
             </p>
         );
@@ -103,7 +105,7 @@ const BookPageF = observer(() => {
     if (book && page && pagesCount) {
         return (
             <>
-                <BPHeader title={book.Title} author={book.Author} />
+                <BPHeader genre={book.Genre as Genres} title={book.Title} author={book.Author} />
                 <div className={styles.book_page_block_style}>
                     <div className={styles.book_page_block_style_inner}>
                         <DynamicMarkdownContent content={page.Text} />

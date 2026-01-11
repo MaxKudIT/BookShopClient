@@ -8,11 +8,13 @@ import { useFirebaseAuth } from "../../../hooks/useFirebaseAuth";
 import styles from './BPHeader.module.scss'
 import { IoBookOutline } from "react-icons/io5";
 import type { FC } from "react";
+import type { Genres } from "../../../types";
+import { ColorChoiceFunc, ColorChoiceFuncForBookInfo } from "../../../helpers/colorChoice";
 
 
 
 
-export const BPHeader: FC<{title: string, author: string}> = ({title, author}) => {
+export const BPHeader: FC<{title: string, author: string, genre: Genres}> = ({title, author, genre}) => {
     const navigate = useNavigate();
 
     const auth = getAuth();
@@ -27,7 +29,7 @@ export const BPHeader: FC<{title: string, author: string}> = ({title, author}) =
                 <div className={styles.header_first_block}>
                     <div style={{
                         padding: 5,
-                        background: '#6d0cbdff',
+                        background: ColorChoiceFunc(genre),
                         borderRadius: 10,
                         display: 'flex',
                         justifyContent: 'center',

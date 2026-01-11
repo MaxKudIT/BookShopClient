@@ -2,7 +2,7 @@ import { LinearProgress, TextField } from "@mui/material"
 import ButtonForPage from "../ui/Button/Button"
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
 import styles from './BookPageFooter.module.scss'
-import { useState, type ChangeEvent, type FC } from "react"
+import { useCallback, useEffect, useState, type ChangeEvent, type FC } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
 
@@ -10,7 +10,26 @@ import { useNavigate, useParams } from "react-router-dom"
 
 const BookPageFooter: FC<{ currentPage: number, totalPages: number, onPageChange: (page: number) => void }> = ({ currentPage, totalPages, onPageChange }) => {
 
-    const [inputPage, setInputPage] = useState<string>(String(totalPages));
+    const [inputPage, setInputPage] = useState<string>();
+
+    const handleKeyDown = useCallback((e: KeyboardEvent) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            if (inputPage === '' || Number(inputPage) < 0 || Number(inputPage) > totalPages) {
+                return;
+            }
+            onPageChange(Number(inputPage));
+        }
+    }, [inputPage, onPageChange]);
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [handleKeyDown]);
+
+
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         if (value === '' || /^\d+$/.test(value)) {
@@ -45,7 +64,7 @@ const BookPageFooter: FC<{ currentPage: number, totalPages: number, onPageChange
 
                             value={inputPage}
                             onChange={handleInputChange}
-                            defaultValue={totalPages}
+                            placeholder="1"
                             variant="outlined"
                             size="small"
                             sx={{
@@ -119,17 +138,17 @@ const BookPageFooter: FC<{ currentPage: number, totalPages: number, onPageChange
                             }}
                         />
                         <ButtonForPage onClick={() => {
-                          
-                            if (inputPage === '') {
+
+                            if (inputPage === '' || Number(inputPage) < 0 || Number(inputPage) > totalPages) {
                                 return
-                            } 
+                            }
                             onPageChange(Number(inputPage))
                         }}>
                             <p>Перейти</p>
                         </ButtonForPage>
                     </div>
 
-                    <ButtonForPage onClick={() => {onPageChange(currentPage + 1) }} disabled={currentPage === totalPages}>
+                    <ButtonForPage onClick={() => { onPageChange(currentPage + 1) }} disabled={currentPage === totalPages}>
 
                         <IoIosArrowForward />
                         <p>Следующая</p>
