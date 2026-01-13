@@ -9,12 +9,12 @@ import { FaRubleSign } from "react-icons/fa6";
 import { MdCurrencyRuble } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 
-const Book: FC<BookPreviewT & {PageView: 'shop' | 'home'}> = ({ Id, Title, Genre, ImageUrl, Price, IsMine, Discount, PageView }) => {
+const Book: FC<BookPreviewT & { PageView: 'shop' | 'home' }> = ({ Id, Title, Genre, ImageUrl, Price, IsMine, Discount, PageView }) => {
 
     const navigate = useNavigate();
 
 
-    const DiscountPrice = Math.floor(Price - (Price / 100 * Discount))    
+    const DiscountPrice = Math.floor(Price - (Price / 100 * Discount))
     return (
         <div onClick={() => navigate(`/books/${Id}`)} className={styles.book_wrapper}>
             <img
@@ -32,42 +32,59 @@ const Book: FC<BookPreviewT & {PageView: 'shop' | 'home'}> = ({ Id, Title, Genre
                         <p>{Genre}</p>
                     </div>
                     {PageView === 'shop' && (
-                          IsMine ? (
-                        <div style={{ display: 'flex', columnGap: 5, alignItems: 'center', position: 'absolute', left: 140, top: 30 }}>
-                            <IoCheckmarkCircle style={{ color: '#cecb13ff', fontSize: 25 }} />
-                            <p style={{ color: '#cecb13ff', fontWeight: '500' }}>В наличии</p>
-                        </div>
-                    ) : (
-                        <div style={{
-                            display: 'flex', columnGap: 6, alignItems: 'center',
-                            position: 'absolute', right: 5, top: 30
-                        }}>
-                            <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold',  display: 'inline-flex', alignItems: 'center' }}>
-                                {DiscountPrice}
-                                <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
-                            </p>
-                            <p style={{
-                                fontSize: 14,
-                                color: 'gray',
-                                textDecoration: 'line-through',
-                                textDecorationColor: '#a7a7adff'
-                            }}>-{Price}</p>
-                            <div style={{
-                                padding: '4px 6px',
-                                fontSize: 13,
-                                borderRadius: 8,
-                                background: '#0b9128ff',
-                                color: 'white',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}>
-                                -{Discount}%
+                        IsMine ? (
+                            <div style={{ display: 'flex', columnGap: 5, alignItems: 'center', position: 'absolute', left: 140, top: 30 }}>
+                                <IoCheckmarkCircle style={{ color: '#cecb13ff', fontSize: 25 }} />
+                                <p style={{ color: '#cecb13ff', fontWeight: '500' }}>В наличии</p>
                             </div>
-                        </div>
-                    ))}
-                    
-                  
+                        ) : (
+                            <div style={{
+                                display: 'flex', columnGap: 6, alignItems: 'center',
+                                position: 'absolute', right: 5, top: 30
+                            }}>
+                                {Price === 0 ? (
+                                     <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>Бесплатно</p>
+                                ) : (
+                                    Discount !== 0 ? (
+                                    <>
+                                        <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
+                                            {DiscountPrice}
+                                            <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
+                                        </p>
+                                        <p style={{
+                                            fontSize: 14,
+                                            color: 'gray',
+                                            textDecoration: 'line-through',
+                                            textDecorationColor: '#a7a7adff'
+                                        }}>-{Price}</p>
+                                        <div style={{
+                                            padding: '4px 6px',
+                                            fontSize: 13,
+                                            borderRadius: 8,
+                                            background: '#0b9128ff',
+                                            color: 'white',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            -{Discount}%
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
+                                            {Price}
+                                            <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
+                                        </p>
+                                    </>
+                                )
+                                )}
+                              
+
+                            </div>
+                        ))}
+
+
 
 
                 </div>

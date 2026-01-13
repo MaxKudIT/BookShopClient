@@ -2,26 +2,20 @@ import ReactMarkdown from 'react-markdown';
 
 function DynamicMarkdownContent({ content }: {content: string}) {
 
-  const formatContent = (text: string) => {
+const formatContent = (text: string) => {
     if (!text) return text;
 
-    const sentences = text.split(/(?<=\.)\s+/);
+    const paragraphs = text.split(/\n\n+/);
     
-    return sentences.map(sentence => {
-        const gostMatch = sentence.match(/^(ГОСТ(?:\s+Р)?(?:\s+ИСО)?\s+[\d.-]+(?:\s+«[^»]+»)?[^.]*\.)/);
-        
-        if (gostMatch) {
-       
-            return `- **${gostMatch[1].trim()}**${sentence.slice(gostMatch[1].length)}`;
-        }
-        
-        const withFormattedGosts = sentence.replace(
+    return paragraphs.map(paragraph => {
+    
+        const withFormattedGosts = paragraph.replace(
             /(ГОСТ(?:\s+Р)?(?:\s+ИСО)?\s+[\d.-]+(?:\s+«[^»]+»)?)([^.]*\.)/g,
             '**$1**$2'
         );
         
         return withFormattedGosts;
-    }).join('\n\n');
+    }).join('\n\n'); 
 };
   const formattedContent = formatContent(content);
 

@@ -50,15 +50,15 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
 
     const [dialog, setDialog] = useState(false)
 
-    const textEvent = (state: {error: string | null}): string => {
+    const textEvent = (state: { error: string | null }): string => {
 
         if (state.error) {
             return 'Произошла ошибка, повторите операцию позже'
         }
-        
+
         return 'Покупка была успешно произведена!'
-       
-       
+
+
     }
 
     const DiscountPrice = Math.floor(Price - (Price / 100 * Discount))
@@ -131,7 +131,7 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
 
 
             <Dialog
-                onClose={() => {setDialog(false); navigate('/mybooks')}}
+                onClose={() => { setDialog(false); navigate('/mybooks') }}
                 open={dialog}
                 slotProps={{
                     paper: {
@@ -146,7 +146,7 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
                             `,
                             color: 'white',
                             borderRadius: 3,
-                          
+
                             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
                         }
                     },
@@ -162,24 +162,24 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
                 <DialogTitle>
                     Результат покупки
                     <IconButton
-                        onClick={() => {setDialog(false); navigate('/mybooks')}}
+                        onClick={() => { setDialog(false); navigate('/mybooks') }}
                         sx={{
                             position: 'absolute',
                             right: 8,
                             top: 8,
                             color: 'white',
-                           
+
                         }}
                     >
-                    <IoClose/>
+                        <IoClose />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>
-                    {textEvent({error})}
+                    {textEvent({ error })}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => {setDialog(false); navigate('/mybooks')}} sx={{color: 'white'}}>Продолжить</Button>
-                 
+                    <Button onClick={() => { setDialog(false); navigate('/mybooks') }} sx={{ color: 'white' }}>Продолжить</Button>
+
                 </DialogActions>
             </Dialog>
 
@@ -219,7 +219,7 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
                             <p style={{ fontSize: 15, letterSpacing: 0.2, color: 'white' }}>{Author}</p>
                         </div>
                     </div>
-                     <Divider sx={{ my: 2, borderColor: 'rgba(94, 67, 156, 1)' }} />
+                    <Divider sx={{ my: 2, borderColor: 'rgba(94, 67, 156, 1)' }} />
                     <p style={{ color: 'rgba(255,255,255,0.6', fontSize: 14, letterSpacing: 0.2, textAlign: 'justify', lineHeight: 1.5, marginBottom: 15 }}>
                         {Description}
                     </p>
@@ -250,34 +250,50 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
                     ) : (
                         <>
                             <div style={{ display: 'flex', columnGap: 10, alignItems: 'center' }}>
-                                <p style={{ fontSize: 26, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
-                                    {DiscountPrice}
-                                    <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
-                                </p>
-                                <p style={{
-                                    fontSize: 16,
-                                    color: 'gray',
-                                    textDecoration: 'line-through',
-                                    textDecorationColor: '#a7a7adff'
-                                }}>{Price}р</p>
-                                <div style={{
-                                    padding: '5px 7px',
-                                    fontSize: 14,
-                                    borderRadius: 8,
-                                    background: '#0b9128ff',
-                                    color: 'white',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}>
-                                    -{Discount}%
-                                </div>
+                                 {Price === 0 ? (
+                                     <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>Бесплатно</p>
+                                ) : (
+                                    Discount !== 0 ? (
+                                    <>
+                                        <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
+                                            {DiscountPrice}
+                                            <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
+                                        </p>
+                                        <p style={{
+                                            fontSize: 14,
+                                            color: 'gray',
+                                            textDecoration: 'line-through',
+                                            textDecorationColor: '#a7a7adff'
+                                        }}>-{Price}</p>
+                                        <div style={{
+                                            padding: '4px 6px',
+                                            fontSize: 13,
+                                            borderRadius: 8,
+                                            background: '#0b9128ff',
+                                            color: 'white',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            -{Discount}%
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
+                                            {Price}
+                                            <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
+                                        </p>
+                                    </>
+                                )
+                                )}
+                              
                             </div>
                             <Button
                                 onClick={async () => {
                                     await handleBuy();
                                     setDialog(true)
-                               
+
                                 }}
                                 sx={buttonStyles}
                                 variant="contained"
