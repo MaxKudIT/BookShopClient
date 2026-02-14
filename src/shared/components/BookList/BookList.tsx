@@ -63,6 +63,7 @@ export const BookList: FC<{ list: BookPreviewT[], viewPage: 'home' | 'shop' }> =
                 {
                     filteredBooks.map(book => (
                         <BookPreview
+                            Rate={book.Rate}
                             PageView={pageView}
                             Price={book.Price}
                             IsMine={book.IsMine}

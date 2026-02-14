@@ -1,14 +1,15 @@
 import React from "react";
-import BookInfo  from "../../features/BookInfo/BookInfo";
+import BookInfo from "../../features/BookInfo/BookInfo";
 import styles from './BookInfo.module.scss'
 import { Box, Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Tooltip, Typography } from "@mui/material";
-import { MdEmail, MdExitToApp, MdLibraryBooks, MdOutlineAccountCircle, MdPerson } from "react-icons/md";
+import { MdAccountCircle, MdEmail, MdExitToApp, MdLibraryBooks, MdOutlineAccountCircle, MdPerson } from "react-icons/md";
 import { PiBooks } from "react-icons/pi";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useFirebaseAuth } from "../../shared/hooks/useFirebaseAuth";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineShopping } from "react-icons/ai";
+import { RiShoppingBag4Fill } from "react-icons/ri";
 
 
 
@@ -23,8 +24,11 @@ const BookInfoModule = () => {
 
   return (
     <div className={styles.book_info_page_style}>
-      <div style={{ position: 'fixed', right: 40, top: 20, display: 'flex', alignItems: 'center', columnGap: 25, zIndex: 2 }}>
-          <AiOutlineShopping onClick={() => {navigate('/')}} style={{ fontSize: 35, color: 'white', cursor: 'pointer' }} />
+      <div style={{ position: 'fixed', right: 40, top: 20, display: 'flex', alignItems: 'center' }}>
+        <div onClick={() => { navigate('/') }} className={styles.clickable_wrapper}>
+          <RiShoppingBag4Fill style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
+          <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Библиотека</p>
+        </div>
         <Tooltip
 
           title={
@@ -79,40 +83,39 @@ const BookInfoModule = () => {
               </ListItem>
 
               <Divider sx={{ my: 1 }} />
+          
+              
+                  <ListItemButton
 
-              <ListItemButton
+                    onClick={() => { navigate('/mybooks') }}
+                    sx={{
 
-                onClick={() => { navigate('/mybooks') }}
-                sx={{
+                      pt: 0,
+                      pb: 0,
+                      pl: 1.5,
+                      pr: 1.5,
+                      height: 45,
+                      '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
+                    }}
+                  >
+                    <ListItemIcon sx={{ minWidth: 36 }}>
+                      <MdLibraryBooks fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText
+                      sx={{
+                        '& .MuiListItemText-primary': {
+                          fontSize: 14,
+                        },
 
-                  mt: 1,
-                  pt: 0,
-                  pb: 0,
-                  pl: 1.5,
-                  pr: 1.5,
-                  height: 40,
-                  '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
-                }}
-              >
-                <ListItemIcon sx={{ minWidth: 36 }}>
-                  <MdLibraryBooks fontSize="small" />
-                </ListItemIcon>
-                <ListItemText
-                  sx={{
-                    '& .MuiListItemText-primary': {
-                      fontSize: 14,
-                    },
-
-                  }}
-                  primary="Мои книги"
-
-
-                />
-              </ListItemButton>
-              <Divider sx={{ my: 1 }} />
+                      }}
+                      primary="Мои книги"
 
 
+                    />
+                  </ListItemButton>
 
+           
+          
 
 
 
@@ -122,12 +125,11 @@ const BookInfoModule = () => {
                 onClick={() => { logout(); navigate('/auth') }}
                 sx={{
 
-                  mt: 1,
                   pb: 0,
                   pt: 0,
                   pl: 1.5,
                   pr: 1.5,
-                  height: 40,
+                  height: 45,
                   '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
                 }}
               >
@@ -162,14 +164,18 @@ const BookInfoModule = () => {
           }}
         >
           <IconButton sx={{ p: 0 }}>
-            <MdOutlineAccountCircle
-              style={{
-                fontSize: 32,
-                color: 'white',
-                borderRadius: 10,
-                cursor: 'pointer'
-              }}
-            />
+            <div className={styles.clickable_wrapper} style={{ cursor: 'default' }}>
+              <MdAccountCircle
+                style={{
+                  fontSize: 27,
+                  color: 'rgba(255,255,255,0.9)',
+                  borderRadius: 10,
+
+                }}
+              />
+              <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Профиль</p>
+            </div>
+
           </IconButton>
         </Tooltip>
       </div>

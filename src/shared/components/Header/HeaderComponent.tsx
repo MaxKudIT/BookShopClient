@@ -1,7 +1,9 @@
 import React, { useEffect, type FC } from "react";
 import styles from './Header.module.scss'
 import { PiBooks, PiFunnelBold } from "react-icons/pi";
-import { MdOutlineAccountCircle } from "react-icons/md";
+import { MdAccountCircle } from "react-icons/md";
+import { RiShoppingBag4Fill } from "react-icons/ri";
+import { FaCartPlus } from "react-icons/fa";
 import {
   FormControl,
   IconButton,
@@ -20,13 +22,16 @@ import {
   Typography,
   ListItemButton
 } from "@mui/material";
-import { IoMdSearch } from "react-icons/io";
+import { IoIosHeart, IoMdCart, IoMdSearch } from "react-icons/io";
+import { IoIosHome } from "react-icons/io";
 import {
   MdEmail,
   MdPerson,
   MdLibraryBooks,
   MdExitToApp
 } from "react-icons/md";
+import { IoColorFilterOutline } from "react-icons/io5";
+import { MdAccountBox } from "react-icons/md";
 import { selectStyles, textFieldStyles } from "./muiStyles";
 import { IoHomeOutline } from "react-icons/io5";
 import { useMyBooksSearch, useSearch, type GenresDropDown } from "../../../store/context/SearchContext";
@@ -36,13 +41,14 @@ import { useFirebaseAuth } from "../../hooks/useFirebaseAuth";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { FaCartShopping } from "react-icons/fa6";
 export const genresKeys: GenresDropDown[] = ['Все жанры', 'Приключения', 'Драма', 'Ужасы', 'Исторические', 'Фантастика']
 
 
 
 const booksPlaceholder = [
   'Гарри Поттер',
-  'Человек-паук', 
+  'Человек-паук',
   'Властелин колец',
   'Голодные игры',
   'Убить пересмешника',
@@ -59,7 +65,7 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
 
 
   const randomPl = booksPlaceholder[Math.floor(Math.random() * booksPlaceholder.length)]
-  
+
 
 
   const { setsearchingValue, setGenre } = useSearch()
@@ -111,11 +117,29 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
 
 
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', columnGap: 25 }}>
+
+
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div onClick={() => { navigate('/favs') }} className={styles.clickable_wrapper}>
+            <IoIosHeart style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
+            <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Избранное</p>
+          </div>
+          <div onClick={() => { navigate('/cart') }} className={styles.clickable_wrapper}>
+            <IoMdCart style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
+            <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Корзина</p>
+          </div>
           {myBooksPage ? (
-            <AiOutlineShopping onClick={() => {navigate('/')}} style={{ fontSize: 35, color: 'white', cursor: 'pointer' }} />
+            <div onClick={() => { navigate('/') }} className={styles.clickable_wrapper}>
+              <RiShoppingBag4Fill style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
+              <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Библиотека</p>
+            </div>
+
           ) : (
-            <IoHomeOutline onClick={() => {navigate('/mybooks')}} style={{ fontSize: 30, color: 'white', cursor: 'pointer' }} />
+            <div  onClick={() => { navigate('/mybooks') }} className={styles.clickable_wrapper}>
+              <IoIosHome style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
+              <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Домашняя</p>
+            </div>
+
           )}
 
           <Tooltip
@@ -134,7 +158,7 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
               }}>
 
 
-                <ListItem sx={{pl: 1.5, pr: 1.5}} disablePadding>
+                <ListItem sx={{ pl: 1.5, pr: 1.5 }} disablePadding>
                   <ListItemIcon sx={{ minWidth: 36 }}>
                     <MdEmail fontSize="small" />
                   </ListItemIcon>
@@ -153,7 +177,7 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
                 </ListItem>
 
 
-                <ListItem sx={{pl: 1.5, pr: 1.5}} disablePadding>
+                <ListItem sx={{ pl: 1.5, pr: 1.5 }} disablePadding>
                   <ListItemIcon sx={{ minWidth: 36 }}>
                     <MdPerson fontSize="small" />
                   </ListItemIcon>
@@ -174,54 +198,52 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
                 <Divider sx={{ my: 1 }} />
                 {!myBooksPage && (
                   <>
-                     <ListItemButton
+                    <ListItemButton
 
-                    onClick={() => {navigate('/mybooks')}}
-                    sx={{
-                  
-                      mt: 1,
-                      pt: 0,
-                      pb: 0,
-                      pl: 1.5,
-                      pr: 1.5,
-                      height: 40,
-                      '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
-                    }}
-                  >
-                    <ListItemIcon sx={{ minWidth: 36 }}>
-                      <MdLibraryBooks fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText
+                      onClick={() => { navigate('/mybooks') }}
                       sx={{
-                        '& .MuiListItemText-primary': {
-                          fontSize: 14,
-                        },
-                  
+
+                        pt: 0,
+                        pb: 0,
+                        pl: 1.5,
+                        pr: 1.5,
+                        height: 45,
+                        '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
                       }}
-                      primary="Мои книги"
+                    >
+                      <ListItemIcon sx={{ minWidth: 36 }}>
+                        <MdLibraryBooks fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText
+                        sx={{
+                          '& .MuiListItemText-primary': {
+                            fontSize: 14,
+                          },
+
+                        }}
+                        primary="Мои книги"
 
 
-                    />
-                  </ListItemButton>
-                  <Divider sx={{ my: 1 }} />
+                      />
+                    </ListItemButton>
+
                   </>
-                 
+
                 )}
 
 
-              
+
 
                 <ListItemButton
-            
+
                   onClick={() => { logout(); navigate('/auth') }}
                   sx={{
-                   
-                    mt: 1,
+
                     pb: 0,
                     pt: 0,
                     pl: 1.5,
                     pr: 1.5,
-                    height: 40,
+                    height: 45,
                     '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
                   }}
                 >
@@ -256,14 +278,18 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
             }}
           >
             <IconButton sx={{ p: 0 }}>
-              <MdOutlineAccountCircle
-                style={{
-                  fontSize: 32,
-                  color: 'white',
-                  borderRadius: 10,
-                  cursor: 'pointer'
-                }}
-              />
+              <div className={styles.clickable_wrapper} style={{ cursor: 'default' }}>
+                <MdAccountCircle
+                  style={{
+                    fontSize: 27,
+                    color: 'rgba(255,255,255,0.9)',
+                    borderRadius: 10,
+
+                  }}
+                />
+                <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Профиль</p>
+              </div>
+
             </IconButton>
           </Tooltip>
         </div>
@@ -296,7 +322,7 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
         />
 
         <div style={{ display: 'flex', alignItems: 'center', columnGap: 10 }}>
-          <PiFunnelBold color="white" size={22} />
+          <IoColorFilterOutline color="white" size={22} />
           <FormControl sx={selectStyles.formControl}>
             <Select
               defaultValue="Все жанры"

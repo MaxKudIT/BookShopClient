@@ -1,6 +1,7 @@
 .book_info_wrapper {
     width: 900px;
     position: relative;
+    z-index: 3;
 }
 
 
@@ -9,7 +10,7 @@
     width: 100%;
     
      background-color: rgba(221, 216, 231, 0.1);
- 
+    
      border-bottom-left-radius: 20px;
      border-bottom-right-radius: 20px;
      padding: 30px 20px;

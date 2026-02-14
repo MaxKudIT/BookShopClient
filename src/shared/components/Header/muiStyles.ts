@@ -72,6 +72,7 @@ export const textFieldStyles = {
 export const selectStyles = {
   formControl: {
     width: 250,
+    
     '& .MuiOutlinedInput-root': {
       backgroundColor: 'rgba(255, 255, 255, 0.1)', 
       borderRadius: '8px',
@@ -140,9 +141,10 @@ export const selectStyles = {
 
   menuPaper: {
     marginTop: '8px',
-    borderRadius: '8px',
+
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
     background: 'rgba(95, 97, 134, 1)',
+    
     '& .MuiMenuItem-root': {
       color: 'rgba(255,255,255, 1)',
       borderBottom: '1px solid rgba(86, 86, 112, 0.7)',

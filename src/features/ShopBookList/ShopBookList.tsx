@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styles from './ShopBookList.module.scss'
 import type { BookPreviewT, Genres } from "../../shared/types";
-import BookPreview from "../../shared/components/BookPreview/BookPreview";
-import { searchByPartial } from "../../shared/helpers/searchByPartial";
-import { useSearch } from "../../store/context/SearchContext";
+
 import { useGet } from "../../shared/hooks/queries";
 import { Avatar, CircularProgress, Dialog } from "@mui/material";
 import { getAuth } from "firebase/auth";
@@ -80,6 +78,8 @@ const ShopBookList = () => {
       </div>
     )
   }
+
+  console.log(books)
 
   return (
     <div className={styles.books_global_style}>

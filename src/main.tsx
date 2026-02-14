@@ -26,6 +26,10 @@ const router = createBrowserRouter([
         loader: protectedLoader
     },
     {
+        element: <div>test</div>,
+        path: '/cart',
+    },
+    {
         element: <BookInfoPage />,
         path: 'books/:id',
         loader: protectedLoader

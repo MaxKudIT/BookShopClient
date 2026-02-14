@@ -16,32 +16,32 @@ import type { Genres } from "../../shared/types";
 const BookPageF = observer(() => {
 
 
-    const {id, pageNumber} = useParams()
+    const { id, pageNumber } = useParams()
     const navigate = useNavigate();
-    
-    
+
+
     const onPageChange = (page: number) => {
         if (!id || !page) {
             console.error('Параметров не обнаружено');
             return
         }
-        
+
         navigate(`/books/${id}/pages/${page}`)
     }
 
     const {
-       bookPageStore: {
-        page,
-        pagesCount,        
+        bookPageStore: {
+            page,
+            pagesCount,
 
-         getPageById,
-         getPageState,
-         getPagesCount,
-         getPagesCountState
-       },
-       bookInfoStore: {
-        book
-       }
+            getPageById,
+            getPageState,
+            getPagesCount,
+            getPagesCountState
+        },
+        bookInfoStore: {
+            book
+        }
     } = useStores()
 
 
@@ -49,11 +49,11 @@ const BookPageF = observer(() => {
     const handleGetBook = useCallback(async () => {
         if (id && pageNumber) {
             await Promise.all([
-            getPageById(id, pageNumber),
-            getPagesCount(id)
-        ]);
-        
-        console.log('Оба запроса завершены');
+                getPageById(id, pageNumber),
+                getPagesCount(id)
+            ]);
+
+            console.log('Оба запроса завершены');
         } else {
             console.error('Параметр id или pageNumber не найден')
         }
@@ -111,7 +111,7 @@ const BookPageF = observer(() => {
                         <DynamicMarkdownContent content={page.Text} />
                     </div>
                 </div>
-                <BookPageFooter onPageChange={onPageChange} totalPages={pagesCount} currentPage={currentPage}/>
+                <BookPageFooter onPageChange={onPageChange} totalPages={pagesCount} currentPage={currentPage} />
             </>
 
         )

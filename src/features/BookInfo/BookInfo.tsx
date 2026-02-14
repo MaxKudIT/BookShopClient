@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import BookInfoView from "../../shared/components/BookInfoView/BookInfoView";
-import type { BookInfoT } from "../../shared/types";
+
 import { useCallback, useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { useStores } from "../../store/context/GloabalContext";

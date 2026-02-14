@@ -1,19 +1,40 @@
 .book_info_page_style {
-    max-width: 100vw;
-    min-height: 100vh; 
-    overflow-x: hidden;
-    position: relative;
-      padding-bottom: 65px;
-     background: linear-gradient(145deg, 
-      rgba(3, 5, 34, 0.9) 0%, 
-      rgba(6, 5, 63, 0.9) 30%, 
-      rgba(13, 4, 43, 0.9) 70%
-    );
-    
-    display: flex;
-    justify-content: center;
+  max-width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  padding-bottom: 65px;
+  background: linear-gradient(145deg,
+      rgba(3, 5, 34, 0.9) 0%,
+      rgba(6, 5, 63, 0.9) 30%,
+      rgba(13, 4, 43, 0.9) 70%);
+
+  display: flex;
+  justify-content: center;
 }
 
-    // rgba(44, 5, 94, 0.9) 0%, 
-    //   rgba(45, 5, 63, 0.9) 30%, 
-    //   rgba(67, 6, 80, 0.9) 70%
+// rgba(44, 5, 94, 0.9) 0%, 
+//   rgba(45, 5, 63, 0.9) 30%, 
+//   rgba(67, 6, 80, 0.9) 70%
+
+.clickable_wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 7px;
+  align-items: center;
+  border-radius: 10px;
+  padding: 10px 0;
+  width: 85px;
+  transition: all 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@media (max-width: 1350px) {
+  .clickable_wrapper {
+    display: none;
+  }
+}

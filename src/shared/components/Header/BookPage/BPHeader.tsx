@@ -2,7 +2,7 @@ import { Box, Divider, IconButton, ListItem, ListItemButton, ListItemIcon, ListI
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { AiOutlineShopping } from "react-icons/ai";
-import { MdEmail, MdExitToApp, MdLibraryBooks, MdOutlineAccountCircle, MdPerson } from "react-icons/md";
+import { MdAccountCircle, MdEmail, MdExitToApp, MdLibraryBooks, MdOutlineAccountCircle, MdPerson } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useFirebaseAuth } from "../../../hooks/useFirebaseAuth";
 import styles from './BPHeader.module.scss'
@@ -10,11 +10,12 @@ import { IoBookOutline } from "react-icons/io5";
 import type { FC } from "react";
 import type { Genres } from "../../../types";
 import { ColorChoiceFunc, ColorChoiceFuncForBookInfo } from "../../../helpers/colorChoice";
+import { RiShoppingBag4Fill } from "react-icons/ri";
 
 
 
 
-export const BPHeader: FC<{title: string, author: string, genre: Genres}> = ({title, author, genre}) => {
+export const BPHeader: FC<{ title: string, author: string, genre: Genres }> = ({ title, author, genre }) => {
     const navigate = useNavigate();
 
     const auth = getAuth();
@@ -44,7 +45,10 @@ export const BPHeader: FC<{title: string, author: string, genre: Genres}> = ({ti
                     </div>
                 </div>
                 <div className={styles.header_second_block}>
-                    <AiOutlineShopping onClick={() => { navigate('/') }} style={{ fontSize: 35, color: 'white', cursor: 'pointer' }} />
+                    <div onClick={() => { navigate('/') }} className={styles.clickable_wrapper}>
+                        <RiShoppingBag4Fill style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
+                        <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Библиотека</p>
+                    </div>
                     <Tooltip
 
                         title={
@@ -100,17 +104,17 @@ export const BPHeader: FC<{title: string, author: string, genre: Genres}> = ({ti
 
                                 <Divider sx={{ my: 1 }} />
 
+
                                 <ListItemButton
 
                                     onClick={() => { navigate('/mybooks') }}
                                     sx={{
 
-                                        mt: 1,
                                         pt: 0,
                                         pb: 0,
                                         pl: 1.5,
                                         pr: 1.5,
-                                        height: 40,
+                                        height: 45,
                                         '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
                                     }}
                                 >
@@ -129,7 +133,6 @@ export const BPHeader: FC<{title: string, author: string, genre: Genres}> = ({ti
 
                                     />
                                 </ListItemButton>
-                                <Divider sx={{ my: 1 }} />
 
 
 
@@ -142,12 +145,11 @@ export const BPHeader: FC<{title: string, author: string, genre: Genres}> = ({ti
                                     onClick={() => { logout(); navigate('/auth') }}
                                     sx={{
 
-                                        mt: 1,
                                         pb: 0,
                                         pt: 0,
                                         pl: 1.5,
                                         pr: 1.5,
-                                        height: 40,
+                                        height: 45,
                                         '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
                                     }}
                                 >
@@ -182,14 +184,18 @@ export const BPHeader: FC<{title: string, author: string, genre: Genres}> = ({ti
                         }}
                     >
                         <IconButton sx={{ p: 0 }}>
-                            <MdOutlineAccountCircle
-                                style={{
-                                    fontSize: 32,
-                                    color: 'white',
-                                    borderRadius: 10,
-                                    cursor: 'pointer'
-                                }}
-                            />
+                            <div className={styles.clickable_wrapper} style={{ cursor: 'default' }}>
+                                <MdAccountCircle
+                                    style={{
+                                        fontSize: 27,
+                                        color: 'rgba(255,255,255,0.9)',
+                                        borderRadius: 10,
+
+                                    }}
+                                />
+                                <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Профиль</p>
+                            </div>
+
                         </IconButton>
                     </Tooltip>
                 </div>

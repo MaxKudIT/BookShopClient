@@ -7,7 +7,7 @@
       rgba(22, 9, 58, 0.4) 70%
     );
     background-color: rgba(9, 7, 54, 0.9);
-    padding: 20px 30px;
+    padding: 20px 50px 20px 30px;
     display: flex;
     flex-direction: column;
     row-gap: 20px;
@@ -17,7 +17,7 @@
 .header_first_row {
     display: flex;
     justify-content: space-between;
-  
+    
     width: 100%;
     align-items: center;
 }
@@ -34,9 +34,27 @@
     row-gap: 5px;
 }
 
+
+
+
 .header_second_row {
     display: flex;
     justify-content: space-between;
     width: 100%;
     align-items: center;
+}
+
+.clickable_wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 7px;
+    align-items: center;
+    border-radius: 10px;
+    padding: 10px 0;
+    width: 85px;
+    transition: all 0.2s;
+    cursor: pointer;
+    &:hover {
+        background-color: rgba(255,255,255,0.1);
+    }
 }

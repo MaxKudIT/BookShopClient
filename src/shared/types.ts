@@ -14,7 +14,8 @@ export type BookPreviewT = {
     Price: number
     ImageUrl: string,
     Discount: number,
-    IsMine: boolean
+    IsMine: boolean,
+    Rate: number
 }
 
 export type BookInfoT = {
