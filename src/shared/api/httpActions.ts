@@ -24,14 +24,24 @@ class HttpActions {
         ids: string[],
         config?: AxiosRequestConfig
     ): AxiosPromise<T> => {
+        if (!ids || ids.length === 0) {
+        
+            return Promise.resolve({
+                data: null as T,
+                status: 200,
+                statusText: 'OK',
+                headers: {},
+                config: {}
+            }) as AxiosPromise<T>;
+        }
         return api.delete(url, {
             ...config,
             params: {
                 ...config?.params,
-                id: ids  
+                id: ids
             },
             paramsSerializer: {
-                indexes: null 
+                indexes: null
             }
         });
     };
@@ -39,6 +49,15 @@ class HttpActions {
 
     public getAccessToken = async (): Promise<AxiosRequestConfig> => {
         const auth = getAuth();
+
+        await auth.authStateReady();
+
+        const user = auth.currentUser;
+        if (!user) {
+
+            throw new Error('User not authenticated');
+        }
+
         const token = await auth.currentUser?.getIdToken();
 
         const configAddToken: AxiosRequestConfig = {

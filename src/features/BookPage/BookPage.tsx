@@ -50,7 +50,8 @@ const BookPageF = observer(() => {
         if (id && pageNumber) {
             await Promise.all([
                 getPageById(id, pageNumber),
-                getPagesCount(id)
+                getPagesCount(id),
+              
             ]);
 
             console.log('Оба запроса завершены');

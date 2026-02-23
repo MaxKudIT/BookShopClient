@@ -1,5 +1,5 @@
 import { Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton } from "@mui/material";
-import { useCallback, useEffect, useState, type FC } from "react";
+import { useCallback, useEffect, useMemo, useState, type FC } from "react";
 import { IoClose, IoCheckmarkCircle, IoCartOutline } from "react-icons/io5";
 
 import { useNavigate } from "react-router-dom";
@@ -12,13 +12,19 @@ import { RiDeleteBinLine } from "react-icons/ri";
 
 import { IoMdCart } from "react-icons/io";
 import type { CartItemsPreview } from "../../types";
+import CartFooter from "../Footer/CartFooter";
 
+
+
+export type CartSelectedType = {
+    id: string
+    price: number
+}
 
 
 export type RequestingState = {
 
-    loading: boolean,
-    error: string | null,
+    loading: boolean
     handleDeleteItem: (bookId: string[]) => void
 
 
@@ -28,7 +34,7 @@ export type RequestingState = {
 
 
 
-const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, loading, error, handleDeleteItem }) => {
+const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, loading, handleDeleteItem }) => {
 
 
 
@@ -37,16 +43,17 @@ const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, 
 
     const [dialog, setDialog] = useState(false)
 
-    const [selectedIds, setSelectedIds] = useState<string[]>([]);
+    const [selectedI, setSelectedI] = useState<CartSelectedType[]>([]);
     const [allSelected, setAllSelected] = useState(false);
 
     useEffect(() => {
-        if (selectedIds.length === items.length && items.length > 0) {
+        if (selectedI.length === items.length && items.length > 0) {
             setAllSelected(true);
         } else {
             setAllSelected(false);
         }
-    }, [selectedIds, items]);
+    }, [selectedI, items]);
+
 
 
 
@@ -62,37 +69,47 @@ const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, 
     }
 
 
-    const addItem = (checkedId: string) => {
-        setSelectedIds(prev => {
+    const addItem = (selectedParam: CartSelectedType) => {
+        setSelectedI(prev => {
             if (prev !== null) {
-                return [...prev, checkedId]
+                return [...prev, selectedParam]
             }
-            return [checkedId]
+            return [selectedParam]
         })
     }
 
 
-    const deleteItem = (checkedId: string) => {
-        setSelectedIds(prev => {
+    const deleteItem = (id: string) => {
+        setSelectedI(prev => {
             if (prev !== null) {
-                return prev.filter(el => el !== checkedId)
+                return prev.filter(el => el.id !== id)
             }
-            return [checkedId]
+            return []
         })
     }
 
 
     const handleSelectAll = (checked: boolean) => {
         if (checked) {
-            setSelectedIds(items.map(item => item.Id));
+            setSelectedI(items.map(item => ({id: item.Id, price: Math.floor(item.Price - (item.Price / 100 * item.Discount))})));
         } else {
-            setSelectedIds([]);
+            setSelectedI([]);
         }
     };
 
 
 
-    
+    const sumItems = useMemo(() => {
+        if (selectedI.length > 0) {
+            
+            return selectedI.reduce((acc, cv) => acc + cv.price, 0)
+        } 
+        return items.reduce((acc, cv) => {
+            const price = Math.floor(cv.Price - (cv.Price / 100 * cv.Discount));
+            return acc + price
+        }, 0)
+        
+    }, [selectedI, items])
 
     return (
 
@@ -100,58 +117,6 @@ const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, 
 
 
 
-            <Dialog
-                onClose={() => { setDialog(false); navigate('/mybooks') }}
-                open={dialog}
-                slotProps={{
-                    paper: {
-                        sx: {
-                            outline: 'none',
-                            background: `
-                                linear-gradient(145deg, 
-                                rgba(20, 39, 131, 1) 0%, 
-                                rgba(37, 58, 180, 1) 30%, 
-                                rgba(98, 38, 211, 1) 70%
-                                )
-                            `,
-                            color: 'white',
-                            borderRadius: 3,
-
-                            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
-                        }
-                    },
-                    backdrop: {
-                        sx: {
-                            backdropFilter: 'blur(3px)',
-                            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                        }
-                    }
-                }}
-                fullWidth
-            >
-                <DialogTitle>
-                    Результат покупки
-                    <IconButton
-                        onClick={() => { setDialog(false); navigate('/mybooks') }}
-                        sx={{
-                            position: 'absolute',
-                            right: 8,
-                            top: 8,
-                            color: 'white',
-
-                        }}
-                    >
-                        <IoClose />
-                    </IconButton>
-                </DialogTitle>
-                <DialogContent>
-                    <p>ss</p>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => { setDialog(false); navigate('/mybooks') }} sx={{ color: 'white' }}>Продолжить</Button>
-
-                </DialogActions>
-            </Dialog>
 
 
             <div className={styles.cart_first_row}>
@@ -198,9 +163,11 @@ const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, 
                 </div>
                 <Divider sx={{ my: 2, ml: 2, borderColor: 'rgba(94, 67, 156, 1)' }} orientation="vertical" />
                 <div style={{ display: 'flex', alignItems: 'center', columnGap: 20 }}>
-                    <p style={{ color: 'white', fontSize: 14 }}>Выбрано: {selectedIds.length}</p>
+                    <p style={{ color: 'white', fontSize: 14 }}>Выбрано: {selectedI.length}</p>
                     <button onClick={async () => {
-                        await handleDeleteItem(selectedIds)
+                        const array = selectedI.map(item => item.id)
+                        await handleDeleteItem(array)
+                        setSelectedI([])
                     }} className={styles.clickable_wrapper}>
                         <RiDeleteBinLine style={{ color: 'red', fontSize: 16 }} />
                         <p style={{ color: 'red' }}>Удалить выбранное</p>
@@ -221,31 +188,42 @@ const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, 
 
                     }}
 
-                />) :
-                    items.map(el => (<CartViewComponent
-                        addItem={addItem}
-                        deleteItem={deleteItem}
-                        isSelected={selectedIds.includes(el.Id)}
-                        handleDeleteItem={handleDeleteItem}
+                />) : items.length !== 0 ?
+                    <>
+                        {items.map(el => (<CartViewComponent
+                            addItem={addItem}
+                            deleteItem={deleteItem}
+                            isSelected={selectedI.some(item => item.id === el.Id)}
+                            handleDeleteItem={handleDeleteItem}
 
 
-                        Id={el.Id}
-                        ImageUrl={el.ImageUrl}
-                        Title={el.Title}
-                        Author={el.Author}
-                        Price={el.Price}
-                        Discount={el.Discount}
-                        Rate={el.Rate}
+                            Id={el.Id}
+                            ImageUrl={el.ImageUrl}
+                            Title={el.Title}
+                            Author={el.Author}
+                            Price={el.Price}
+                            Discount={el.Discount}
+                            Rate={el.Rate}
 
 
+                        />))}
+                         <Divider sx={{ borderBottomWidth: 2, my: 3, mb: 0, borderColor: 'rgba(94, 67, 156, 1)' }} />
+                        <CartFooter sum={sumItems}/>
+                    </>
 
-
-                    />))
+                    : (
+                        <div style={{
+                            color: 'white',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignSelf: 'center'
+                        }}>Корзина пуста</div>
+                    )
                 }
 
 
 
-            </div>
+            </div >
 
 
 
@@ -253,7 +231,7 @@ const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, 
 
 
 
-        </div>
+        </div >
     )
 }
 
