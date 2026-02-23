@@ -33,7 +33,9 @@ export type BookInfoT = {
     Genre: string
     ImageUrl: string
     Rate: number
-    IsMine: number
+    IsMine: number,
+
+    isInCart: boolean
 }
 
 export type PageInfoT = {
@@ -48,4 +50,16 @@ export type ErrorResponse = string
 export type AxiosSolt = {
     loading: boolean
     error: string | null
+}
+
+
+export type CartItemsPreview = {
+    Id: string
+    ImageUrl: string
+    Title: string
+    Author: string
+    Price: number
+    Discount: number
+    Rate: number
+
 }

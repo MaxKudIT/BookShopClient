@@ -1,7 +1,7 @@
 import React from "react";
 import styles from './MyBooks.module.scss'
 
-import ShopBookList from "../../features/ShopBookList/ShopBookList";
+
 import HeaderComponent from "../../shared/components/Header/HeaderComponent";
 import MyBooksList from "../../features/MyBooks/MyBooksList";
 const MyBooks = () =>

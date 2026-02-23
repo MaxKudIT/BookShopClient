@@ -21,7 +21,7 @@ export const protectedLoader = async () => {
     response.headers.set('X-Replace-History', 'true');
     return response;
   }
-
+ 
   return { user };
 };
 

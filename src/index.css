@@ -8,10 +8,10 @@
 }
 
 img {
-     user-select: none; /* Запрещает выделение */
-  -webkit-user-drag: none; /* Запрещает перетаскивание в Safari/Chrome */
-  -webkit-user-select: none; /* Для Safari */
-  -moz-user-select: none; /* Для Firefox */
-  -ms-user-select: none; /* Для старых IE */
+     user-select: none; 
+  -webkit-user-drag: none; 
+  -webkit-user-select: none; 
+  -moz-user-select: none; 
+  -ms-user-select: none;
    pointer-events: none;
 }

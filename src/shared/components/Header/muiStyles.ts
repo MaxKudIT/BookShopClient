@@ -2,7 +2,7 @@ import { PiX } from "react-icons/pi";
 
 export const textFieldStyles = {
   height: 50,
-  width: '65%',
+  width: '40%',
   '& .MuiFilledInput-root': {   
     height: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.1)', 

@@ -4,24 +4,78 @@ import type { BookInfoT, Genres } from "../../types";
 import { FaRegStar, FaRegUser } from "react-icons/fa6";
 import { FaStar } from "react-icons/fa"
 import { FaStarHalfAlt } from "react-icons/fa";
-import { MdCurrencyRuble, MdOutlineDateRange, MdOutlineShoppingCart } from "react-icons/md";
+import { MdAttachMoney, MdCurrencyRuble, MdOutlineAttachMoney, MdOutlineDateRange, MdOutlineShoppingCart } from "react-icons/md";
 import { FiTag } from "react-icons/fi";
 import { IoBookOutline, IoCheckmarkCircle, IoTimeOutline } from "react-icons/io5";
 import BookInfoComponent from "../BookInfoComponent/BookInfoComponent";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton } from "@mui/material";
-import { buttonStyles } from "./muiStyles";
+import { buttonStyles, buttonStyles2 } from "./muiStyles";
 import { formatDateToRussian, getHoursWord, getMinutesWord, getPagesWord } from "../../helpers/format";
 import { LuBookOpenText } from "react-icons/lu";
 import { IoClose } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { ColorChoiceFunc, ColorChoiceFuncForBookInfo } from "../../helpers/colorChoice";
+import useDominantColor from "../../hooks/useDominantColor";
+import { RiMoneyDollarCircleLine } from "react-icons/ri";
 
 
 export type RequestingState = {
     loading: boolean,
     error: string | null,
-    handleBuy: () => void
+    handleBuy: () => void,
+
+    loading2: boolean,
+    error2: string | null,
+    hanldleAddItem: (bookId: string) => void,
+
+    loading3: boolean,
+    error3: string | null,
+    handleDeleteItem: (bookId: string[]) => void
+
+
 }
+
+
+export const rateStars = (rate: number, maxStars: number = 5): JSX.Element[] => {
+    const fullStars = Math.floor(rate);
+    const remainder = rate % 1;
+    const hasHalfStar = remainder >= 0.2;
+
+    const stars: JSX.Element[] = [];
+
+    for (let i = 0; i < fullStars; i++) {
+        stars.push(
+            <FaStar
+                key={`full-${i}`}
+                style={{ color: '#e0c320ff', fontSize: 19 }}
+            />
+        );
+    }
+
+
+    if (hasHalfStar && fullStars < maxStars) {
+        stars.push(
+            <FaStarHalfAlt
+                key="half"
+                style={{ color: '#e0c320ff', fontSize: 19 }}
+            />
+        );
+    }
+
+
+    const totalStars = fullStars + (hasHalfStar ? 1 : 0);
+    for (let i = totalStars; i < maxStars; i++) {
+        stars.push(
+            <FaRegStar
+                key={`empty-${i}`}
+                style={{ color: '#e0c320ff', fontSize: 19 }}
+            />
+        );
+    }
+
+    return stars;
+};
+
 
 const BookInfoView: FC<BookInfoT & RequestingState> = ({
     Rate,
@@ -42,9 +96,23 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
 
     loading,
     handleBuy,
-    error
+    error,
+
+    loading2,
+    error2,
+    hanldleAddItem,
+
+    isInCart,
+
+    loading3,
+    error3,
+    handleDeleteItem
 
 }) => {
+
+
+
+
 
     const navigate = useNavigate();
 
@@ -63,45 +131,7 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
 
     const DiscountPrice = Math.floor(Price - (Price / 100 * Discount))
 
-    const rateStars = (rate: number, maxStars: number = 5): JSX.Element[] => {
-        const fullStars = Math.floor(rate);
-        const remainder = rate % 1;
-        const hasHalfStar = remainder >= 0.2;
 
-        const stars: JSX.Element[] = [];
-
-        for (let i = 0; i < fullStars; i++) {
-            stars.push(
-                <FaStar
-                    key={`full-${i}`}
-                    style={{ color: '#e0c320ff', fontSize: 19 }}
-                />
-            );
-        }
-
-
-        if (hasHalfStar && fullStars < maxStars) {
-            stars.push(
-                <FaStarHalfAlt
-                    key="half"
-                    style={{ color: '#e0c320ff', fontSize: 19 }}
-                />
-            );
-        }
-
-
-        const totalStars = fullStars + (hasHalfStar ? 1 : 0);
-        for (let i = totalStars; i < maxStars; i++) {
-            stars.push(
-                <FaRegStar
-                    key={`empty-${i}`}
-                    style={{ color: '#e0c320ff', fontSize: 19 }}
-                />
-            );
-        }
-
-        return stars;
-    };
 
 
     const calculateFormat = useMemo(() => {
@@ -192,8 +222,7 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
                             src={ImageUrl}
                             style={{
                                 width: '100%',
-                                height: '100%',
-                                borderRadius: 30
+                                height: '100%'
                             }}
                         />
                     </div>
@@ -237,83 +266,220 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
                                 <IoCheckmarkCircle style={{ color: 'rgba(68, 190, 30, 1)', fontSize: 28 }} />
                                 <p style={{ fontSize: 18, color: 'rgba(67, 209, 24, 1)', fontWeight: '500' }}>В наличии</p>
                             </div>
-                            <Button
-                                onClick={() => navigate(`/books/${Id}/pages/1`)}
-                                sx={buttonStyles}
-                                variant="contained"
+                            <div style={{
+                                width: '100%',
+                                paddingTop: '20px',
 
-                            >
-                                <LuBookOpenText style={{ fontSize: 18 }} />
-                                <p>Читать книгу</p>
-                            </Button>
+                                rowGap: 20,
+                                display: 'flex',
+                                flexDirection: 'column',
+
+                            }}>
+                                <Button
+                                    onClick={() => navigate(`/books/${Id}/pages/1`)}
+                                    sx={buttonStyles}
+                                    variant="contained"
+
+                                >
+                                    <LuBookOpenText style={{ fontSize: 18 }} />
+                                    <p>Читать электронную книгу</p>
+                                </Button>
+                                {isInCart ? (
+                                    <Button
+                                        onClick={async () => {
+                                            await handleDeleteItem([Id])
+                                            navigate('/')
+
+                                        }}
+                                        sx={buttonStyles2}
+                                        variant="contained"
+
+                                    >
+                                        {loading3 ? <CircularProgress
+                                            sx={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                padding: 1,
+                                                color: 'white',
+
+                                            }}
+
+                                        /> : <>
+                                            <MdOutlineShoppingCart style={{ fontSize: 18 }} />
+                                            <p>Удалить из корзины</p>
+                                        </>}
+
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        onClick={async () => {
+                                            await hanldleAddItem(Id);
+                                            navigate('/')
+
+                                        }}
+                                        sx={buttonStyles2}
+                                        variant="contained"
+
+                                    >
+                                        {loading2 ? <CircularProgress
+                                            sx={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                padding: 1,
+                                                color: 'white',
+
+                                            }}
+
+                                        /> : <>
+                                            <MdOutlineShoppingCart style={{ fontSize: 18 }} />
+                                            <p>В корзину (с доставкой)</p>
+                                        </>}
+
+                                    </Button>
+                                )}
+
+                            </div>
+
+
                         </>
                     ) : (
                         <>
                             <div style={{ display: 'flex', columnGap: 10, alignItems: 'center' }}>
-                                 {Price === 0 ? (
-                                     <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>Бесплатно</p>
+                                {Price === 0 ? (
+                                    <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>Бесплатно</p>
                                 ) : (
                                     Discount !== 0 ? (
-                                    <>
-                                        <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
-                                            {DiscountPrice}
-                                            <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
-                                        </p>
-                                        <p style={{
-                                            fontSize: 14,
-                                            color: 'gray',
-                                            textDecoration: 'line-through',
-                                            textDecorationColor: '#a7a7adff'
-                                        }}>-{Price}</p>
-                                        <div style={{
-                                            padding: '4px 6px',
-                                            fontSize: 13,
-                                            borderRadius: 8,
-                                            background: '#0b9128ff',
-                                            color: 'white',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center'
-                                        }}>
-                                            -{Discount}%
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
-                                            {Price}
-                                            <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
-                                        </p>
-                                    </>
-                                )
+                                        <>
+                                            <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
+                                                {DiscountPrice}
+                                                <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
+                                            </p>
+                                            <p style={{
+                                                fontSize: 14,
+                                                color: 'gray',
+                                                textDecoration: 'line-through',
+                                                textDecorationColor: '#a7a7adff'
+                                            }}>-{Price}</p>
+                                            <div style={{
+                                                padding: '4px 6px',
+                                                fontSize: 13,
+                                                borderRadius: 8,
+                                                background: '#0b9128ff',
+                                                color: 'white',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}>
+                                                -{Discount}%
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
+                                                {Price}
+                                                <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
+                                            </p>
+                                        </>
+                                    )
                                 )}
-                              
+
                             </div>
-                            <Button
-                                onClick={async () => {
-                                    await handleBuy();
-                                    setDialog(true)
+                            <div style={{
+                                width: '100%',
+                                paddingTop: '20px',
 
-                                }}
-                                sx={buttonStyles}
-                                variant="contained"
+                                rowGap: 20,
+                                display: 'flex',
+                                flexDirection: 'column',
 
-                            >
-                                {loading ? <CircularProgress
-                                    sx={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        padding: 1,
-                                        color: 'white'
+                            }}>
+                                <Button
+                                    onClick={async () => {
+                                        await handleBuy();
+                                        setDialog(true)
+
                                     }}
+                                    sx={buttonStyles}
+                                    variant="contained"
 
-                                /> : <>
-                                    <MdOutlineShoppingCart style={{ fontSize: 18 }} />
-                                    <p>Купить сейчас</p>
-                                </>}
+                                >
+                                    {loading ? <CircularProgress
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            padding: 1,
+                                            color: 'white'
+                                        }}
 
-                            </Button>
+                                    /> : <>
+                                        <RiMoneyDollarCircleLine style={{ fontSize: 20 }} />
+                                        <p>Купить электронную версию</p>
+                                    </>}
+
+                                </Button>
+
+                                {isInCart ? (
+                                    <Button
+                                        onClick={async () => {
+                                            await handleDeleteItem([Id])
+                                            navigate('/')
+
+
+                                        }}
+                                        sx={buttonStyles2}
+                                        variant="contained"
+
+                                    >
+                                        {loading3 ? <CircularProgress
+                                            sx={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                padding: 1,
+                                                color: 'white',
+
+                                            }}
+
+                                        /> : <>
+                                            <MdOutlineShoppingCart style={{ fontSize: 18 }} />
+                                            <p>Удалить из корзины</p>
+                                        </>}
+
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        onClick={async () => {
+                                            await hanldleAddItem(Id);
+                                            navigate('/')
+
+                                        }}
+                                        sx={buttonStyles2}
+                                        variant="contained"
+
+                                    >
+                                        {loading2 ? <CircularProgress
+                                            sx={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                padding: 1,
+                                                color: 'white',
+
+                                            }}
+
+                                        /> : <>
+                                            <MdOutlineShoppingCart style={{ fontSize: 18 }} />
+                                            <p>В корзину (с доставкой)</p>
+                                        </>}
+
+                                    </Button>
+                                )}
+
+                            </div>
+
                         </>
                     )}
 

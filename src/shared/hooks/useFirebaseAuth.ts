@@ -11,6 +11,7 @@ import { doc, setDoc, getDoc, type DocumentData } from 'firebase/firestore';
 import { auth, db } from './configs/firebase-config';
 import type { RegFormType } from '../../features/Registration/Registration';
 import type { LoginFormType } from '../../features/Authorization/Authorization';
+import { api } from '../api/api';
 
 
 export type AppUser = User & { login: string }
@@ -54,6 +55,7 @@ export const useFirebaseAuth = () => {
       };
     
       setUser(userData);
+
       return userData;
 
     } catch (err: any) {

@@ -79,7 +79,7 @@ const ShopBookList = () => {
     )
   }
 
-  console.log(books)
+
 
   return (
     <div className={styles.books_global_style}>

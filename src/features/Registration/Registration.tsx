@@ -20,6 +20,7 @@ import { auth } from '../../shared/hooks/configs/firebase-config';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from 'react-router-dom';
 import { usePost } from '../../shared/hooks/queries';
+import { getAuth } from 'firebase/auth';
 
 
 
@@ -37,7 +38,11 @@ const Registration = () => {
 
   const [user] = useAuthState(auth)
 
-    const {post} = usePost<{FirebaseId: string}, {id: string}>('/users/create');
+  const { post: createUser } = usePost<{ FirebaseId: string }, { id: string }>('/users/create');
+
+  const { post: createCart } = usePost('/cart')
+
+
 
   const { register, loading, error, clearError } = useFirebaseAuth();
 
@@ -106,17 +111,36 @@ const Registration = () => {
 
     try {
 
+      // 1. Регистрируем пользователя в Firebase
       const user = await register(input);
-      await post({FirebaseId: user.uid})
-      
 
-      if (user) {
-        navigate('/', { replace: true })
-      }
+      // 2. Создаем пользователя в своей БД
+      await createUser({ FirebaseId: user.uid });
+
+      // Получаем данные авторизации
+      const auth = getAuth()
 
 
+      // 3. Получаем токен
+      const token = await auth.currentUser?.getIdToken()
+
+      // 4. Создаем корзину для пользователя
+      await createCart(
+        { title: `Cart ${user.uid}` },
+        { idToken: token }
+      );
+
+
+      // 5. Редирект на главную
+      navigate('/', { replace: true });
+
+      // 6. Очищаем форму
       setInput({ email: '', login: '', pass: '' });
       setErrors({ login: '', email: '', pass: '' });
+
+
+
+
 
 
     } catch (err: any) {

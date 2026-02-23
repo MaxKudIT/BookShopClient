@@ -1,6 +1,6 @@
 import React from "react";
 import BookInfo from "../../features/BookInfo/BookInfo";
-import styles from './BookInfo.module.scss'
+import styles from './CartM.module.scss'
 import { Box, Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Tooltip, Typography } from "@mui/material";
 import { MdAccountCircle, MdEmail, MdExitToApp, MdLibraryBooks, MdOutlineAccountCircle, MdPerson } from "react-icons/md";
 import { PiBooks } from "react-icons/pi";
@@ -10,12 +10,13 @@ import { useFirebaseAuth } from "../../shared/hooks/useFirebaseAuth";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineShopping } from "react-icons/ai";
 import { RiShoppingBag4Fill } from "react-icons/ri";
+import CartF from "../../features/Cart/CartF";
 import NavComponent from "../../shared/components/Navigation/NavComponent";
 import NavMediaComponent from "../../shared/components/Navigation/MediaNavigation/NavMediaComponent";
 
 
 
-const BookInfoModule = () => {
+const CartM = () => {
 
 
   const navigate = useNavigate()
@@ -26,9 +27,9 @@ const BookInfoModule = () => {
 
   return (
     <div className={styles.book_info_page_style}>
-      
-      <NavMediaComponent pageType="bookinfo"/>
-      <BookInfo />
+      <NavMediaComponent pageType="cart"/>
+
+      <CartF/>
       <div style={{
         width: '100vw',
         height: '100px',
@@ -41,4 +42,4 @@ const BookInfoModule = () => {
   )
 }
 
-export { BookInfoModule };
+export { CartM };

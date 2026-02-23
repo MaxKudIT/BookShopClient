@@ -19,14 +19,26 @@ const BookInfo = observer(() => {
       book,
       getBookById,
       getBookState
+    },
+    cartItemsStore: {
+      createCartItem,
+      postCartItemsState,
+
+      isInCartItem,
+      isInCartItems,
+      postCartItemsState2,
+
+      deleteCartItems,
+      deleteCartItemsState
     }
   } = useStores()
 
 
 
-  const handleGetBook = useCallback(async () => {
+  const handleResultBook = useCallback(async () => {
      if (id) {
       await getBookById(id)
+      await isInCartItem(id);
 
     } else {
       console.error('Параметр id не найден')
@@ -34,9 +46,8 @@ const BookInfo = observer(() => {
   }, [getBookById]) 
 
   useEffect(() => {
-      handleGetBook()
-    
-  }, [handleGetBook]);
+      handleResultBook()
+  }, [handleResultBook]);
 
 
     const {loading, error, post} = usePost('/ub/buy');
@@ -49,7 +60,7 @@ const BookInfo = observer(() => {
       
        if (id) {
         const idToken = await auth.currentUser?.getIdToken();
-        await post({ BookId:  id}, {idToken: idToken});
+        await post({ BookIds:  [id]}, {idToken: idToken});
 
     } else {
       console.error('Параметр id не найден')
@@ -65,7 +76,7 @@ const BookInfo = observer(() => {
 
 
 
-  if (getBookState.loading) {
+  if (getBookState.loading || postCartItemsState2.loading) {
     return (
     
         <CircularProgress
@@ -84,9 +95,9 @@ const BookInfo = observer(() => {
     )
   }
 
-  if (getBookState.error) {
+  if (getBookState.error || postCartItemsState2.error) {
     return (
-        <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>{getBookState.error}</p>
+        <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>{getBookState.error || postCartItemsState2.error}</p>
     )
   }
 
@@ -111,9 +122,22 @@ const BookInfo = observer(() => {
        ImageUrl={book.ImageUrl} 
        Rate={book.Rate} 
        IsMine={book.IsMine} 
+
        loading={loading}
        handleBuy={handleBuy}
        error={error}
+
+       loading2={postCartItemsState.loading}
+        error2={postCartItemsState.error}
+        hanldleAddItem={createCartItem}
+
+        isInCart={isInCartItems}
+
+        loading3={deleteCartItemsState.loading}
+        error3={deleteCartItemsState.error}
+        handleDeleteItem={deleteCartItems}
+        
+
        />
     )
 })

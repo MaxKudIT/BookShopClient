@@ -25,6 +25,7 @@
 .first_start_block_wrapper {
     display: flex;
     column-gap: 10px;
+
  
 }
 
@@ -53,7 +54,10 @@
     padding: 10px 0;
     width: 85px;
     transition: all 0.2s;
+    border: none;
+    outline: none;
     cursor: pointer;
+    background: transparent;
     &:hover {
         background-color: rgba(255,255,255,0.1);
     }

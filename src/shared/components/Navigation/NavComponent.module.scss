@@ -1,0 +1,18 @@
+
+.clickable_wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 7px;
+    align-items: center;
+    border-radius: 10px;
+    padding: 10px 0;
+    width: 85px;
+    transition: all 0.2s;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background: transparent;
+    &:hover {
+        background-color: rgba(255,255,255,0.1);
+    }
+}

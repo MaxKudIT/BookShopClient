@@ -19,7 +19,7 @@ const Book: FC<BookPreviewT & { PageView: 'shop' | 'home' }> = ({ Id, Title, Gen
         if ((rate >= 4 && rate < 5)) {
             return <div style={{
                 position: 'absolute',
-                background: '#3da813ff',
+                background: 'linear-gradient(#3da813ff, #70c71fff)',
                 padding: '5px 15px',
                 top: 5,
                 left: 5,
@@ -60,7 +60,7 @@ const Book: FC<BookPreviewT & { PageView: 'shop' | 'home' }> = ({ Id, Title, Gen
 
         return <div style={{
             position: 'absolute',
-            background: 'gray',
+            background: 'linear-gradient(gray, #5a5656ff)',
             padding: '5px 15px',
             top: 5,
             left: 5,
@@ -107,7 +107,7 @@ const Book: FC<BookPreviewT & { PageView: 'shop' | 'home' }> = ({ Id, Title, Gen
                                 ) : (
                                     Discount !== 0 ? (
                                         <>
-                                            <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
+                                            <p style={{ fontSize: 22, color: '#c09fd6ff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
                                                 {DiscountPrice}
                                                 <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
                                             </p>

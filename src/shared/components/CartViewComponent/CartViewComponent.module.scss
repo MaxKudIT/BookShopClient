@@ -1,0 +1,29 @@
+.cart_view_compo_wrapper {
+    height: 180px;
+   
+    border-radius: 15px;
+    border: 1px solid rgba(112, 79, 204, 0.5);
+    display: flex;
+    align-items: center;
+    padding: 10px 10px;
+    justify-content: space-between;
+    background: linear-gradient(rgba(42, 81, 190, 0.2), rgba(33, 16, 129, 0.2), rgb(81, 42, 190, 0.1));
+}
+
+.clickable_wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 7px;
+    align-items: center;
+    border-radius: 10px;
+    padding: 10px 10px;
+
+    transition: all 0.2s;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background: transparent;
+    &:hover {
+        background-color: rgba(255,255,255,0.1);
+    }
+}

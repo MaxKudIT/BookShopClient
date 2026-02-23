@@ -42,6 +42,7 @@ import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { FaCartShopping } from "react-icons/fa6";
+import NavComponent from "../Navigation/NavComponent";
 export const genresKeys: GenresDropDown[] = ['Все жанры', 'Приключения', 'Драма', 'Ужасы', 'Исторические', 'Фантастика']
 
 
@@ -99,7 +100,7 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
     <div className={styles.header_block_style}>
       <div className={styles.header_first_row}>
         <div className={styles.first_start_block_wrapper}>
-          <div style={{ background: 'rgba(255,255,255, 0.2)', borderRadius: 10, padding: 5, }}>
+          <div style={{ background: 'rgba(255,255,255, 0.2)', borderRadius: 10, padding: 5 }}>
             <IoBookOutline style={{ fontSize: 40, color: 'white' }} />
           </div>
 
@@ -118,181 +119,8 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
 
         </div>
 
-
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div onClick={() => { navigate('/favs') }} className={styles.clickable_wrapper}>
-            <IoIosHeart style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
-            <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Избранное</p>
-          </div>
-          <div onClick={() => { navigate('/cart') }} className={styles.clickable_wrapper}>
-            <IoMdCart style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
-            <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Корзина</p>
-          </div>
-          {myBooksPage ? (
-            <div onClick={() => { navigate('/') }} className={styles.clickable_wrapper}>
-              <RiShoppingBag4Fill style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
-              <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Библиотека</p>
-            </div>
-
-          ) : (
-            <div  onClick={() => { navigate('/mybooks') }} className={styles.clickable_wrapper}>
-              <IoIosHome style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
-              <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Домашняя</p>
-            </div>
-
-          )}
-
-          <Tooltip
-
-            title={
-              <Box sx={{
-                borderRadius: 2,
-                pb: 1, pt: 1, background: 'rgba(95, 97, 134, 1)',
-                '& svg': {
-                  color: 'rgba(153, 154, 179, 1)',
-                  fontSize: '20px',
-
-                }
-
-
-              }}>
-
-
-                <ListItem sx={{ pl: 1.5, pr: 1.5 }} disablePadding>
-                  <ListItemIcon sx={{ minWidth: 36 }}>
-                    <MdEmail fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Typography fontSize={14} color='rgba(211, 211, 221, 1)'>
-                        Email
-                      </Typography>
-                    }
-                    secondary={
-                      <Typography fontSize={14} sx={{ fontWeight: 'medium' }}>
-                        {user?.email}
-                      </Typography>
-                    }
-                  />
-                </ListItem>
-
-
-                <ListItem sx={{ pl: 1.5, pr: 1.5 }} disablePadding>
-                  <ListItemIcon sx={{ minWidth: 36 }}>
-                    <MdPerson fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Typography fontSize={14} color='rgba(211, 211, 221, 1)'>
-                        Логин
-                      </Typography>
-                    }
-                    secondary={
-                      <Typography fontSize={14} sx={{ fontWeight: 'medium' }}>
-                        {user?.displayName}
-                      </Typography>
-                    }
-                  />
-                </ListItem>
-
-                <Divider sx={{ my: 1 }} />
-                {!myBooksPage && (
-                  <>
-                    <ListItemButton
-
-                      onClick={() => { navigate('/mybooks') }}
-                      sx={{
-
-                        pt: 0,
-                        pb: 0,
-                        pl: 1.5,
-                        pr: 1.5,
-                        height: 45,
-                        '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
-                      }}
-                    >
-                      <ListItemIcon sx={{ minWidth: 36 }}>
-                        <MdLibraryBooks fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText
-                        sx={{
-                          '& .MuiListItemText-primary': {
-                            fontSize: 14,
-                          },
-
-                        }}
-                        primary="Мои книги"
-
-
-                      />
-                    </ListItemButton>
-
-                  </>
-
-                )}
-
-
-
-
-                <ListItemButton
-
-                  onClick={() => { logout(); navigate('/auth') }}
-                  sx={{
-
-                    pb: 0,
-                    pt: 0,
-                    pl: 1.5,
-                    pr: 1.5,
-                    height: 45,
-                    '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
-                  }}
-                >
-                  <ListItemIcon sx={{ minWidth: 36 }}>
-                    <MdExitToApp fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText sx={{
-                    '& .MuiListItemText-primary': {
-                      fontSize: 14,
-                    }
-                  }} primary="Выйти" />
-                </ListItemButton>
-
-              </Box>
-            }
-            placement="bottom-end"
-            arrow
-            slotProps={{
-              tooltip: {
-                sx: {
-
-                  backgroundColor: 'transparent',
-                  padding: 0,
-                  boxShadow: 'none',
-                  maxWidth: 'none',
-                  '& .MuiTooltip-arrow': {
-                    color: 'rgba(153, 154, 179, 1)',
-                  },
-
-                }
-              }
-            }}
-          >
-            <IconButton sx={{ p: 0 }}>
-              <div className={styles.clickable_wrapper} style={{ cursor: 'default' }}>
-                <MdAccountCircle
-                  style={{
-                    fontSize: 27,
-                    color: 'rgba(255,255,255,0.9)',
-                    borderRadius: 10,
-
-                  }}
-                />
-                <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Профиль</p>
-              </div>
-
-            </IconButton>
-          </Tooltip>
-        </div>
+          <NavComponent myBooksPage={myBooksPage}/>
+       
 
       </div>
 
