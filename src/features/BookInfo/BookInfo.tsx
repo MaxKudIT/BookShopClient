@@ -10,10 +10,10 @@ import { getAuth } from "firebase/auth";
 
 const BookInfo = observer(() => {
 
-    const {id} = useParams<{id: string}>()
+  const { id } = useParams<{ id: string }>()
 
 
-    
+
   const {
     bookInfoStore: {
       book,
@@ -30,41 +30,57 @@ const BookInfo = observer(() => {
 
       deleteCartItems,
       deleteCartItemsState
+    },
+    favItemsStore: {
+      createFavItem,
+      postFavItemsState,
+
+      isInFavsItem,
+      isInFavsItems,
+      postFavItemsState2,
+
+      deleteFavItems,
+      deleteFavItemsState
     }
   } = useStores()
 
 
 
   const handleResultBook = useCallback(async () => {
-     if (id) {
-      await getBookById(id)
-      await isInCartItem(id);
+    if (id) {
+
+      await Promise.all([
+        getBookById(id),        
+        isInCartItem(id),      
+        isInFavsItem(id)       
+      ])
+  
 
     } else {
       console.error('Параметр id не найден')
     }
-  }, [getBookById]) 
+  }, [getBookById])
 
   useEffect(() => {
-      handleResultBook()
+    handleResultBook()
   }, [handleResultBook]);
 
 
-    const {loading, error, post} = usePost('/ub/buy');
+  const { loading, error, post } = usePost('/ub/buy');
 
 
-    const auth = getAuth();
+  const auth = getAuth();
 
-    const handleBuy = useCallback(async () => {
+  const handleBuy = useCallback(async () => {
     try {
-      
-       if (id) {
-        const idToken = await auth.currentUser?.getIdToken();
-        await post({ BookIds:  [id]}, {idToken: idToken});
 
-    } else {
-      console.error('Параметр id не найден')
-    }
+      if (id) {
+        const idToken = await auth.currentUser?.getIdToken();
+        await post({ BookIds: [id] }, { idToken: idToken });
+
+      } else {
+        console.error('Параметр id не найден')
+      }
 
     } catch (err) {
       console.error('Ошибка покупки книг:', err);
@@ -76,28 +92,28 @@ const BookInfo = observer(() => {
 
 
 
-  if (getBookState.loading || postCartItemsState2.loading) {
+  if (getBookState.loading || postCartItemsState2.loading || postFavItemsState2.loading) {
     return (
-    
-        <CircularProgress
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            justifySelf: 'center',
-            marginTop: 10,
-            alignItems: 'center',
-            padding: 0.5,
-            color: 'white'
-          }}
 
-        />
- 
+      <CircularProgress
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          justifySelf: 'center',
+          marginTop: 10,
+          alignItems: 'center',
+          padding: 0.5,
+          color: 'white'
+        }}
+
+      />
+
     )
   }
 
-  if (getBookState.error || postCartItemsState2.error) {
+  if (getBookState.error || postCartItemsState2.error || postFavItemsState2.error) {
     return (
-        <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>{getBookState.error || postCartItemsState2.error}</p>
+      <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>{getBookState.error || postCartItemsState2.error || postFavItemsState2.error}</p>
     )
   }
 
@@ -105,41 +121,48 @@ const BookInfo = observer(() => {
     return <p>Книга не найдена</p>;
   }
 
-    return (
-       <BookInfoView 
-       Id={id!}
-       Genre={book.Genre} 
-       Title={book.Title} 
-       PagesCount={book.PagesCount} 
-       Description={book.Description} 
-       AboutBook={book.AboutBook} 
-       Quote={book.Quote} 
-       CreatedDate={book.CreatedDate} 
-       ReadingTime={book.ReadingTime} 
-       Price={book.Price} 
-       Discount={book.Discount} 
-       Author={book.Author} 
-       ImageUrl={book.ImageUrl} 
-       Rate={book.Rate} 
-       IsMine={book.IsMine} 
+  return (
+    <BookInfoView
+      Id={id!}
+      Genre={book.Genre}
+      Title={book.Title}
+      PagesCount={book.PagesCount}
+      Description={book.Description}
+      AboutBook={book.AboutBook}
+      Quote={book.Quote}
+      CreatedDate={book.CreatedDate}
+      ReadingTime={book.ReadingTime}
+      Price={book.Price}
+      Discount={book.Discount}
+      Author={book.Author}
+      ImageUrl={book.ImageUrl}
+      Rate={book.Rate}
+      IsMine={book.IsMine}
 
-       loading={loading}
-       handleBuy={handleBuy}
-       error={error}
+      loading={loading}
+      handleBuy={handleBuy}
+      error={error}
 
-       loading2={postCartItemsState.loading}
-        error2={postCartItemsState.error}
-        hanldleAddItem={createCartItem}
+      loading2={postCartItemsState.loading}
+      error2={postCartItemsState.error}
+      hanldleAddItem={createCartItem}
 
-        isInCart={isInCartItems}
+      isInCart={isInCartItems}
 
-        loading3={deleteCartItemsState.loading}
-        error3={deleteCartItemsState.error}
-        handleDeleteItem={deleteCartItems}
-        
+      loading3={deleteCartItemsState.loading}
+      error3={deleteCartItemsState.error}
+      handleDeleteItem={deleteCartItems}
 
-       />
-    )
+      isInFavs={isInFavsItems}
+
+      loading4={postFavItemsState.loading}
+      hanldleAddFavItem={createFavItem}
+
+      loading5={deleteFavItemsState.loading}
+      handleDeleteFavItem={deleteFavItems}
+
+    />
+  )
 })
 
 export default BookInfo;

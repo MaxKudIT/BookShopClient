@@ -42,6 +42,7 @@ const Registration = () => {
 
   const { post: createCart } = usePost('/cart')
 
+  const {post: createFav} = usePost('/fav')
 
 
   const { register, loading, error, clearError } = useFirebaseAuth();
@@ -130,11 +131,16 @@ const Registration = () => {
         { idToken: token }
       );
 
+      // 5. Создаем избранные товары (также обьект)
+          await createFav(
+        { title: `Fav ${user.uid}` },
+        { idToken: token }
+      );
 
-      // 5. Редирект на главную
+      // 6. Редирект на главную
       navigate('/', { replace: true });
 
-      // 6. Очищаем форму
+      // 7. Очищаем форму
       setInput({ email: '', login: '', pass: '' });
       setErrors({ login: '', email: '', pass: '' });
 

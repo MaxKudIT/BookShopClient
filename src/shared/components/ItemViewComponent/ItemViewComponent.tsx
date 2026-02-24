@@ -1,22 +1,25 @@
 import { Checkbox } from "@mui/material";
-import { AiOutlineDelete } from "react-icons/ai";
 import { MdCurrencyRuble } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
 
-import styles from './CartViewComponent.module.scss'
+import styles from './ItemViewComponent.module.scss'
 import type { FC } from "react";
 import { rateStars } from "../BookInfoView/BookInfoView";
 import type { CartItemsPreview } from "../../types";
 import type { CartSelectedType } from "../CartView/CartView";
+import { IoIosHeart } from "react-icons/io";
+import { FaHeart } from "react-icons/fa6";
 
 
 
+type TypeComponent = 'cartItem' | 'favItem'
 
-
-const CartViewComponent: FC<CartItemsPreview & {
+const ItemViewComponent: FC<CartItemsPreview & {
     addItem: (el: CartSelectedType) => void,
     deleteItem: (id: string) => void,
-    isSelected: boolean
+    isSelected: boolean,
+    type: TypeComponent
+    
 } & {
     handleDeleteItem: (bookId: string[]) => void
 }> = ({
@@ -33,7 +36,9 @@ const CartViewComponent: FC<CartItemsPreview & {
 
     isSelected,
 
-    handleDeleteItem
+    handleDeleteItem,
+
+    type
 
 
 }) => {
@@ -41,7 +46,7 @@ const CartViewComponent: FC<CartItemsPreview & {
         const DiscountPrice = Math.floor(Price - (Price / 100 * Discount))
 
         return (
-            <div className={styles.cart_view_compo_wrapper}>
+            <div className={styles.item_view_compo_wrapper}>
 
 
 
@@ -139,7 +144,12 @@ const CartViewComponent: FC<CartItemsPreview & {
                             handleDeleteItem([Id])
                             deleteItem(Id)
                         }} className={styles.clickable_wrapper}>
-                            <RiDeleteBinLine style={{ color: 'red', fontSize: 20 }} />
+                            {type === 'cartItem' ? (
+                                 <RiDeleteBinLine style={{ color: 'red', fontSize: 20 }} />
+                            ) : (
+                                 <FaHeart style={{ color: 'red', fontSize: 20 }} />
+                            )}
+                           
                         </button>
 
                     </div>
@@ -153,4 +163,4 @@ const CartViewComponent: FC<CartItemsPreview & {
 
 
 
-export default CartViewComponent;
+export default ItemViewComponent;

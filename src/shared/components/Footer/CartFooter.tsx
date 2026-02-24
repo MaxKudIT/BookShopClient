@@ -3,6 +3,7 @@ import styles from './CartFooter.module.scss'
 import { Button, CircularProgress, Divider } from '@mui/material';
 import { buttonStyles } from './muiStyles';
 import { MdCurrencyRuble } from 'react-icons/md';
+import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 
 const CartFooter: FC<{ sum: number }> = ({ sum }) => {
 
@@ -21,7 +22,7 @@ const CartFooter: FC<{ sum: number }> = ({ sum }) => {
 
             }}>
                 <p style={{ color: 'white', fontSize: 19, letterSpacing: 0.5, fontWeight: '500' }}>Итого:</p>
-                <p style={{ fontSize: 22, color: 'rgb(175, 92, 230)', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
+                <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
                     {sum}
                     <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
                 </p>
@@ -37,7 +38,8 @@ const CartFooter: FC<{ sum: number }> = ({ sum }) => {
                 variant="contained"
 
             >
-                Купить сейчас
+                <RiMoneyDollarCircleLine style={{ fontSize: 20 }} />
+                <p>Купить сейчас</p>
 
             </Button>
         </div>

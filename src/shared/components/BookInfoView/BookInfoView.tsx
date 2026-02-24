@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState, type FC, type JSX } from "react";
 import styles from './BookInfoView.module.scss'
 import type { BookInfoT, Genres } from "../../types";
-import { FaRegStar, FaRegUser } from "react-icons/fa6";
+import { FaHeart, FaRegHeart, FaRegStar, FaRegUser } from "react-icons/fa6";
 import { FaStar } from "react-icons/fa"
 import { FaStarHalfAlt } from "react-icons/fa";
 import { MdAttachMoney, MdCurrencyRuble, MdOutlineAttachMoney, MdOutlineDateRange, MdOutlineShoppingCart } from "react-icons/md";
@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { ColorChoiceFunc, ColorChoiceFuncForBookInfo } from "../../helpers/colorChoice";
 import useDominantColor from "../../hooks/useDominantColor";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import { IoIosHeart } from "react-icons/io";
 
 
 export type RequestingState = {
@@ -32,6 +33,11 @@ export type RequestingState = {
     error3: string | null,
     handleDeleteItem: (bookId: string[]) => void
 
+    loading4: boolean,
+    hanldleAddFavItem: (bookId: string) => void,
+
+    loading5: boolean,
+    handleDeleteFavItem: (bookId: string[]) => void
 
 }
 
@@ -106,7 +112,16 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
 
     loading3,
     error3,
-    handleDeleteItem
+    handleDeleteItem,
+
+    isInFavs,
+
+    loading4,
+    hanldleAddFavItem,
+
+    loading5,
+    handleDeleteFavItem
+
 
 }) => {
 
@@ -262,10 +277,40 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
                     <Divider sx={{ my: 2, borderColor: 'rgba(94, 67, 156, 1)' }} />
                     {IsMine ? (
                         <>
-                            <div style={{ display: 'flex', columnGap: 10, alignItems: 'center' }}>
-                                <IoCheckmarkCircle style={{ color: 'rgba(68, 190, 30, 1)', fontSize: 28 }} />
-                                <p style={{ fontSize: 18, color: 'rgba(67, 209, 24, 1)', fontWeight: '500' }}>В наличии</p>
+                            <div style={{
+                                width: '80%',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                height: 'fit-content',
+
+                            }}>
+
+                                <div style={{ display: 'flex', columnGap: 10, alignItems: 'center' }}>
+                                    <IoCheckmarkCircle style={{ color: 'rgba(68, 190, 30, 1)', fontSize: 28 }} />
+                                    <p style={{ fontSize: 18, color: 'rgba(67, 209, 24, 1)', fontWeight: '500' }}>В наличии</p>
+                                </div>
+
+                                {isInFavs ? (
+                                    <button onClick={async () => {
+                                        await hanldleAddFavItem(Id)
+                                        navigate('/')
+                                    }} className={styles.clickable_wrapper}>
+
+                                        <FaHeart style={{ color: 'red', fontSize: 22 }} />
+                                    </button>
+                                ) : (
+                                    <button onClick={async () => {
+                                        await hanldleAddFavItem(Id)
+                                        navigate('/')
+                                    }} className={styles.clickable_wrapper}>
+                                        <FaRegHeart style={{ color: 'gray', fontSize: 22 }} />
+                                    </button>
+                                )}
                             </div>
+
+
+
                             <div style={{
                                 width: '100%',
                                 paddingTop: '20px',
@@ -346,12 +391,18 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
                         </>
                     ) : (
                         <>
-                            <div style={{ display: 'flex', columnGap: 10, alignItems: 'center' }}>
+                            <div style={{
+                                width: '80%',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                height: 'fit-content'
+                            }}>
                                 {Price === 0 ? (
                                     <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>Бесплатно</p>
                                 ) : (
                                     Discount !== 0 ? (
-                                        <>
+                                        <div className={styles.price_block}>
                                             <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
                                                 {DiscountPrice}
                                                 <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
@@ -374,7 +425,7 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
                                             }}>
                                                 -{Discount}%
                                             </div>
-                                        </>
+                                        </div>
                                     ) : (
                                         <>
                                             <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
@@ -384,6 +435,24 @@ const BookInfoView: FC<BookInfoT & RequestingState> = ({
                                         </>
                                     )
                                 )}
+
+                                {isInFavs ? (
+                                    <button onClick={async () => {
+                                        await hanldleAddFavItem(Id)
+                                        navigate('/')
+                                    }} className={styles.clickable_wrapper}>
+
+                                        <FaHeart style={{ color: 'red', fontSize: 22 }} />
+                                    </button>
+                                ) : (
+                                    <button onClick={async () => {
+                                        await hanldleAddFavItem(Id)
+                                        navigate('/')
+                                    }} className={styles.clickable_wrapper}>
+                                        <FaRegHeart style={{ color: 'gray', fontSize: 22 }} />
+                                    </button>
+                                )}
+
 
                             </div>
                             <div style={{

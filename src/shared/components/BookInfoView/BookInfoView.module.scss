@@ -79,3 +79,35 @@
     background-color: rgba(63, 54, 180, 0.2);
     line-height: 1.5;
 }
+
+
+.price_block {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+    background: rgb(50, 90, 199, 0.2);
+    padding: 10px 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(112, 79, 204, 0.5);
+
+    
+}
+
+.clickable_wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 7px;
+    align-items: center;
+    border-radius: 10px;
+    padding: 12px 0;
+    width: 50px;
+
+    transition: all 0.2s;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background: transparent;
+    &:hover {
+        background-color: rgba(255,255,255,0.1);
+    }
+}

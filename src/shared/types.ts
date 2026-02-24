@@ -36,6 +36,8 @@ export type BookInfoT = {
     IsMine: number,
 
     isInCart: boolean
+    isInFavs: boolean
+
 }
 
 export type PageInfoT = {
@@ -54,6 +56,17 @@ export type AxiosSolt = {
 
 
 export type CartItemsPreview = {
+    Id: string
+    ImageUrl: string
+    Title: string
+    Author: string
+    Price: number
+    Discount: number
+    Rate: number
+
+}
+
+export type FavItemsPreview = {
     Id: string
     ImageUrl: string
     Title: string

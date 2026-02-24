@@ -1,18 +1,18 @@
 import { Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState, type FC } from "react";
-import { IoClose, IoCheckmarkCircle, IoCartOutline } from "react-icons/io5";
-
 import { useNavigate } from "react-router-dom";
 
 
-import styles from './CartView.module.scss'
-import CartViewComponent from "../ItemViewComponent/ItemViewComponent";
+import styles from './FavsView.module.scss'
 
-import { RiDeleteBinLine } from "react-icons/ri";
+import { RiDeleteBinLine, RiMoneyDollarCircleLine } from "react-icons/ri";
 
-import { IoMdCart } from "react-icons/io";
+import { IoMdCart, IoMdHeart } from "react-icons/io";
 import type { CartItemsPreview } from "../../types";
-import CartFooter from "../Footer/CartFooter";
+
+import { FaCartPlus, FaHeart } from "react-icons/fa6";
+import ItemViewComponent from "../ItemViewComponent/ItemViewComponent";
+import { buttonStyles } from "../Footer/muiStyles";
 
 
 
@@ -34,7 +34,7 @@ export type RequestingState = {
 
 
 
-const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, loading, handleDeleteItem }) => {
+const FavsView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, loading, handleDeleteItem }) => {
 
 
 
@@ -91,7 +91,7 @@ const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, 
 
     const handleSelectAll = (checked: boolean) => {
         if (checked) {
-            setSelectedI(items.map(item => ({id: item.Id, price: Math.floor(item.Price - (item.Price / 100 * item.Discount))})));
+            setSelectedI(items.map(item => ({ id: item.Id, price: Math.floor(item.Price - (item.Price / 100 * item.Discount)) })));
         } else {
             setSelectedI([]);
         }
@@ -99,33 +99,23 @@ const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, 
 
 
 
-    const sumItems = useMemo(() => {
-        if (selectedI.length > 0) {
-            
-            return selectedI.reduce((acc, cv) => acc + cv.price, 0)
-        } 
-        return items.reduce((acc, cv) => {
-            const price = Math.floor(cv.Price - (cv.Price / 100 * cv.Discount));
-            return acc + price
-        }, 0)
-        
-    }, [selectedI, items])
+
 
     return (
 
-        <div className={styles.cart_info_wrapper}>
+        <div className={styles.fav_info_wrapper}>
 
 
 
 
 
-            <div className={styles.cart_first_row}>
-                <div className={styles.cart_first_block}>
+            <div className={styles.fav_first_row}>
+                <div className={styles.fav_first_block}>
                     <div style={{ background: 'linear-gradient(rgba(164, 77, 223, 0.7), #5630b1ff)', borderRadius: 10, padding: 9 }}>
-                        <IoMdCart style={{ fontSize: 45, color: '#e1dbe6ff' }} />
+                        <IoMdHeart style={{ fontSize: 42, color: '#e1dbe6ff' }} />
                     </div>
                     <div style={{ color: 'white', display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center', rowGap: 5 }}>
-                        <p style={{ fontSize: 22 }}>Корзина</p>
+                        <p style={{ fontSize: 22 }}>Избранное</p>
                         <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>{items.length} товаров</p>
                     </div>
                 </div>
@@ -190,7 +180,7 @@ const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, 
 
                 />) : items.length !== 0 ?
                     <>
-                        {items.map(el => (<CartViewComponent
+                        {items.map(el => (<ItemViewComponent
                             addItem={addItem}
                             deleteItem={deleteItem}
                             isSelected={selectedI.some(item => item.id === el.Id)}
@@ -205,11 +195,23 @@ const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, 
                             Discount={el.Discount}
                             Rate={el.Rate}
 
-                            type="cartItem"
+                            type="favItem"
 
                         />))}
-                         <Divider sx={{ borderBottomWidth: 2, my: 3, mb: 0, borderColor: 'rgba(94, 67, 156, 1)' }} />
-                        <CartFooter sum={sumItems}/>
+                        <Divider sx={{ borderBottomWidth: 2, my: 3, mb: 0, borderColor: 'rgba(94, 67, 156, 1)' }} />
+                        <Button
+                            onClick={async () => {
+
+
+                            }}
+                            sx={buttonStyles}
+                            variant="contained"
+
+                        >
+                            <FaCartPlus style={{ fontSize: 18 }} />
+                            <p>Переместить в корзину</p>
+
+                        </Button>
                     </>
 
                     : (
@@ -218,7 +220,7 @@ const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, 
                             display: 'flex',
                             flexDirection: 'column',
                             alignSelf: 'center'
-                        }}>Корзина пуста</div>
+                        }}>Избранных товаров нет</div>
                     )
                 }
 
@@ -236,4 +238,4 @@ const CartView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, 
     )
 }
 
-export default CartView;
+export default FavsView;

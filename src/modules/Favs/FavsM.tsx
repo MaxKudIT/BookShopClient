@@ -1,18 +1,18 @@
-import styles from './CartM.module.scss'
-import CartF from "../../features/Cart/CartF";
+import styles from './FavsM.module.scss'
 import NavMediaComponent from "../../shared/components/Navigation/MediaNavigation/NavMediaComponent";
+import FavsF from '../../features/Favs/FavsF';
 
 
 
-const CartM = () => {
+const FavsM = () => {
 
-
+ 
 
   return (
     <div className={styles.book_info_page_style}>
       
-      <NavMediaComponent pageType="cart"/>
-      <CartF/>
+      <NavMediaComponent pageType="favs"/>
+     <FavsF/>
      
       <div style={{
         width: '100vw',
@@ -26,4 +26,4 @@ const CartM = () => {
   )
 }
 
-export default CartM ;
+export default FavsM;

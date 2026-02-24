@@ -13,6 +13,7 @@ import { protectedLoader, protectedPurchaseLoader, publicLoader } from './shared
 import { StoreContext } from './store/context/GloabalContext'
 import { stores } from './store/stores'
 import Cart from './pages/Cart/Cart'
+import Favs from './pages/Favs/Favs'
 
 
 const router = createBrowserRouter([
@@ -29,6 +30,12 @@ const router = createBrowserRouter([
     {
         element: <Cart/>,
         path: '/cart',
+        loader: protectedLoader
+    },
+    {
+        element: <Favs/>,
+        path: '/favs',
+        loader: protectedLoader
     },
     {
         element: <BookInfoPage />,
