@@ -7,6 +7,7 @@ import { useStores } from "../../store/context/GloabalContext";
 import { observer } from 'mobx-react-lite';
 import { usePost } from "../../shared/hooks/queries";
 import { getAuth } from "firebase/auth";
+import NavMediaComponent from "../../shared/components/Navigation/MediaNavigation/NavMediaComponent";
 
 const BookInfo = observer(() => {
 
@@ -29,7 +30,11 @@ const BookInfo = observer(() => {
       postCartItemsState2,
 
       deleteCartItems,
-      deleteCartItemsState
+      deleteCartItemsState,
+
+      count,
+      countCartState,
+      getCountCart
     },
     favItemsStore: {
       createFavItem,
@@ -40,7 +45,11 @@ const BookInfo = observer(() => {
       postFavItemsState2,
 
       deleteFavItems,
-      deleteFavItemsState
+      deleteFavItemsState,
+
+      count: favCount,
+      countFavState,
+      getCountFav
     }
   } = useStores()
 
@@ -50,11 +59,13 @@ const BookInfo = observer(() => {
     if (id) {
 
       await Promise.all([
-        getBookById(id),        
-        isInCartItem(id),      
-        isInFavsItem(id)       
+        getBookById(id),
+        isInCartItem(id),
+        isInFavsItem(id),
+        getCountFav(),
+        getCountCart()
       ])
-  
+      
 
     } else {
       console.error('Параметр id не найден')
@@ -92,7 +103,7 @@ const BookInfo = observer(() => {
 
 
 
-  if (getBookState.loading || postCartItemsState2.loading || postFavItemsState2.loading) {
+  if (getBookState.loading || postCartItemsState2.loading || postFavItemsState2.loading || countCartState.loading || countFavState.loading) {
     return (
 
       <CircularProgress
@@ -111,9 +122,9 @@ const BookInfo = observer(() => {
     )
   }
 
-  if (getBookState.error || postCartItemsState2.error || postFavItemsState2.error) {
+  if (getBookState.error || postCartItemsState2.error || postFavItemsState2.error || countFavState.error || countCartState.error) {
     return (
-      <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>{getBookState.error || postCartItemsState2.error || postFavItemsState2.error}</p>
+      <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>{getBookState.error || postCartItemsState2.error || postFavItemsState2.error || countFavState.error || countCartState.error}</p>
     )
   }
 
@@ -122,46 +133,50 @@ const BookInfo = observer(() => {
   }
 
   return (
-    <BookInfoView
-      Id={id!}
-      Genre={book.Genre}
-      Title={book.Title}
-      PagesCount={book.PagesCount}
-      Description={book.Description}
-      AboutBook={book.AboutBook}
-      Quote={book.Quote}
-      CreatedDate={book.CreatedDate}
-      ReadingTime={book.ReadingTime}
-      Price={book.Price}
-      Discount={book.Discount}
-      Author={book.Author}
-      ImageUrl={book.ImageUrl}
-      Rate={book.Rate}
-      IsMine={book.IsMine}
+    <>
+      <NavMediaComponent countCart={count} countFav={favCount}  pageType="bookinfo" />
+      <BookInfoView
+        Id={id!}
+        Genre={book.Genre}
+        Title={book.Title}
+        PagesCount={book.PagesCount}
+        Description={book.Description}
+        AboutBook={book.AboutBook}
+        Quote={book.Quote}
+        CreatedDate={book.CreatedDate}
+        ReadingTime={book.ReadingTime}
+        Price={book.Price}
+        Discount={book.Discount}
+        Author={book.Author}
+        ImageUrl={book.ImageUrl}
+        Rate={book.Rate}
+        IsMine={book.IsMine}
 
-      loading={loading}
-      handleBuy={handleBuy}
-      error={error}
+        loading={loading}
+        handleBuy={handleBuy}
+        error={error}
 
-      loading2={postCartItemsState.loading}
-      error2={postCartItemsState.error}
-      hanldleAddItem={createCartItem}
+        loading2={postCartItemsState.loading}
+        error2={postCartItemsState.error}
+        hanldleAddItem={createCartItem}
 
-      isInCart={isInCartItems}
+        isInCart={isInCartItems}
 
-      loading3={deleteCartItemsState.loading}
-      error3={deleteCartItemsState.error}
-      handleDeleteItem={deleteCartItems}
+        loading3={deleteCartItemsState.loading}
+        error3={deleteCartItemsState.error}
+        handleDeleteItem={deleteCartItems}
 
-      isInFavs={isInFavsItems}
+        isInFavs={isInFavsItems}
 
-      loading4={postFavItemsState.loading}
-      hanldleAddFavItem={createFavItem}
+        loading4={postFavItemsState.loading}
+        hanldleAddFavItem={createFavItem}
 
-      loading5={deleteFavItemsState.loading}
-      handleDeleteFavItem={deleteFavItems}
+        loading5={deleteFavItemsState.loading}
+        handleDeleteFavItem={deleteFavItems}
 
-    />
+      />
+    </>
+
   )
 })
 

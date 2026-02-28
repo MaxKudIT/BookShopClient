@@ -11,7 +11,7 @@ const FavsM = () => {
   return (
     <div className={styles.book_info_page_style}>
       
-      <NavMediaComponent pageType="favs"/>
+     
      <FavsF/>
      
       <div style={{

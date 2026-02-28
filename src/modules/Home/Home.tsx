@@ -6,7 +6,6 @@ const Home = () =>
   {
     return (
       <div className={styles.home_container}>
-        <HeaderComponent myBooksPage={false}/>
         <ShopBookList/>
       </div>
     )

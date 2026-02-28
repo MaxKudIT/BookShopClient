@@ -1,7 +1,7 @@
 import { Tooltip, Box, ListItem, ListItemIcon, ListItemText, Typography, Divider, ListItemButton, IconButton } from "@mui/material"
 import { IoIosHeart, IoMdCart, IoIosHome } from "react-icons/io"
 import { MdEmail, MdPerson, MdLibraryBooks, MdExitToApp, MdAccountCircle } from "react-icons/md"
-import { RiShoppingBag4Fill } from "react-icons/ri"
+
 import { useNavigate } from "react-router-dom"
 import { getAuth } from "firebase/auth"
 import { useAuthState } from "react-firebase-hooks/auth"
@@ -15,7 +15,7 @@ import { useFirebaseAuth } from "../../../hooks/useFirebaseAuth"
 export type PageType = 'bookinfo' | 'cart' | 'favs'
 
 
-const NavMediaComponent: FC<{ pageType: PageType }> = ({ pageType }) => {
+const NavMediaComponent: FC<{ pageType: PageType, countFav: number, countCart: number }> = ({ pageType, countCart, countFav }) => {
 
     const { logout } = useFirebaseAuth()
     const navigate = useNavigate();
@@ -31,10 +31,12 @@ const NavMediaComponent: FC<{ pageType: PageType }> = ({ pageType }) => {
         if (pageType === 'bookinfo') {
             return <>
                 <button onClick={() => { navigate('/favs') }} className={styles.clickable_wrapper}>
+                     {countFav > 0 && <div className={styles.count_block}>{countFav}</div>}
                     <IoIosHeart style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
                     <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Избранное</p>
                 </button>
                 <button onClick={() => { navigate('/cart') }} className={styles.clickable_wrapper}>
+                    {countCart > 0 && <div className={styles.count_block}>{countCart}</div>}
                     <IoMdCart style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
                     <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Корзина</p>
                 </button>
@@ -43,13 +45,15 @@ const NavMediaComponent: FC<{ pageType: PageType }> = ({ pageType }) => {
 
         if (pageType === 'cart') {
             return <button onClick={() => { navigate('/favs') }} className={styles.clickable_wrapper}>
+                {countFav > 0 && <div className={styles.count_block}>{countFav}</div>}
                 <IoIosHeart style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
                 <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Избранное</p>
             </button>
         }
 
         if (pageType === 'favs') {
-            return  <button onClick={() => { navigate('/cart') }} className={styles.clickable_wrapper}>
+            return <button onClick={() => { navigate('/cart') }} className={styles.clickable_wrapper}>
+                {countCart > 0 && <div className={styles.count_block}>{countCart}</div>}
                 <IoMdCart style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
                 <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Корзина</p>
             </button>
@@ -61,7 +65,7 @@ const NavMediaComponent: FC<{ pageType: PageType }> = ({ pageType }) => {
 
     return (
         <div style={{ position: 'fixed', right: 40, top: 20, display: 'flex', alignItems: 'center' }}>
-          
+
 
             {CalculateButtonByType(pageType)}
             <button onClick={() => { navigate('/mybooks') }} className={styles.clickable_wrapper}>

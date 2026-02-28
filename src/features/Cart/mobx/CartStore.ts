@@ -18,6 +18,12 @@ class CartItemStore {
     public isInCartItems: boolean = false;
     public postCartItemsState2 = makeInitialAxiosSolt(); //isInCart
 
+    public count: number = 0;
+    public countCartState = makeInitialAxiosSolt();
+
+    public areAllInCart: boolean = false
+    public areAllInCartState = makeInitialAxiosSolt();
+
 
     private api: Api;
 
@@ -26,9 +32,12 @@ class CartItemStore {
         this.api = api;
 
         this.getCartItems = this.getCartItems.bind(this)
+        this.areAllInCartItem = this.areAllInCartItem.bind(this)
         this.createCartItem = this.createCartItem.bind(this)
         this.deleteCartItems = this.deleteCartItems.bind(this)
         this.isInCartItem = this.isInCartItem.bind(this)
+        this.getCountCart = this.getCountCart.bind(this)
+        
     }
 
 
@@ -40,7 +49,7 @@ class CartItemStore {
         this.getCartItemsState = { loading: true, error: null };
 
         try {
-           
+
             const res = yield this.api.carts.getCartItems();
 
             if (typeof res === 'string') {
@@ -55,14 +64,14 @@ class CartItemStore {
         }
     });
 
- 
-     public isInCartItem = flow(function* (this: CartItemStore, bookId: string)
-        : Generator<Promise<string | {isInCart: boolean}>, void, string | {isInCart: boolean}> {
+
+    public isInCartItem = flow(function* (this: CartItemStore, bookId: string)
+        : Generator<Promise<string | { isInCart: boolean }>, void, string | { isInCart: boolean }> {
 
         this.postCartItemsState2 = { loading: true, error: null };
 
         try {
-         
+
             const result = yield this.api.carts.isInCartItem(bookId);
 
             if (typeof result === 'string') {
@@ -70,36 +79,86 @@ class CartItemStore {
             } else {
                 this.isInCartItems = result.isInCart
                 this.postCartItemsState2 = { loading: false, error: null };
-              
+
             }
         } catch (err: any) {
             this.postCartItemsState2 = { loading: false, error: err?.message || 'Failed to create' };
             console.error('Create error:', err);
-         
+
         }
     });
 
 
+
+      public areAllInCartItem = flow(function* (this: CartItemStore, bookIds: string[])
+        : Generator<Promise<string | { areAllInCart: boolean }>, void, string | { areAllInCart: boolean }> {
+
+        this.areAllInCartState = { loading: true, error: null };
+
+        try {
+
+            const result = yield this.api.carts.areAllInCart(bookIds);
+
+            if (typeof result === 'string') {
+                this.areAllInCartState = { loading: false, error: result };
+            } else {
+                this.areAllInCart = result.areAllInCart
+                this.areAllInCartState = { loading: false, error: null };
+
+            }
+        } catch (err: any) {
+            this.areAllInCartState = { loading: false, error: err?.message || 'Failed to create' };
+            console.error('Create error:', err);
+
+        }
+    });
+
+    public getCountCart = flow(function* (this: CartItemStore)
+        : Generator<Promise<string | { count: number }>, void, string | { count: number }> {
+
+        this.countCartState = { loading: true, error: null };
+
+        try {
+
+            const result = yield this.api.carts.countCart();
+
+            if (typeof result === 'string') {
+                this.countCartState = { loading: false, error: result };
+            } else {
+                this.count = result.count
+                this.countCartState = { loading: false, error: null };
+
+            }
+        } catch (err: any) {
+            this.countCartState = { loading: false, error: err?.message || 'Failed to create' };
+            console.error('Create error:', err);
+
+        }
+    });
+
+
+
+
     public createCartItem = flow(function* (this: CartItemStore, bookId: string)
-        : Generator<Promise<string | {resultId: string}>, void, string | {resultId: string}> {
+        : Generator<Promise<string | { resultId: string }>, void, string | { resultId: string }> {
 
         this.postCartItemsState = { loading: true, error: null };
 
         try {
-         
+
             const result = yield this.api.carts.createCartItem(bookId);
 
             if (typeof result === 'string') {
                 this.postCartItemsState = { loading: false, error: result };
             } else {
-                
+
                 this.postCartItemsState = { loading: false, error: null };
-              
+
             }
         } catch (err: any) {
             this.postCartItemsState = { loading: false, error: err?.message || 'Failed to create' };
             console.error('Create error:', err);
-         
+
         }
     });
 
@@ -110,7 +169,7 @@ class CartItemStore {
         this.deleteCartItemsState = { loading: true, error: null };
 
         try {
-            
+
             const result = yield this.api.carts.deleteCartItem(bookIds);
 
             if (typeof result === 'string') {

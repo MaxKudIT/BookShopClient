@@ -57,12 +57,14 @@ const booksPlaceholder = [
 ];
 
 export type HeaderProps = {
-  myBooksPage: boolean
+  myBooksPage: boolean,
+  countFav: number;
+  countCart: number
 }
 
 
 
-const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
+const HeaderComponent: FC<HeaderProps> = ({ myBooksPage, countCart, countFav }) => {
 
 
   const randomPl = booksPlaceholder[Math.floor(Math.random() * booksPlaceholder.length)]
@@ -119,7 +121,7 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage }) => {
 
         </div>
 
-          <NavComponent myBooksPage={myBooksPage}/>
+          <NavComponent myBooksPage={myBooksPage} countFav={countFav} countCart={countCart}/>
        
 
       </div>

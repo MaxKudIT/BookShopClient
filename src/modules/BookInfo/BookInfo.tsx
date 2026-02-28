@@ -1,33 +1,17 @@
 import React from "react";
 import BookInfo from "../../features/BookInfo/BookInfo";
 import styles from './BookInfo.module.scss'
-import { Box, Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Tooltip, Typography } from "@mui/material";
-import { MdAccountCircle, MdEmail, MdExitToApp, MdLibraryBooks, MdOutlineAccountCircle, MdPerson } from "react-icons/md";
-import { PiBooks } from "react-icons/pi";
-import { getAuth } from "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useFirebaseAuth } from "../../shared/hooks/useFirebaseAuth";
-import { useNavigate } from "react-router-dom";
-import { AiOutlineShopping } from "react-icons/ai";
-import { RiShoppingBag4Fill } from "react-icons/ri";
-import NavComponent from "../../shared/components/Navigation/NavComponent";
-import NavMediaComponent from "../../shared/components/Navigation/MediaNavigation/NavMediaComponent";
 
 
 
 const BookInfoModule = () => {
 
 
-  const navigate = useNavigate()
-  const auth = getAuth();
-
-  const [user] = useAuthState(auth)
-  const { logout } = useFirebaseAuth()
 
   return (
     <div className={styles.book_info_page_style}>
       
-      <NavMediaComponent pageType="bookinfo"/>
+     
       <BookInfo />
       <div style={{
         width: '100vw',

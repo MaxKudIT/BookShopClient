@@ -18,42 +18,71 @@ class CartA {
     public getCartItems = async (): Promise<CartItemsPreview[] | string> => {
         const config = await this.httpActions.getAccessToken();
 
-        const resData = this.httpActions.get<{cartItems: CartItemsPreview[]}>(`${this.startUrl}/all`, config).
-                        then(res => {
-                            return res.data.cartItems
-                        }).
-                        catch((err: any) => {
-                            return err?.response?.data?.error;
-                        })
+        const resData = this.httpActions.get<{ cartItems: CartItemsPreview[] }>(`${this.startUrl}/all`, config).
+            then(res => {
+                return res.data.cartItems
+            }).
+            catch((err: any) => {
+                return err?.response?.data?.error;
+            })
         return resData
-        
+
     }
 
 
 
-    public isInCartItem = async (bookId: string): Promise<{isInCart: boolean} | string> => {
+    public isInCartItem = async (bookId: string): Promise<{ isInCart: boolean } | string> => {
         const config = await this.httpActions.getAccessToken();
 
-        const resData = this.httpActions.post<{isInCart: boolean}>(`${this.startUrl}/incart`, {BookId: bookId}, config).
-                        then(res => {
-                            return res.data
-                        }).
-                        catch((err: any) => {
-                            return err?.response?.data?.error;
-                        })
+        const resData = this.httpActions.post<{ isInCart: boolean }>(`${this.startUrl}/incart`, { BookId: bookId }, config).
+            then(res => {
+                return res.data
+            }).
+            catch((err: any) => {
+                return err?.response?.data?.error;
+            })
         return resData
     }
 
-    public createCartItem = async (bookId: string): Promise<{resultId: string} | string> => {
+
+     public areAllInCart = async (bookIds: string[]): Promise<{ areAllInCart: boolean } | string> => {
         const config = await this.httpActions.getAccessToken();
 
-        const resData = this.httpActions.post<{id: string}>(`${this.startUrl}`, {BookId: bookId}, config).
-                        then(res => {
-                            return {resultId: res.data.id}
-                        }).
-                        catch((err: any) => {
-                            return err?.response?.data?.error;
-                        })
+        const resData = this.httpActions.post<{ areAllInCart: boolean }>(`${this.startUrl}/allincart`, { BookIds: bookIds }, config).
+            then(res => {
+                return res.data
+            }).
+            catch((err: any) => {
+                return err?.response?.data?.error;
+            })
+        return resData
+    }
+
+
+    public countCart = async (): Promise<{ count: number } | string> => {
+        const config = await this.httpActions.getAccessToken();
+
+        const resData = this.httpActions.get<{ count: number }>(`${this.startUrl}/count`, config).
+            then(res => {
+                return res.data
+            }).
+            catch((err: any) => {
+                return err?.response?.data?.error;
+            })
+        return resData
+    }
+
+
+    public createCartItem = async (bookId: string): Promise<{ resultId: string } | string> => {
+        const config = await this.httpActions.getAccessToken();
+
+        const resData = this.httpActions.post<{ id: string }>(`${this.startUrl}`, { BookId: bookId }, config).
+            then(res => {
+                return { resultId: res.data.id }
+            }).
+            catch((err: any) => {
+                return err?.response?.data?.error;
+            })
         return resData
     }
 
@@ -61,12 +90,12 @@ class CartA {
         const config = await this.httpActions.getAccessToken();
 
         const resData = this.httpActions.delete(`${this.startUrl}`, bookIds, config).
-                        then(res => {
-                            console.log('Success deleting!')
-                        }).
-                        catch((err: any) => {
-                            return err?.response?.data?.error;
-                        })
+            then(res => {
+                console.log('Success deleting!')
+            }).
+            catch((err: any) => {
+                return err?.response?.data?.error;
+            })
         return resData
     }
 
@@ -75,4 +104,4 @@ class CartA {
 
 }
 
-export {CartA}
+export { CartA }

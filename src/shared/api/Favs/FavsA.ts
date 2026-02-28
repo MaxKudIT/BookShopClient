@@ -44,6 +44,22 @@ class FavsA {
         return resData
     }
 
+
+
+    public countFavs = async (): Promise<{count: number} | string> => {
+        const config = await this.httpActions.getAccessToken();
+
+        const resData = this.httpActions.get<{count: number}>(`${this.startUrl}/count`, config).
+                        then(res => {
+                            return res.data
+                        }).
+                        catch((err: any) => {
+                            return err?.response?.data?.error;
+                        })
+        return resData
+    }
+
+
     public createFavItem = async (bookId: string): Promise<{resultId: string} | string> => {
         const config = await this.httpActions.getAccessToken();
 

@@ -20,6 +20,8 @@ class FavItemStore {
     public isInFavsItems: boolean = false;
     public postFavItemsState2 = makeInitialAxiosSolt(); //isInCart
 
+    public count: number = 0;
+    public countFavState = makeInitialAxiosSolt();
 
     private api: Api;
 
@@ -31,6 +33,7 @@ class FavItemStore {
         this.createFavItem = this.createFavItem.bind(this)
         this.deleteFavItems = this.deleteFavItems.bind(this)
         this.isInFavsItem = this.isInFavsItem.bind(this)
+        this.getCountFav = this.getCountFav.bind(this)
     }
 
 
@@ -80,6 +83,32 @@ class FavItemStore {
          
         }
     });
+
+
+    
+     public getCountFav = flow(function* (this: FavItemStore)
+        : Generator<Promise<string | {count: number}>, void, string | {count: number}> {
+
+        this.countFavState = { loading: true, error: null };
+
+        try {
+         
+            const result = yield this.api.favs.countFavs();
+
+            if (typeof result === 'string') {
+                this.countFavState = { loading: false, error: result };
+            } else {
+                this.count = result.count
+                this.countFavState = { loading: false, error: null };
+              
+            }
+        } catch (err: any) {
+            this.countFavState = { loading: false, error: err?.message || 'Failed to create' };
+            console.error('Create error:', err);
+         
+        }
+    });
+
 
 
     public createFavItem = flow(function* (this: FavItemStore, bookId: string)

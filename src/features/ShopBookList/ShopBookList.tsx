@@ -7,6 +7,8 @@ import { Avatar, CircularProgress, Dialog } from "@mui/material";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import BookList from "../../shared/components/BookList/BookList";
+import HeaderComponent from "../../shared/components/Header/HeaderComponent";
+import { useStores } from "../../store/context/GloabalContext";
 
 export const booksPlaceholder = [
   'Гарри Поттер',
@@ -30,17 +32,44 @@ const ShopBookList = () => {
 
   const auth = getAuth()
 
+
+  const {
+    favItemsStore: {
+      count,
+      countFavState,
+      getCountFav
+
+    },
+    cartItemsStore: {
+      count: countCart,
+      countCartState,
+      getCountCart
+    }
+
+  } = useStores()
+
+
+
   const handleData = useCallback(async () => {
     try {
 
       const idToken = await auth.currentUser?.getIdToken();
-
       const booksData = await get({ idToken: idToken });
+       await Promise.all([
+              getCountFav(),
+              getCountCart()
+            ]);
       setBooks(booksData.Books);
+
+      
+
+
     } catch (err) {
-      console.error('Ошибка загрузки книг:', err);
+      console.error('Ошибка загрузки количества и книг:', err);
     }
   }, [get]);
+
+
 
 
   useEffect(() => {
@@ -82,9 +111,13 @@ const ShopBookList = () => {
 
 
   return (
-    <div className={styles.books_global_style}>
-      <BookList viewPage="shop" list={books}/>
-    </div>
+    <>
+      <HeaderComponent countCart={countCart} countFav={count} myBooksPage={false} />
+      <div className={styles.books_global_style}>
+        <BookList viewPage="shop" list={books} />
+      </div>
+    </>
+
   )
 }
 

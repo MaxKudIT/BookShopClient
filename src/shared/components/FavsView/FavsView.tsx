@@ -10,6 +10,7 @@ import { RiDeleteBinLine, RiMoneyDollarCircleLine } from "react-icons/ri";
 import { IoMdCart, IoMdHeart } from "react-icons/io";
 import type { CartItemsPreview } from "../../types";
 
+import { BsCartCheckFill } from "react-icons/bs";
 import { FaCartPlus, FaHeart } from "react-icons/fa6";
 import ItemViewComponent from "../ItemViewComponent/ItemViewComponent";
 import { buttonStyles } from "../Footer/muiStyles";
@@ -25,8 +26,13 @@ export type CartSelectedType = {
 export type RequestingState = {
 
     loading: boolean
-    handleDeleteItem: (bookId: string[]) => void
+    handleDeleteItem: (bookId: string[]) => void,
 
+    loading2: boolean,
+    handleAddToCart: (bookIds: string[]) => void,
+
+    loading3: boolean,
+    areAllInCart: boolean
 
 }
 
@@ -34,7 +40,18 @@ export type RequestingState = {
 
 
 
-const FavsView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, loading, handleDeleteItem }) => {
+const FavsView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({
+    items,
+    loading,
+    handleDeleteItem,
+    loading2,
+    handleAddToCart,
+
+    loading3,
+    areAllInCart,
+
+
+}) => {
 
 
 
@@ -45,6 +62,11 @@ const FavsView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, 
 
     const [selectedI, setSelectedI] = useState<CartSelectedType[]>([]);
     const [allSelected, setAllSelected] = useState(false);
+
+
+
+
+
 
     useEffect(() => {
         if (selectedI.length === items.length && items.length > 0) {
@@ -199,19 +221,45 @@ const FavsView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({ items, 
 
                         />))}
                         <Divider sx={{ borderBottomWidth: 2, my: 3, mb: 0, borderColor: 'rgba(94, 67, 156, 1)' }} />
-                        <Button
-                            onClick={async () => {
+                        {loading2 || loading3 ? (
+                            (<CircularProgress
+                                sx={{
 
+                                    padding: 1,
+                                    color: 'white',
+                                    alignSelf: 'center'
 
-                            }}
-                            sx={buttonStyles}
-                            variant="contained"
+                                }}
 
-                        >
-                            <FaCartPlus style={{ fontSize: 18 }} />
-                            <p>Переместить в корзину</p>
+                            />)
+                        ) : !areAllInCart ? (
+                            <Button
+                                onClick={async () => {
+                                    const array = items.map(el => el.Id)
+                                    await handleAddToCart(array)
 
-                        </Button>
+                                }}
+                                sx={buttonStyles}
+                                variant="contained"
+
+                            >
+                                <FaCartPlus style={{ fontSize: 18 }} />
+                                <p>Переместить в корзину</p>
+
+                            </Button>
+                        ) : (
+                            <Button
+                                sx={buttonStyles}
+                                variant="contained"
+                                style={{pointerEvents: 'none'}}
+
+                            >
+                                <BsCartCheckFill style={{ fontSize: 17 }} />
+                                <p>Все в корзине</p>
+
+                            </Button>
+                        )}
+
                     </>
 
                     : (

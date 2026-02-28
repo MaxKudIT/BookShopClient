@@ -11,7 +11,7 @@ const CartM = () => {
   return (
     <div className={styles.book_info_page_style}>
       
-      <NavMediaComponent pageType="cart"/>
+     
       <CartF/>
      
       <div style={{

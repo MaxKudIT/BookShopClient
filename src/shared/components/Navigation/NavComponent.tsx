@@ -9,7 +9,7 @@ import { useAuthState } from "react-firebase-hooks/auth"
 import styles from './NavComponent.module.scss'
 import type { FC } from "react"
 
-const NavComponent: FC<{myBooksPage: boolean}> = ({myBooksPage}) => {
+const NavComponent: FC<{myBooksPage: boolean, countFav: number, countCart: number}> = ({myBooksPage, countCart, countFav}) => {
 
     const { logout } = useFirebaseAuth()
     const navigate = useNavigate();
@@ -25,10 +25,12 @@ const NavComponent: FC<{myBooksPage: boolean}> = ({myBooksPage}) => {
     return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
             <button onClick={() => { navigate('/favs') }} className={styles.clickable_wrapper}>
+                  {countFav > 0 && <div className={styles.count_block}>{countFav}</div>}
                 <IoIosHeart style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
                 <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Избранное</p>
             </button>
             <button onClick={() => { navigate('/cart') }} className={styles.clickable_wrapper}>
+                {countCart > 0 && <div className={styles.count_block}>{countCart}</div>}
                 <IoMdCart style={{ fontSize: 25, color: 'rgba(255,255,255,0.9)' }} />
                 <p style={{ color: 'white', opacity: 0.9, fontSize: 13 }}>Корзина</p>
             </button>
