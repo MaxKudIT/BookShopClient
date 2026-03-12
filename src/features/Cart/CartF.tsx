@@ -1,86 +1,78 @@
-
 import { observer } from 'mobx-react-lite';
-
-import CartView from "../../shared/components/CartView/CartView";
+import { useCallback, useEffect, useMemo } from 'react';
 import { useStores } from '../../store/context/GloabalContext';
-import { useCallback, useEffect } from 'react';
+
+import CartView from '../../shared/components/CartView/CartView';
+import LoadingErrorWrapper from '../../shared/components/LoadingErrorWrapper/LoadingErrorWrapper';
 import NavMediaComponent from '../../shared/components/Navigation/MediaNavigation/NavMediaComponent';
 
 
 const CartF = observer(() => {
+  const {
+    favItemsStore: { count: favCount, getCountFav, countFavState },
+    cartItemsStore: {
+      getCartItems,
+      getCartItemsState,
+      cartItemsPreview,
+      deleteCartItems,
+      deleteCartItemsState,
+      count: cartCount,
+      getCountCart,
+      countCartState
+    }
+  } = useStores();
+
+
+  const pageLoading = useMemo(() => 
+    countFavState.loading || countCartState.loading || getCartItemsState.loading,
+    [countFavState.loading, countCartState.loading, getCartItemsState.loading]
+  );
+
+
+  const pageError = useMemo(() => 
+    countFavState.error || countCartState.error || getCartItemsState.error,
+    [countFavState.error, countCartState.error, getCartItemsState.error]
+  );
+
+
+  useEffect(() => {
+    const loadCounters = async () => {
+      await Promise.all([
+        getCountFav(),
+        getCountCart()
+      ]);
+    };
+    loadCounters();
+  }, [getCountFav, getCountCart]);
+
+  useEffect(() => {
+    getCartItems();
+  }, [getCartItems]);
 
  
-
-
-    const {
-        favItemsStore: {
-           
-
-            count,
-            countFavState,
-            getCountFav
-        },
-        cartItemsStore: {
-            getCartItems,
-            getCartItemsState,
-            cartItemsPreview,
-
-
-            deleteCartItems,
-            deleteCartItemsState,
-
-            count: cartCount,
-            countCartState,
-            getCountCart
-        },
-
-    } = useStores()
-
-
-     const handleResultBook = useCallback(async () => {
-      
-
-            await Promise.all([
-            
-                getCountFav(),
-                getCountCart()
-            ])
-
-
-        
-    }, [])
-
-    useEffect(() => {
-        handleResultBook()
-    }, [handleResultBook]);
-
-
-    useEffect(() => {
-        if (!deleteCartItemsState.loading && deleteCartItemsState.error === null) {
-          
-            getCartItems();
-        }
-    }, [deleteCartItemsState.loading, deleteCartItemsState.error, getCartItems]);
-
-
-
-    if (getCartItemsState.error || deleteCartItemsState.error || countFavState.error || countCartState.error) {
-        return (
-            <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>{getCartItemsState.error || deleteCartItemsState.error || countFavState.error || countCartState.error}</p>
-        )
+  useEffect(() => {
+    if (!deleteCartItemsState.loading && !deleteCartItemsState.error) {
+      getCartItems();
     }
+  }, [deleteCartItemsState.loading, deleteCartItemsState.error, getCartItems]);
 
-
-
-
-
-    return (
-        <>
-         <NavMediaComponent countCart={cartCount} countFav={count} pageType="cart"/>
-           <CartView items={cartItemsPreview || []} handleDeleteItem={deleteCartItems} loading={getCartItemsState.loading} />
-        </>
+  return (
+    <LoadingErrorWrapper loading={pageLoading} error={pageError}>
+      <NavMediaComponent 
+        countCart={cartCount ?? 0} 
+        countFav={favCount ?? 0} 
+        pageType="cart" 
+      />
       
-    )
-})
+      
+      <CartView 
+        items={cartItemsPreview || []} 
+        handleDeleteItem={deleteCartItems} 
+        loading={getCartItemsState.loading}
+    
+      />
+    </LoadingErrorWrapper>
+  );
+});
 
 export default CartF;
