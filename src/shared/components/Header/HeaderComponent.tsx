@@ -32,7 +32,7 @@ import {
 } from "react-icons/md";
 import { IoColorFilterOutline } from "react-icons/io5";
 import { MdAccountBox } from "react-icons/md";
-import { selectStyles, textFieldStyles } from "./muiStyles";
+import { selectStyles, textFieldStyles } from "./MainHeader/muiStyles";
 import { IoHomeOutline } from "react-icons/io5";
 import { useMyBooksSearch, useSearch, type GenresDropDown } from "../../../store/context/SearchContext";
 import { IoBookOutline } from "react-icons/io5";
@@ -88,10 +88,10 @@ const HeaderComponent: FC<HeaderProps> = ({ myBooksPage, countCart, countFav }) 
 
     return () => {
       setsearchingValue('');
-      setGenre('Все жанры');
+
 
       setSearchingValueMy('')
-      setGenreMy('Все жанры')
+
 
     };
   }, []);

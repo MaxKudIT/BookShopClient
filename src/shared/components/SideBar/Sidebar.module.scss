@@ -1,0 +1,131 @@
+.sidebar_main {
+display: flex;
+flex-direction: column;
+align-items: center;
+background: #161A22FF;
+padding-top: 40px;
+height: 100vh;
+width: 300px;
+border-right: 1px solid rgba(86, 86, 88, 0.2);
+}
+
+
+
+.title {
+font-family: Roboto;
+font-size: 18px;
+line-height: 20px;
+font-weight: 900;
+color: #6379E9FF;
+
+}
+
+.title_menu_container {
+    width: 250px;
+
+    padding-left: 25px;
+    margin-bottom: 25px;
+}
+
+.title_menu {
+font-family: Inter;
+font-size: 10px;
+
+font-weight: 900;
+color: rgb(107, 111, 117);
+letter-spacing: 1px;
+}
+
+.button_sidebar_active {
+    font-family: Inter;
+font-size: 13px;
+font-weight: 600;
+
+width: 250px;
+height: 35px;
+padding: 0 25px;
+display: flex;
+align-items: center;
+color: rgb(21, 23, 29);
+background: #6379E9FF;
+opacity: 1;
+border-radius: 10px;
+border-width: 0px;
+border-color: #FFFFFFFF;
+border-style: solid;
+box-shadow: 0px 8px 16px #6379E933, 0px 0px 0px #171a1f00;
+transition: all 0.1s;
+cursor: pointer;
+
+column-gap: 10px;
+    &:hover {
+        color: #161A22FF;
+          background: rgb(81, 98, 185)
+    }
+}
+
+.button_sidebar_unactive {
+font-family: Inter;
+font-size: 13px;
+font-weight: 600;
+
+width: 250px;
+height: 35px;
+padding: 0 25px;
+display: flex;
+align-items: center;
+color: #BAC1CEFF;
+background: transparent;
+opacity: 1;
+
+border-radius: 10px;
+border-width: 0px;
+border-color: #FFFFFFFF;
+border-style: solid;
+transition: all 0.1s;
+cursor: pointer;
+column-gap: 10px;
+
+    &:hover {
+        color: rgb(148, 149, 158);
+    }
+}
+
+
+.footer_sidebar {
+    background: #161A2280;
+    border-top: 2px solid rgba(86, 86, 88, 0.2);
+    margin-top: auto;
+    width: 100%;
+    height: 150px;
+    padding: 20px 35px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+}
+
+.button_settings {
+font-family: Inter;
+font-size: 13px;
+font-weight: 600;
+width: 170px;
+height: 35px;
+padding: 0 25px;
+display: flex;
+align-items: center;
+color: #F9FAFBFF;
+background: #1D212BFF;
+border-radius: 10px;
+opacity: 1;
+border-width: 0px;
+border-color: #FFFFFFFF;
+border-style: solid;
+transition: all 0.1s;
+cursor: pointer;
+column-gap: 10px;
+
+    &:hover {
+        color: rgb(148, 149, 158);
+    }
+
+}

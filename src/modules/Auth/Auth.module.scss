@@ -1,7 +1,7 @@
 .auth_page_styles {
     width: 100vw;
     height: 100vh;
-    background-image: url('https://i.pinimg.com/originals/0c/ac/5e/0cac5ed32498bfe3e707b8492e0db3e0.jpg');
+    background: url('/background.png');
     background-position: center center;     
     background-size: cover;                 
     background-repeat: no-repeat;       
@@ -22,7 +22,33 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5); 
+    background: rgba(0, 0, 0, 0.4); 
   
     z-index: 1;
 }
+
+.auth_blocks_wrapper {
+    display: flex;
+    height: 75%;
+    width: 950px;
+    border: 1px solid #FFFFFF1A;
+    border-radius: 16px;
+}
+
+.auth_first_block {
+    height: 100%;
+    width: 400px;
+    background: linear-gradient(rgb(24, 36, 59), rgb(23, 30, 44));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 50px;
+    padding-top: 60px;
+    padding-bottom: 45px;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+     position: relative;
+    overflow: hidden; 
+    border-right: 1px solid rgba(86, 86, 88, 0.2);
+}   
+

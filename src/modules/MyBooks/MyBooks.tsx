@@ -8,7 +8,7 @@ const MyBooks = () =>
   {
     return (
       <div className={styles.home_container}>
-        <HeaderComponent myBooksPage={true}/>
+      
         <MyBooksList/>
       </div>
     )

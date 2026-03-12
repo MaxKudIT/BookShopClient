@@ -30,10 +30,10 @@ export type LoginFormType = {
 
 const Authorization = () => {
 
- const { login, loading, error, clearError } = useFirebaseAuth();
+  const { login, loading, error, clearError } = useFirebaseAuth();
 
 
-   const [submitError, setSubmitError] = useState<string>('');
+  const [submitError, setSubmitError] = useState<string>('');
 
   const navigate = useNavigate()
 
@@ -61,30 +61,30 @@ const Authorization = () => {
   };
 
 
-    const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-   
+
     if (!isFormValid() || loading) {
       return;
     }
-    
+
     try {
-    
-      const user = await login(input);      
-   
+
+      const user = await login(input);
+
 
       if (user) {
-        navigate('/', {replace: true})
+        navigate('/', { replace: true })
       }
 
       setInput({ email: '', pass: '' });
-      setErrors({email: '', pass: '' });
-      
+      setErrors({ email: '', pass: '' });
 
 
-      
+
+
     } catch (err: any) {
-    
+
       console.error('Ошибка аутентификации:', err);
       setSubmitError(err.message || 'Произошла ошибка при аутентификации');
     }
@@ -112,7 +112,27 @@ const Authorization = () => {
       styles.authorization_container,
       isCurrentForm === 'registration' && styles.unactive
     )}>
-      <div className={styles.authorization_wrapper_column}>
+
+
+        <div style={{
+          display: 'flex', 
+          alignItems: 'center', 
+          marginBottom: 30,
+          width: '100%', 
+          height: 40, 
+          background: '#262A3380',
+          borderRadius: 16
+          }}>
+          <button style={{borderTopRightRadius: 0, borderBottomRightRadius: 0}} className={styles.toggle_button_active}>
+            Авторизация
+          </button>
+          <button style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 0}} className={styles.toggle_button_unactive}>
+            Регистрация
+          </button>
+        </div>
+   
+
+      {/* <div className={styles.authorization_wrapper_column}>
         <div className={styles.head_text_block}>
           <p style={{ fontSize: 20, color: 'white' }}>Вход</p>
           <p style={{ color: '#b8b7b7ff', fontSize: 15, opacity: '0.8' }}>Войдите в свой аккаунт</p>
@@ -248,7 +268,7 @@ const Authorization = () => {
         <div>
 
         </div>
-      </div>
+      </div> */}
 
     </div>
   )

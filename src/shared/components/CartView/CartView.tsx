@@ -1,12 +1,11 @@
-import { Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton } from "@mui/material";
-import { useCallback, useEffect, useMemo, useState, type FC } from "react";
-import { IoClose, IoCheckmarkCircle, IoCartOutline } from "react-icons/io5";
+import { Checkbox, CircularProgress, Divider } from "@mui/material";
+import { useEffect, useMemo, useState, type FC } from "react";
 
 import { useNavigate } from "react-router-dom";
 
 
-import styles from './CartView.module.scss'
 import CartViewComponent from "../ItemViewComponent/ItemViewComponent";
+import styles from './CartView.module.scss';
 
 import { RiDeleteBinLine } from "react-icons/ri";
 
