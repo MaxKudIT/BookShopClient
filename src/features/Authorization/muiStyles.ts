@@ -3,10 +3,11 @@ export const textFieldStyles = {
 
 
   '& .MuiOutlinedInput-root': {
-    height: '100%',
-
+    height: '40px',
+    borderRadius: 2,
+    background: '#181d2280',
     '& .MuiInputBase-input': {
-      color: 'white',
+      color: '#F3F4F6FF',
       fontSize: '14px',
       fontWeight: 400,
       '&:-webkit-autofill': {
@@ -14,12 +15,12 @@ export const textFieldStyles = {
         WebkitBoxShadow: '0 0 0px 1000px transparent inset',
         transition: 'background-color 5000s ease-in-out 0s',
       },
-      
+
       '&:-webkit-autofill:hover': {
         WebkitTextFillColor: 'white',
         WebkitBoxShadow: '0 0 0px 1000px transparent inset',
       },
-      
+
       '&:-webkit-autofill:focus': {
         WebkitTextFillColor: 'white',
         WebkitBoxShadow: '0 0 0px 1000px transparent inset',
@@ -27,24 +28,24 @@ export const textFieldStyles = {
     },
 
     '& .MuiInputAdornment-positionStart': {
-      color: 'white',
+      color: '#BDC1CAFF',
     },
 
     '& .MuiInputAdornment-positionEnd': {
-      color: 'white',
+      color: '#BDC1CAFF',
     },
     '& fieldset': {
-      borderColor: '#CCCCCC',
+      borderColor: '#323743FF',
 
     },
     '&:hover': {
       '& fieldset': {
-        borderColor: 'white'
+        borderColor: 'rgb(86, 92, 109)'
       },
     },
     '&.Mui-focused': {
       '& fieldset': {
-        borderColor: 'white',
+        borderColor: 'rgb(86, 92, 109)',
         borderWidth: 2,
       },
 
@@ -52,7 +53,7 @@ export const textFieldStyles = {
   },
 
   '& .MuiInputLabel-root': {
-    color: 'white !important',
+    color: '#F3F4F6FF !important',
 
 
   },
@@ -62,22 +63,18 @@ export const textFieldStyles = {
 export const buttonStyles = {
   width: '100%',
   height: 45,
+
   textTransform: 'none',
   borderRadius: 2,
-  fontSize: '15px',
+  fontSize: '14px',
   fontWeight: 'bold',
-  color: 'rgba(46, 5, 160, 0.9)',
-  boxShadow: 'none',
+  color: 'rgb(21, 23, 29)',
   position: 'relative',
 
-  background: `
-    linear-gradient(145deg, 
-      rgba(204, 202, 235, 1) 0%, 
-      rgba(255, 255, 255, 1) 30%, 
-      rgba(201, 198, 233, 1) 90%
-    )
-  `,
-
-
+  background: '#6379E9FF',
+  boxShadow: '0px 0px 2px #1F36AD33, 0px 4px 7px #1F36AD33',
+  columnGap: 1,
+  marginBottom: 3
 
 }
+

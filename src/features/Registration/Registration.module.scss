@@ -1,17 +1,99 @@
 .registration_container {
-    height: 65%;
-    width: 20%;
-    background-color: rgb(240, 238, 238);
-    max-width: 600px;
-    min-width: 500px;
-    min-height: 500px;
+      flex-grow: 1;
+    background-color: rgb(23, 30, 44);
 
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    border-top-right-radius: 50px;
+    padding: 0 60px;
+    padding-top: 70px;
+    padding-bottom: 45px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
 }
+
+.toggle_button_active {
+font-family: 'Inter';
+font-size: 13px;
+font-weight: 700;
+
+width: 50%;
+height: 100%;
+padding: 0 25px;
+display: flex;
+align-items: center;
+justify-content: center;
+color: rgb(21, 23, 29);
+background: #6379E9FF;
+opacity: 1;
+border-radius: 10px;
+border-width: 0px;
+border-color: #FFFFFFFF;
+border-style: solid;
+box-shadow: 0px 8px 16px #6379E933, 0px 0px 0px #171a1f00;
+transition: all 0.1s;
+cursor: pointer;
+
+column-gap: 10px;
+    &:hover {
+        color: #161A22FF;
+          background: rgb(66, 80, 153)
+    }
+}
+
+.toggle_button_unactive {
+font-family: Inter;
+font-size: 13px;
+font-weight: 600;
+width: 50%;
+height: 100%;
+padding: 0 25px;
+display: flex;
+align-items: center;
+justify-content: center;
+color: #BAC1CEFF;
+background: transparent;
+opacity: 1;
+
+border-radius: 10px;
+border-width: 0px;
+border-color: #FFFFFFFF;
+border-style: solid;
+transition: all 0.1s;
+cursor: pointer;
+column-gap: 10px;
+
+    &:hover {
+        color: rgb(148, 149, 158);
+    }
+}
+
+.button_oauth {
+
+font-size: 15px;
+font-weight: 600;
+width: 48%;
+height: 100%;
+padding: 0 25px;
+display: flex;
+align-items: center;
+justify-content: center;
+color: #BAC1CEFF;
+background: #262A334D;
+opacity: 1;
+
+border-radius: 10px;
+
+border: 1px solid #323743FF;
+transition: all 0.1s;
+cursor: pointer;
+column-gap: 10px;
+
+    &:hover {
+        color: rgb(148, 149, 158);
+    }
+}
+
 
 .registration_wrapper_column {
     height: 100%;
@@ -32,6 +114,7 @@
     flex-direction: column;
     row-gap: 15px;
     padding: 20px 0;
+     width: 100%;
 }
 
 .href_block {
@@ -52,18 +135,7 @@
 
 .unactive {
     position: relative;
-    pointer-events: none !important; 
+    pointer-events: none !important;
+    display: none; 
 }
 
-.unactive::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8); 
-    border-top-right-radius: 50px; 
-   
-    z-index: 3;
-}

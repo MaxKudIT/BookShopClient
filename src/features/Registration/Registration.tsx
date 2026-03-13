@@ -6,6 +6,9 @@ import {
   IconButton,
   Alert,
   CircularProgress,
+  Box,
+  Chip,
+  Snackbar,
 } from '@mui/material';
 import cn from 'classnames';
 import { MdClear, MdOutlineEmail, MdLockOutline, MdDriveFileRenameOutline, MdOutlineVisibilityOff, MdOutlineVisibility } from "react-icons/md";
@@ -14,13 +17,17 @@ import { buttonStyles, textFieldStyles } from './muiStyle';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../store/context/AuthContext';
 import { validateEmail, validateLogin, validatePassword } from '../../shared/helpers/validateForm';
-import { useFirebaseAuth } from '../../shared/hooks/useFirebaseAuth';
+import { useFirebaseAuth, type AppUser } from '../../shared/hooks/useFirebaseAuth';
 
 import { auth } from '../../shared/hooks/configs/firebase-config';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from 'react-router-dom';
-import { usePost } from '../../shared/hooks/queries';
+import { useDelete, usePost } from '../../shared/hooks/queries';
 import { getAuth } from 'firebase/auth';
+import { FaGithub } from 'react-icons/fa6';
+import { FcGoogle } from 'react-icons/fc';
+import { GrFormNext } from 'react-icons/gr';
+import { IoMdInformationCircleOutline } from 'react-icons/io';
 
 
 
@@ -30,22 +37,36 @@ export type RegFormType = {
   pass: string
 }
 
+export type SagaType = {
+  firebaseUser: boolean,
+  dbUser: boolean,
+  cart: boolean,
+  fav: boolean
+}
 
 
 const Registration = () => {
+
+
+
+
+
 
   const navigate = useNavigate();
 
   const [user] = useAuthState(auth)
 
   const { post: createUser } = usePost<{ FirebaseId: string }, { id: string }>('/users/create');
-
-  const { post: createCart } = usePost('/cart')
-
-  const {post: createFav} = usePost('/fav')
+  const { deleteI: deleteUserDB } = useDelete<any>('/users')
 
 
-  const { register, loading, error, clearError } = useFirebaseAuth();
+  const { post: createCart } = usePost<{ title: string }, { id: string }>('/cart') //создание корзины для пользователя
+  const { deleteI: deleteCartDB } = useDelete<any>('/cart')
+
+  const { post: createFav } = usePost<{ title: string }, { id: string }>('/fav')  //создание избранного (как корзины содержимого) для пользователя
+  const { deleteI: deleteFavDB } = useDelete<any>('/fav')
+
+  const { register, registerLoading, registerError, clearErrors, googleSignIn, googleError, gitHubSignIn, gitHubError } = useFirebaseAuth();
 
   useEffect(() => {
     if (user) {
@@ -69,6 +90,24 @@ const Registration = () => {
 
 
   const [submitError, setSubmitError] = useState<string>('');
+
+  //окно ошибки
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (registerError || submitError || googleError || gitHubError) {
+      setOpen(true);
+    }
+  }, [registerError, submitError, googleError, gitHubError]);
+
+  const handleClose = (event: any, reason: any) => {
+    if (reason === 'clickaway') {
+      setOpen(false);
+      clearErrors?.();
+      setSubmitError?.('');
+    }
+  };
+
 
   const onChangeLogin = (e: any) => {
     const value = e.target.value;
@@ -106,36 +145,57 @@ const Registration = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!isFormValid() || loading) {
+    if (!isFormValid() || registerLoading) {
       return;
     }
+    const completedOps: SagaType = {
+      firebaseUser: false,
+      dbUser: false,
+      cart: false,
+      fav: false
+    };
+
+    let dbUserId: string | undefined = undefined;
+    let cartId: string | undefined = undefined;
+    let favId: string | undefined = undefined
+
+    let token: string | undefined = undefined;
 
     try {
-
+     
       // 1. Регистрируем пользователя в Firebase
-      const user = await register(input);
+      const firebaseUser = await register(input);
+      completedOps.firebaseUser = true;
 
-      // 2. Создаем пользователя в своей БД
-      await createUser({ FirebaseId: user.uid });
-
-      // Получаем данные авторизации
+      // 2. Получаем токен
+    
       const auth = getAuth()
+      token = await auth.currentUser?.getIdToken()
+
+      // 3. Создаем пользователя в своей БД
+      const data = await createUser({ FirebaseId: firebaseUser.uid });
+      dbUserId = data.id;
+      completedOps.dbUser = true;
 
 
-      // 3. Получаем токен
-      const token = await auth.currentUser?.getIdToken()
 
       // 4. Создаем корзину для пользователя
-      await createCart(
-        { title: `Cart ${user.uid}` },
+      const data2 = await createCart(
+        { title: `Cart ${firebaseUser.uid}` },
         { idToken: token }
       );
+      cartId = data2.id;
+      completedOps.cart = true;
+
 
       // 5. Создаем избранные товары (также обьект)
-          await createFav(
-        { title: `Fav ${user.uid}` },
+      const data3 = await createFav(
+        { title: `Fav ${firebaseUser.uid}` },
         { idToken: token }
       );
+      favId = data3.id;
+      completedOps.fav = true;
+
 
       // 6. Редирект на главную
       navigate('/', { replace: true });
@@ -144,17 +204,100 @@ const Registration = () => {
       setInput({ email: '', login: '', pass: '' });
       setErrors({ login: '', email: '', pass: '' });
 
-
-
-
-
-
     } catch (err: any) {
-
+      console.log('error!!!')
+      await rollbackOperations(completedOps, dbUserId, cartId, favId, token)
       console.error('Ошибка регистрации:', err);
       setSubmitError(err.message || 'Произошла ошибка при регистрации');
     }
   };
+
+  const rollbackOperations = async (
+    completedOps: SagaType,
+    dbUserId: string | undefined,
+    cartId: string | undefined,
+    favId: string | undefined,
+    token: string | undefined) => {
+
+      console.log('tste')
+    if (completedOps.fav) {
+      try {
+
+        await deleteFavDB({ idToken: token, param: favId });
+        console.log('Избранное удалено');
+      } catch (e) {
+        console.error('Не удалось удалить избранное:', e);
+      }
+    }
+
+    if (completedOps.cart) {
+      try {
+        await deleteCartDB({ idToken: token, param: cartId });
+        console.log('Корзина удалена');
+      } catch (e) {
+        console.error('Не удалось удалить корзину:', e);
+      }
+    }
+
+    if (completedOps.dbUser) {
+      try {
+        await deleteUserDB({ param: dbUserId });
+        console.log('Пользователь удален из БД');
+      } catch (e) {
+        console.error('Не удалось удалить пользователя из БД:', e);
+      }
+    }
+
+    if (completedOps.firebaseUser) {
+      try {
+        const auth = getAuth();
+        if (auth.currentUser) {
+          await auth.currentUser.delete();
+          console.log('Пользователь Firebase удален');
+        }
+      } catch (e) {
+        console.error('Не удалось удалить пользователя Firebase:', e);
+      }
+    }
+  };
+
+
+
+  const handleGoogleLogin = async () => {
+    try {
+      await googleSignIn();
+
+
+
+      navigate('/', { replace: true });
+
+      setInput({ email: '', login: '', pass: '' });
+      setErrors({ login: '', email: '', pass: '' });
+    }
+    catch (e: any) {
+      console.error(e)
+    }
+
+
+  }
+
+
+  const handleGitHubLogin = async () => {
+    try {
+      await gitHubSignIn();
+
+      navigate('/', { replace: true });
+
+      setInput({ email: '', login: '', pass: '' });
+      setErrors({ email: '', login: '', pass: '' });
+    }
+    catch (e: any) {
+      console.error(e)
+    }
+
+
+  }
+
 
 
 
@@ -167,148 +310,239 @@ const Registration = () => {
       styles.registration_container,
       isCurrentForm === 'login' && styles.unactive
     )}>
-      <div className={styles.registration_wrapper_column}>
-        <div className={styles.head_text_block}>
-          <p style={{ fontSize: 20 }}>Регистрация</p>
-          <p style={{ color: '#535252ff', fontSize: 15, opacity: '0.8' }}>Создайте новый аккаунт</p>
-        </div>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: 30,
+        width: '100%',
+        height: 40,
+        background: '#262A3380',
+        borderRadius: 16
+      }}>
+        <button onClick={() => {
+          setInput({ email: '', pass: '', login: '' })
+          setErrors({ pass: '', login: '', email: '' })
+          clearErrors()
+          setCurrentForm('login')
 
-        {(error || submitError) && (
-          <Alert
-            severity="error"
-            sx={{ width: '100%', background: 'rgba(216, 135, 124, 0.3)', borderRadius: 3, marginTop: 2 }}
-            onClose={() => { clearError(); setSubmitError(''); }}
-          >
-            {error || submitError}
-          </Alert>
-        )}
-
-
-        <div className={styles.text_field_block}>
-
-
-          <TextField
-            sx={textFieldStyles}
-            value={input.login}
-            label="Логин"
-            onChange={onChangeLogin}
-            fullWidth
-            margin="normal"
-            helperText={errors.login}
-            error={!!errors.login}
-
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <MdDriveFileRenameOutline />
-                  </InputAdornment>
-                ),
-
-              },
-            }}
-          />
-
-          <TextField
-            sx={textFieldStyles}
-            value={input.email}
-            label="Почта"
-
-
-            onChange={onChangeEmail}
-            fullWidth
-            margin="normal"
-            error={!!errors.email}
-            helperText={errors.email}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <MdOutlineEmail />
-                  </InputAdornment>
-                ),
-
-              },
-            }}
-          />
-
-          <TextField
-
-            sx={textFieldStyles}
-            value={input.pass}
-
-            label="Пароль"
-            onChange={onChangePassword}
-            type={passIsVisible ? 'text' : 'password'}
-            fullWidth
-            margin="normal"
-
-            error={!!errors.pass}
-            helperText={errors.pass}
-
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <MdLockOutline />
-                  </InputAdornment>
-                ),
-                endAdornment: input.pass.length > 0 && (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setPassVisible(prev => !prev)}
-                      edge="end"
-                      size="small"
-                      aria-label={passIsVisible ? "Скрыть пароль" : "Показать пароль"}
-
-                    >
-                      {passIsVisible ? <MdOutlineVisibilityOff color='gray' /> : <MdOutlineVisibility color='gray' />}
-                    </IconButton>
-                  </InputAdornment>
-                )
-
-              },
-            }}
-          />
-
-        </div>
-
-        <Button
-          sx={buttonStyles}
-          variant="contained"
-          onClick={handleSubmit}
-
-          style={(!isFormValid()) ? { pointerEvents: 'none', opacity: 0.6 } : { pointerEvents: 'auto', opacity: 1 }}
-        >
-          {loading ? <CircularProgress
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: 1,
-              color: 'white'
-            }}
-
-          /> : 'Зарегистрироваться'}
-        </Button>
-
-        <div className={styles.href_block}>
-          <p>Уже есть аккаунт?</p>
-          <span onClick={() => {
-            setInput({ email: '', pass: '', login: '' })
-            setErrors({ pass: '', login: '', email: '' })
-            clearError()
-            setCurrentForm('login')
-
-            setSubmitError('');
-          }}>Войти</span>
-        </div>
-
-
-        <div>
-
-        </div>
+          setSubmitError('');
+        }} style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }} className={styles.toggle_button_unactive}>
+          Авторизация
+        </button>
+        <button style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }} className={styles.toggle_button_active}>
+          Регистрация
+        </button>
       </div>
+      <div style={{ width: '100%', rowGap: 5, display: 'flex', flexDirection: 'column' }}>
+        <p style={{ fontSize: 24, fontFamily: 'Montserrat', color: '#F3F4F6FF', fontWeight: 700 }}>Приветствуем вас!</p>
+        <p style={{ fontSize: 14, fontFamily: 'Lato', color: '#BDC1CAFF', fontWeight: 400 }}>Создайте аккаунт для погружения в мир фантастических историй</p>
+      </div>
+
+
+
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        sx={{ mt: 2 }}
+      >
+        <Alert
+          severity="error"
+          sx={{
+            background: 'rgba(155, 32, 16, 0.3)',
+            borderRadius: 3,
+            color: '#F3F4F6FF',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(155, 32, 16, 0.5)'
+          }}
+          onClose={() => {
+            setOpen(false);
+            clearErrors?.();
+            setSubmitError?.('');
+          }}
+        >
+          {registerError || submitError || googleError || gitHubError}
+        </Alert>
+      </Snackbar>
+
+      <div className={styles.text_field_block}>
+        <TextField
+          sx={textFieldStyles}
+          value={input.login}
+          label="Логин"
+          onChange={onChangeLogin}
+          fullWidth
+          margin="normal"
+          helperText={errors.login}
+          error={!!errors.login}
+
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <MdDriveFileRenameOutline />
+                </InputAdornment>
+              ),
+
+            },
+          }}
+        />
+        <TextField
+
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="none"
+          spellCheck="false"
+
+          onChange={onChangeEmail}
+          value={input.email}
+          sx={textFieldStyles}
+          label="Почта"
+          helperText={errors.email}
+          error={!!errors.email}
+
+          fullWidth
+          margin="normal"
+
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <MdOutlineEmail />
+                </InputAdornment>
+              ),
+
+            },
+          }}
+        />
+
+
+
+        <TextField
+
+
+          autoComplete="current-password"
+          autoCorrect="off"
+          autoCapitalize="none"
+          spellCheck="false"
+
+          onChange={onChangePassword}
+
+          sx={textFieldStyles}
+          value={input.pass}
+
+          label="Пароль"
+          type={passIsVisible ? 'text' : 'password'}
+          fullWidth
+          margin="normal"
+          helperText={errors.pass}
+          error={!!errors.pass}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <MdLockOutline />
+                </InputAdornment>
+              ),
+              endAdornment: input.pass.length > 0 && (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setPassVisible(prev => !prev)}
+                    edge="end"
+                    size="small"
+                    aria-label={passIsVisible ? "Скрыть пароль" : "Показать пароль"}
+
+                  >
+                    {passIsVisible ? <MdOutlineVisibilityOff color='white' /> : <MdOutlineVisibility color='white' />}
+                  </IconButton>
+                </InputAdornment>
+              )
+
+            },
+          }}
+        />
+
+      </div>
+
+
+      <Button
+        sx={buttonStyles}
+        variant="contained"
+        onClick={handleSubmit}
+        style={errors.email || errors.pass || !input.email || !input.pass ? { pointerEvents: 'none', opacity: 0.6 } : { pointerEvents: 'auto', opacity: 1 }}
+      >
+        {registerLoading ? <CircularProgress
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 1,
+            color: 'rgb(21, 23, 29)'
+          }}
+
+        /> : (
+          <>
+            <p>Создать аккаунт</p>
+            <GrFormNext style={{ fontSize: 18, color: 'rgb(21, 23, 29)' }} />
+          </>
+
+        )}
+      </Button>
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        marginBottom: 3
+      }}>
+        <Box sx={{ flex: 1, height: '1px', bgcolor: 'rgb(107, 111, 117)' }} />
+        <Chip
+          label="ИЛИ ВОЙТИ ЧЕРЕЗ"
+
+          sx={{
+            color: 'rgb(107, 111, 117)',
+            borderColor: 'rgb(107, 111, 117)',
+            backgroundColor: 'transparent',
+            fontSize: 11,
+
+          }}
+        />
+        <Box sx={{ flex: 1, height: '1px', bgcolor: 'rgb(107, 111, 117)' }} />
+      </Box>
+
+      <div style={{ width: '100%', height: 35, display: 'flex', justifyContent: 'space-between', marginBottom: 40 }}>
+        <button onClick={handleGoogleLogin} className={styles.button_oauth}>
+          <FcGoogle />
+          <p style={{ fontFamily: 'Lato' }}>Google</p>
+        </button>
+
+        <button onClick={handleGitHubLogin} className={styles.button_oauth}>
+          <FaGithub />
+          <p style={{ fontFamily: 'Lato' }}>GitHub</p>
+        </button>
+      </div>
+      <div style={{
+        background: '#6f7ec90d',
+        border: '1px solid #5c6cbe1a',
+        borderRadius: 10,
+        width: '100%',
+        display: 'flex',
+        columnGap: 10,
+        alignItems: 'center',
+        padding: 10,
+
+      }}>
+        <IoMdInformationCircleOutline style={{ color: '#6379E9FF', fontSize: 18, flexShrink: 0 }} />
+        <p style={{
+          color: '#BDC1CAFF',
+          fontSize: 13,
+          fontFamily: 'Lato',
+          wordBreak: 'break-word',
+          overflowWrap: 'break-word',
+          lineHeight: 1.5
+        }}>Регистрируйтесь сейчас и успейте получить в подарок 3 фантастические книги!</p>
+      </div>
+
 
     </div>
   )

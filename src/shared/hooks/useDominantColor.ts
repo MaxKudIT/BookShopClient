@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ColorThief from 'colorthief';
 
 const useDominantColor = (imageUrl: string | null | undefined) => {
-  const [dominantColor, setDominantColor] = useState<string>('#c386ebff'); // ваш цвет по умолчанию
+  const [dominantColor, setDominantColor] = useState<string>('#c386ebff'); 
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -20,15 +20,16 @@ const useDominantColor = (imageUrl: string | null | undefined) => {
 
     img.onload = () => {
       try {
-        // Убеждаемся, что изображение загружено
+     
         if (img.complete && img.naturalWidth > 0) {
           const colorThief = new ColorThief();
           const [r, g, b] = colorThief.getColor(img);
           setDominantColor(`rgb(${r}, ${g}, ${b})`);
         }
+
       } catch (error) {
         console.error('Error extracting color:', error);
-        // Оставляем цвет по умолчанию
+ 
       } finally {
         setLoading(false);
       }

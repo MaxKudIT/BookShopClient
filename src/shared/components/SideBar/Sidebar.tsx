@@ -1,14 +1,29 @@
-import { IoBookOutline } from 'react-icons/io5';
+
 import styles from './Sidebar.module.scss'
-import { MdOutlineGridView } from "react-icons/md";
+import { MdOutlineGridView, MdOutlineLocalLibrary } from "react-icons/md";
 import { FaRegCompass } from "react-icons/fa6";
 import { GiBookshelf } from "react-icons/gi";
 import { FaRegBookmark } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
-import { IoSettingsOutline } from "react-icons/io5";
-import { MdExitToApp } from "react-icons/md";
 import { RxExit } from "react-icons/rx";
-const SideBar = () => {
+import type { FC } from 'react';
+import { Tooltip } from '@mui/material';
+
+
+export type SideBarType = {
+    handleLogout: () => void,
+    user: {
+        login: string;
+        email: string;
+    }
+}
+
+
+const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
+
+
+
+
     return (
         <div className={styles.sidebar_main}>
             <div style={{
@@ -27,7 +42,8 @@ const SideBar = () => {
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}>
-                    <IoBookOutline style={{ fontSize: 18, color: '#161A22FF' }} />
+                    <MdOutlineLocalLibrary style={{ color: '#161A22FF', fontSize: 18 }} />
+
                 </div>
                 <p className={styles.title}>MaxLib</p>
             </div>
@@ -71,27 +87,36 @@ const SideBar = () => {
             </div>
 
             <div className={styles.footer_sidebar}>
-                <div style={{ display: 'flex', alignItems: 'center', columnGap: 8 }}>
-                    <div style={{
-                        borderRadius: 50,
-                        background: 'rgb(150, 10, 10)',
-                        width: 35,
-                        height: 35,
-                        color: '#F9FAFBFF',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontWeight: 700,
-                        fontSize: 15
-                    }}>M</div>
-                    <p style={{ color: '#F9FAFBFF', fontSize: 14 }}>Макс Кудинов</p>
-                </div>
-                <div style={{display: 'flex', alignItems: 'center', columnGap: 25}}>
-                    <button className={styles.button_settings}>
-                        <IoSettingsOutline style={{ fontSize: 16 }} />
-                        <p>Настройки</p>
-                    </button>
-                    <RxExit style={{ fontSize: 20, color: '#BAC1CEFF', cursor: 'pointer' }}/>
+
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div className={styles.button_profile}>
+                        <div style={{
+                            borderRadius: 50,
+                            background: 'rgb(150, 10, 10)',
+                            width: 35,
+                            height: 35,
+                            color: '#F9FAFBFF',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontWeight: 700,
+                            fontSize: 15
+                        }}>{user.login[0]}</div>
+                        <p style={{ color: '#F9FAFBFF', fontSize: 14 }}>{user.login}</p>
+                    </div>
+                    <Tooltip slotProps={{
+                        tooltip: {
+                            sx: {
+                              
+                                color: '#F9FAFBFF',   
+                                fontWeight: 500
+                              
+                            }
+                        },
+                     
+                    }} title="Выйти из аккаунта" placement="top">
+                        <RxExit onClick={handleLogout} className={styles.button_exit} />
+                    </Tooltip>
                 </div>
 
             </div>

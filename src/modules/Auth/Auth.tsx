@@ -19,7 +19,7 @@ const Auth = () => {
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <MdOutlineLocalLibrary style={{ color: 'black', fontSize: 23 }} />
+              <MdOutlineLocalLibrary style={{ color: '#161A22FF', fontSize: 23 }} />
             </div>
             <p style={{ fontFamily: 'Montserrat', fontSize: 26, color: '#6379E9FF', fontWeight: 500 }}>MaxLib</p>
           </div>
@@ -77,6 +77,7 @@ const Auth = () => {
         
         </div>
         <Authorization />
+        <Registration/>
       </div>
 
     </div >
