@@ -18,11 +18,11 @@ export const textFieldStyles = {
     
 
     '&:hover': {
-      backgroundColor: 'rgba(159, 165, 175, 0.1)', 
+      backgroundColor: 'rgba(124, 145, 180, 0.1)', 
     },
     
     '&.Mui-focused': {
-      backgroundColor: 'rgba(159, 165, 175, 0.1)',
+      backgroundColor: 'rgba(124, 145, 180, 0.1)',
      
     },
     

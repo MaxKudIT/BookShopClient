@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styles from './ShopBookList.module.scss'
 
-import { useGet } from "../../shared/hooks/queries";
+
 import { Alert, Avatar, CircularProgress, Dialog, Divider, Snackbar } from "@mui/material";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import BookList from "../../shared/components/BookList/BookList";
-import HeaderComponent from "../../shared/components/Header/HeaderComponent";
-import { useStores } from "../../store/context/GloabalContext";
+
 import SideBar from "../../shared/components/SideBar/Sidebar";
 import MainHeader from "../../shared/components/Header/MainHeader/MainHeader";
 
 import { FaRegBookmark } from "react-icons/fa6";
 import { GrFormNext } from "react-icons/gr";
 import { useFirebaseAuth } from "../../shared/hooks/useFirebaseAuth";
+import HistoryRow from "../../shared/components/HistoryRow/HistoryRow";
+import RecommsRow from "../../shared/components/RecommsRow/RecommsRow";
 
 
 const ShopBookList = () => {
@@ -25,11 +25,11 @@ const ShopBookList = () => {
 
 
   const auth = getAuth()
-  
+
   console.log(auth)
 
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -172,7 +172,7 @@ const ShopBookList = () => {
 
 
 
-      <SideBar user={{email: auth.currentUser?.email || 'none', login: auth.currentUser?.displayName || 'none'}} handleLogout={handleLogout}/>
+      <SideBar user={{ email: auth.currentUser?.email || 'none', login: auth.currentUser?.displayName || 'none' }} handleLogout={handleLogout} />
       <div className={styles.main_container}>
         <MainHeader />
         <div className={styles.main_body}>
@@ -186,46 +186,54 @@ const ShopBookList = () => {
               paddingRight: 20,
               display: 'flex',
               flexDirection: 'column',
-              rowGap: 25
+              rowGap: 25,
+
             }}>
-              <div style={{ display: 'flex', flexDirection: 'column', rowGap: 15 }}>
-                <div style={{ width: 'fit-content' }}>
-                  <p style={{
-                    background: 'linear-gradient(90deg, #5f73cf, #b167ce )',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    fontSize: 45,
-                    fontWeight: 900
-                  }}>Человек-паук</p>
+              <div style={{ display: 'flex', flexDirection: 'column', rowGap: 25 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', rowGap: 10 }}>
+                  <div style={{ width: 'fit-content' }}>
+                    <p style={{
+                      background: 'linear-gradient(90deg, #5f73cf, #b167ce )',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      fontSize: 45,
+                      fontWeight: 900
+                    }}>Человек-паук</p>
+                  </div>
+                  <p style={{ fontSize: 18, color: '#BAC1CEFF', fontWeight: 600 }}>Автор: Мэтт Хейг</p>
                 </div>
-                <p style={{ fontSize: 18, color: '#BAC1CEFF', fontWeight: 600 }}>Автор: Мэтт Хейг</p>
-              </div>
-              <div style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                columnGap: 25,
-                height: 100
-              }}>
-                <Divider sx={{ borderRightWidth: 3, borderColor: 'rgb(45, 64, 163, 0.6)' }} orientation="vertical" />
-                <p style={{ color: 'rgb(136, 141, 150)', fontWeight: 500, fontSize: 16, lineHeight: 1.7 }}>«Между жизнью и смертью есть библиотека. И в этой библиотеке полки тянутся бесконечно. Каждая книга дает возможность попробовать другую жизнь...»</p>
-              </div>
-              <div style={{ marginTop: 40, display: 'flex', alignItems: 'center', columnGap: 25 }}>
-                <button className={styles.book_month_button_one}>
-                  <p>Читать сейчас</p>
-                  <GrFormNext style={{ fontSize: 18 }} />
-                </button>
-                <button className={styles.book_month_button_two}>
-                  <FaRegBookmark style={{ fontSize: 14 }} />
-                  <p>В список желаемого</p>
-                </button>
+                <div style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  columnGap: 25,
+                  height: 100
+                }}>
+                  <Divider sx={{ borderRightWidth: 3, borderColor: 'rgb(45, 64, 163, 0.6)' }} orientation="vertical" />
+                  <p style={{ color: 'rgb(136, 141, 150)', fontWeight: 500, fontSize: 16, lineHeight: 1.7 }}>«Между жизнью и смертью есть библиотека. И в этой библиотеке полки тянутся бесконечно. Каждая книга дает возможность попробовать другую жизнь...»</p>
+                </div>
+                <div style={{ marginTop: 40, display: 'flex', alignItems: 'center', columnGap: 25 }}>
+                  <button className={styles.book_month_button_one}>
+                    <p>Читать сейчас</p>
+                    <GrFormNext style={{ fontSize: 18 }} />
+                  </button>
+                  <button className={styles.book_month_button_two}>
+                    <FaRegBookmark style={{ fontSize: 14 }} />
+                    <p>В список желаемого</p>
+                  </button>
+                </div>
+
               </div>
 
+
+            </div>
+            <div className={styles.book_month_two}>
             </div>
 
 
           </div>
-
+          <HistoryRow books={[]} />
+          <RecommsRow books={[]}/>
         </div>
       </div>
 

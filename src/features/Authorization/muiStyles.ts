@@ -75,6 +75,5 @@ export const buttonStyles = {
   boxShadow: '0px 0px 2px #1F36AD33, 0px 4px 7px #1F36AD33',
   columnGap: 1,
   marginBottom: 3
-
 }
 

@@ -2,15 +2,17 @@
     background: rgb(22, 27, 36);
     height: 100%;
     flex-grow: 1;
-    padding: 0 170px;
     display: flex;
     flex-direction: column;
     row-gap: 50px;
+    margin-left: 300px;
+    
 }
 
 
 .main_body {
-
+    margin-top: 150px;
+    padding: 0 170px;
 
 }
 
@@ -18,22 +20,29 @@
     display: flex;
     justify-content: space-between;
     padding: 60px 50px;
-
+    
     
 
-    background: 
-        linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
-        url('/background.png');
-      background-size: cover;    
-    background-position: center; 
-    background-repeat: no-repeat; 
+
 
 
     border-radius: 40px;
 
     box-shadow: 0px 25px 50px #00000040, 0px 0px 0px #171a1f00;
-
+    border: 1px solid #30374680;
+    margin-bottom: 60px;
 }
+.book_month_two {
+    flex-grow: 1;
+ 
+        background: 
+        linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+        url('/public/back2.png');
+      background-size: cover;    
+    background-position: center; 
+    background-repeat: no-repeat; 
+
+} 
 
 .book_month_button_one {
     height: 60px;
@@ -46,8 +55,8 @@
     font-family: Inter;
     font-size: 16px;
     color: #161A22FF;
-    box-shadow: 0px 16px 32px #6379E94D, 0px 0px 0px #171a1f00;
-    background: #6379E9FF;
+    box-shadow: 0px 16px 32px #8f55b64d, 0px 0px 0px #45395200;
+    background: #BA8AEAFF;
     border-radius: 14px;
     border-width: 0px;
     border-color: #FFFFFFFF;
@@ -56,7 +65,7 @@
     transition: all 0.1s;
     cursor: pointer;
     &:hover {
-         background: rgb(81, 98, 185);
+         background: rgb(136, 96, 175);
     }
 }
 

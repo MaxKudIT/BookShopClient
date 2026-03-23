@@ -53,12 +53,12 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
                 </div>
 
                 <div style={{ width: 250, display: 'flex', flexDirection: 'column', rowGap: 17 }}>
-                    <button className={styles.button_sidebar_unactive}>
+                    <button className={styles.button_sidebar_active}>
                         <MdOutlineGridView style={{ fontSize: 15 }} />
                         <p>Обзор</p>
                     </button>
 
-                    <button className={styles.button_sidebar_active}>
+                    <button className={styles.button_sidebar_unactive}>
                         <FaRegCompass style={{ fontSize: 15 }} />
                         <p>Исследовать</p>
                     </button>
@@ -102,7 +102,7 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
                             fontWeight: 700,
                             fontSize: 15
                         }}>{user.login[0]}</div>
-                        <p style={{ color: '#F9FAFBFF', fontSize: 14 }}>{user.login}</p>
+                        <p style={{ color: '#F9FAFBFF', fontSize: 14, fontWeight: 500 }}>{user.login}</p>
                     </div>
                     <Tooltip slotProps={{
                         tooltip: {

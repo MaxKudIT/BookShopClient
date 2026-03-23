@@ -7,7 +7,7 @@ const BookInfo = () =>
     return (
         <>
         <Helmet>
-           <title>MaxBook</title>
+           <title>MaxLib</title>
         </Helmet>
         <BookInfoModule/> 
         </>

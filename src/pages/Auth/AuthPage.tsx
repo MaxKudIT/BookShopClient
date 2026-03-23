@@ -6,7 +6,7 @@ const AuthPage = () =>
     return (
         <>
         <Helmet>
-           <title>Авторизация</title>
+           <title>MaxLib</title>
         </Helmet>
         <Auth/>
         </>

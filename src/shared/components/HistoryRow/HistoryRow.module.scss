@@ -1,0 +1,38 @@
+.history_row_wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+    margin-bottom: 75px;
+}
+
+.history_row_main {
+   display: flex;
+   column-gap: 35px;
+}
+
+.books_button {
+
+    padding: 5px 25px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Inter;
+    font-size: 14px;
+    color: #6379E9FF;
+   
+    background: transparent;
+    border-radius: 14px;
+    border: none; 
+   
+    column-gap: 10px;
+    transition: all 0.1s;
+    cursor: pointer;
+    &:hover {
+       
+   
+          color: rgb(81, 98, 185)
+ 
+    }
+}
+

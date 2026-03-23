@@ -52,7 +52,7 @@ const MainHeader = ({ }) => {
         sx={textFieldStyles}
         variant="filled"
         label="Поиск"
-        placeholder={'Ищите книги, авторов и коллецкии...'}
+        placeholder={'Ищите книги, авторов и коллекции...'}
         slotProps={{
           input: {
             startAdornment:
@@ -63,7 +63,7 @@ const MainHeader = ({ }) => {
         }}
       />
       <button className={styles.button_view}>
-        <GrOverview style={{fontSize: 16}}/>
+        <GrOverview style={{ fontSize: 16 }} />
         <p >Смотреть каталог</p>
       </button>
     </div>

@@ -60,7 +60,7 @@ export const useFirebaseAuth = () => {
   }, []);
 
   const login = useCallback(async (log: LoginFormType) => {
-   if (user) {
+    if (user) {
       console.log('Вы уже вошли!');
       return;
     }
@@ -112,6 +112,9 @@ export const useFirebaseAuth = () => {
     }
   }, []);
 
+
+
+
   const gitHubSignIn = useCallback(async () => {
 
     if (user) {
@@ -125,16 +128,33 @@ export const useFirebaseAuth = () => {
     try {
       const result = await signInWithPopup(auth, githubProvider);
       const user = result.user;
-      setUser(user);
-      return user;
-    } catch (err: any) {
-      const errorMessage = getErrorMessage(err.code, 'gitHub');
-      setGitHubError(errorMessage);
-      throw new Error(errorMessage);
-    } finally {
-      setGitHubLoading(false);
+      
+      if (!user.displayName) {
+        console.log('GitHub не вернул displayName, создаем из других данных');
+
+    
+        if (user.email) {
+          const nameFromEmail = user.email.split('@')[0];
+          await updateProfile(user, {
+            displayName: nameFromEmail
+          });
+          console.log('Установлен displayName из email:', nameFromEmail);
+        }
+
+
+        setUser(user);
+        return user;
+      }
+     } catch (err: any) {
+        const errorMessage = getErrorMessage(err.code, 'gitHub');
+        setGitHubError(errorMessage);
+        throw new Error(errorMessage);
+      } finally {
+        setGitHubLoading(false);
+      }
     }
-  }, []);
+    
+    , []);
 
 
 

@@ -8,7 +8,7 @@ const MyBooksPage = () =>
     return (
         <>
         <Helmet>
-           <title>MaxBook</title>
+           <title>MaxLib</title>
         </Helmet>
         <MyBooks/>
         </>

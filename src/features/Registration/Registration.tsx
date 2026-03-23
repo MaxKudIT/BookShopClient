@@ -333,9 +333,9 @@ const Registration = () => {
           Регистрация
         </button>
       </div>
-      <div style={{ width: '100%', rowGap: 5, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ width: '100%', rowGap: 6, display: 'flex', flexDirection: 'column' }}>
         <p style={{ fontSize: 24, fontFamily: 'Montserrat', color: '#F3F4F6FF', fontWeight: 700 }}>Приветствуем вас!</p>
-        <p style={{ fontSize: 14, fontFamily: 'Lato', color: '#BDC1CAFF', fontWeight: 400 }}>Создайте аккаунт для погружения в мир фантастических историй</p>
+        <p style={{ fontSize: 13, color: '#BDC1CAFF', fontWeight: 400 }}>Создайте аккаунт для погружения в мир фантастических историй</p>
       </div>
 
 
@@ -535,8 +535,8 @@ const Registration = () => {
         <IoMdInformationCircleOutline style={{ color: '#6379E9FF', fontSize: 18, flexShrink: 0 }} />
         <p style={{
           color: '#BDC1CAFF',
-          fontSize: 13,
-          fontFamily: 'Lato',
+          fontSize: 12,
+
           wordBreak: 'break-word',
           overflowWrap: 'break-word',
           lineHeight: 1.5

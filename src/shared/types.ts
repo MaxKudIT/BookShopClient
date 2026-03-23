@@ -12,6 +12,7 @@ export type BookPreviewT = {
     Title: string
     Genre: Genres
     Price: number
+    Author: string;
     ImageUrl: string,
     Discount: number,
     IsMine: boolean,

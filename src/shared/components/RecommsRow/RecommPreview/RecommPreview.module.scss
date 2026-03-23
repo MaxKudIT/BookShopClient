@@ -1,0 +1,36 @@
+.recomm_preview_wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+
+
+      &:hover {
+
+
+        .book_image {
+            filter: brightness(0.8);
+        }
+          .preview_recomm_title {
+            color: #BA8AEAFF; 
+        }
+    }
+}
+
+
+.book_image {
+   height: 310px;
+    width: 200px;
+    opacity: 1;
+    transition: all 0.2s;
+    border-radius: 15px;
+    margin-bottom: 5px
+}
+
+.preview_recomm_title {
+    color: #F9FAFBFF;
+    font-weight: 700;
+    font-family: 'Montserrat';
+    font-size: 15px;
+    transition: all 0.2s;
+}
+

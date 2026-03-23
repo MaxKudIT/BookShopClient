@@ -195,9 +195,9 @@ const Authorization = () => {
           Регистрация
         </button>
       </div>
-      <div style={{ width: '100%', rowGap: 5, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ width: '100%', rowGap: 6, display: 'flex', flexDirection: 'column' }}>
         <p style={{ fontSize: 24, fontFamily: 'Montserrat', color: '#F3F4F6FF', fontWeight: 700 }}>С возвращением!</p>
-        <p style={{ fontSize: 14, fontFamily: 'Lato', color: '#BDC1CAFF', fontWeight: 400 }}>Введите свои данные, чтобы продолжить чтение</p>
+        <p style={{ fontSize: 13, color: '#BDC1CAFF', fontWeight: 400 }}>Введите свои данные, чтобы продолжить чтение</p>
       </div>
 
 
@@ -323,7 +323,8 @@ const Authorization = () => {
             justifyContent: 'center',
             alignItems: 'center',
             padding: 1,
-            color: 'rgb(21, 23, 29)'
+            color: 'rgb(21, 23, 29)',
+    
           }}
 
         /> : (
@@ -381,8 +382,8 @@ const Authorization = () => {
         <IoMdInformationCircleOutline style={{ color: '#6379E9FF', fontSize: 18, flexShrink: 0 }} />
         <p style={{
           color: '#BDC1CAFF',
-          fontSize: 13,
-          fontFamily: 'Lato',
+          fontSize: 12,
+          
           wordBreak: 'break-word',
           overflowWrap: 'break-word',
           lineHeight: 1.5

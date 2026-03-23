@@ -6,7 +6,7 @@ import { CartA } from './Cart/Cart'
 import { FavsA } from './Favs/FavsA'
 
 
-export const api = axios.create({baseURL: 'http://192.168.0.106:3000/',  timeout: 5000})
+export const api = axios.create({baseURL: 'http://192.168.0.106:3000/'})
 
 class Api {
     public readonly books: BookInfoA
