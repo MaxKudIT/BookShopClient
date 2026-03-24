@@ -1,13 +1,14 @@
 import type { FC } from 'react';
 import styles from './RecommsRow.module.scss'
 import type { BookPreviewT } from '../../types';
-import { MdHistory } from "react-icons/md";
+import { MdHistory, MdOutlineWorkspacePremium } from "react-icons/md";
 
 import { GrFormNext } from 'react-icons/gr';
 import RecommPreview from './RecommPreview/RecommPreview';
 import { FaRegCompass } from 'react-icons/fa6';
 import { IoCompassOutline } from 'react-icons/io5';
 import { Divider } from '@mui/material';
+import { IoIosCheckmarkCircleOutline } from 'react-icons/io';
 
 
 
@@ -99,14 +100,15 @@ const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                 }}>ПОПУЛЯРНЫЕ ЖАНРЫ</p>
                 <Divider sx={{ borderBottomWidth: 2, my: 2, mb: 4, borderColor: '#30374666' }} />
                 <div style={{
-                    display: 'flex', 
-                    flexWrap: 'wrap', 
-                    rowGap: 10, 
-                    columnGap: 10}}>
-                    {genres.map(genre => <GenreWrapper genre={genre}/>)}
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    rowGap: 10,
+                    columnGap: 10
+                }}>
+                    {genres.map(genre => <GenreWrapper genre={genre} />)}
                 </div>
-                <MaxPremiumWrapper/>
-             
+                <MaxPremiumWrapper />
+
             </div>
         </div>
 
@@ -118,11 +120,11 @@ const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
 export default RecommsRow;
 
 
-const GenreWrapper: FC<{genre: string}> = ({genre}) => {
+const GenreWrapper: FC<{ genre: string }> = ({ genre }) => {
     return (
         <div style={{
-            borderRadius: 14, 
-            padding: '7px 15px', 
+            borderRadius: 14,
+            padding: '7px 15px',
             background: '#30374666',
             fontSize: 12,
             display: 'flex',
@@ -131,7 +133,7 @@ const GenreWrapper: FC<{genre: string}> = ({genre}) => {
             color: 'rgb(228, 231, 235)',
             width: 'fit-content',
             fontWeight: 700
-            }}>
+        }}>
             {genre}
         </div>
     )
@@ -139,9 +141,39 @@ const GenreWrapper: FC<{genre: string}> = ({genre}) => {
 
 const MaxPremiumWrapper = () => {
     return (
-        <div>
-            <p>Подписка Max Premium</p>
-            <img style={{width: 195, height: 150}} src="/public/premium.png" alt="" />
+        <div className={styles.premium_wrapper}>
+
+                <p style={{
+                    color: '#F9FAFBFF',
+                    fontWeight: 900,
+                    fontSize: 22,
+                    fontFamily: 'Roboto',
+                    display: 'inline'
+                }}><span style={{ fontSize: 20 }}>Подписка</span> Max Premium</p>
+       
+
+            <img style={{ width: 225, height: 170, borderRadius: 10, marginTop: 5 }} src="/public/premium.png" alt="" />
+            <div style={{ display: 'flex', flexDirection: 'column', rowGap: 10 }}>
+                <div style={{ display: 'flex', columnGap: 10, fontSize: 14, alignItems: 'center', fontWeight: 700 }}>
+                    <IoIosCheckmarkCircleOutline style={{ color: '#6379E9FF', fontSize: 17 }} />
+                    <p style={{ color: '#BAC1CEFF' }}>Безлимитный доступ</p>
+                </div>
+                <div style={{ 
+                    display: 'flex', 
+                    columnGap: 10, 
+                    fontSize: 14, 
+                    alignItems: 'center', 
+                    fontWeight: 700,
+
+                    }}>
+                    <IoIosCheckmarkCircleOutline style={{ color: '#6379E9FF', fontSize: 17,   flex: '0 0 auto' }} />
+                    
+                    <p style={{ color: '#BAC1CEFF', flex: '1 1 auto' }}>Скидка на печатные экземпляры</p>
+                </div>
+            </div>
+            <button className={styles.premium_button}>
+                <p>Улучшить план</p>
+            </button>
         </div>
     )
 }

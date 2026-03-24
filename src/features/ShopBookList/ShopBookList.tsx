@@ -14,6 +14,7 @@ import { GrFormNext } from "react-icons/gr";
 import { useFirebaseAuth } from "../../shared/hooks/useFirebaseAuth";
 import HistoryRow from "../../shared/components/HistoryRow/HistoryRow";
 import RecommsRow from "../../shared/components/RecommsRow/RecommsRow";
+import MainFooter from "../../shared/components/Footer/MainFooter/MainFooter";
 
 
 const ShopBookList = () => {
@@ -235,8 +236,9 @@ const ShopBookList = () => {
           <HistoryRow books={[]} />
           <RecommsRow books={[]}/>
         </div>
+         <MainFooter/>
       </div>
-
+       
     </>
 
   )
