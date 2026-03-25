@@ -26,13 +26,13 @@ const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                                 fontSize: 23,
                                 fontWeight: 800,
                                 color: '#F9FAFBFF',
-                                fontFamily: 'Montserrat'
+                                fontFamily: 'MTSWide'
                             }}>Личные рекомендации</p>
                             <p style={{
                                 fontSize: 13,
                                 fontWeight: 600,
                                 color: '#BAC1CEFF',
-                                fontFamily: 'Inter'
+                                
                             }}>Создано специально для вас</p>
                         </div>
                     </div>
@@ -107,7 +107,7 @@ const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                 }}>
                     {genres.map(genre => <GenreWrapper genre={genre} />)}
                 </div>
-                <MaxPremiumWrapper />
+            
 
             </div>
         </div>
@@ -139,41 +139,41 @@ const GenreWrapper: FC<{ genre: string }> = ({ genre }) => {
     )
 }
 
-const MaxPremiumWrapper = () => {
-    return (
-        <div className={styles.premium_wrapper}>
+// const MaxPremiumWrapper = () => {
+//     return (
+//         <div className={styles.premium_wrapper}>
 
-                <p style={{
-                    color: '#F9FAFBFF',
-                    fontWeight: 900,
-                    fontSize: 22,
-                    fontFamily: 'Roboto',
-                    display: 'inline'
-                }}><span style={{ fontSize: 20 }}>Подписка</span> Max Premium</p>
+//                 <p style={{
+//                     color: '#F9FAFBFF',
+//                     fontWeight: 900,
+//                     fontSize: 22,
+//                     fontFamily: 'Roboto',
+//                     display: 'inline'
+//                 }}><span style={{ fontSize: 20 }}>Подписка</span> Max Premium</p>
        
 
-            <img style={{ width: 225, height: 170, borderRadius: 10, marginTop: 5 }} src="/public/premium.png" alt="" />
-            <div style={{ display: 'flex', flexDirection: 'column', rowGap: 10 }}>
-                <div style={{ display: 'flex', columnGap: 10, fontSize: 14, alignItems: 'center', fontWeight: 700 }}>
-                    <IoIosCheckmarkCircleOutline style={{ color: '#6379E9FF', fontSize: 17 }} />
-                    <p style={{ color: '#BAC1CEFF' }}>Безлимитный доступ</p>
-                </div>
-                <div style={{ 
-                    display: 'flex', 
-                    columnGap: 10, 
-                    fontSize: 14, 
-                    alignItems: 'center', 
-                    fontWeight: 700,
+//             <img style={{ width: 225, height: 170, borderRadius: 10, marginTop: 5 }} src="/public/images/premium.png" alt="" />
+//             <div style={{ display: 'flex', flexDirection: 'column', rowGap: 10 }}>
+//                 <div style={{ display: 'flex', columnGap: 10, fontSize: 14, alignItems: 'center', fontWeight: 700 }}>
+//                     <IoIosCheckmarkCircleOutline style={{ color: '#6379E9FF', fontSize: 17 }} />
+//                     <p style={{ color: '#BAC1CEFF' }}>Безлимитный доступ</p>
+//                 </div>
+//                 <div style={{ 
+//                     display: 'flex', 
+//                     columnGap: 10, 
+//                     fontSize: 14, 
+//                     alignItems: 'center', 
+//                     fontWeight: 700,
 
-                    }}>
-                    <IoIosCheckmarkCircleOutline style={{ color: '#6379E9FF', fontSize: 17,   flex: '0 0 auto' }} />
+//                     }}>
+//                     <IoIosCheckmarkCircleOutline style={{ color: '#6379E9FF', fontSize: 17,   flex: '0 0 auto' }} />
                     
-                    <p style={{ color: '#BAC1CEFF', flex: '1 1 auto' }}>Скидка на печатные экземпляры</p>
-                </div>
-            </div>
-            <button className={styles.premium_button}>
-                <p>Улучшить план</p>
-            </button>
-        </div>
-    )
-}
+//                     <p style={{ color: '#BAC1CEFF', flex: '1 1 auto' }}>Скидка на печатные экземпляры</p>
+//                 </div>
+//             </div>
+//             <button className={styles.premium_button}>
+//                 <p>Улучшить план</p>
+//             </button>
+//         </div>
+//     )
+// }

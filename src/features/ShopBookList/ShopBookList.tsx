@@ -179,66 +179,42 @@ const ShopBookList = () => {
         <div className={styles.main_body}>
 
           <div className={styles.book_month}>
-
-            <div style={{
-              width: '50%',
-
-              height: '100%',
-              paddingRight: 20,
-              display: 'flex',
-              flexDirection: 'column',
-              rowGap: 25,
-
-            }}>
-              <div style={{ display: 'flex', flexDirection: 'column', rowGap: 25 }}>
-                <div style={{ display: 'flex', flexDirection: 'column', rowGap: 10 }}>
-                  <div style={{ width: 'fit-content' }}>
-                    <p style={{
-                      background: 'linear-gradient(90deg, #5f73cf, #b167ce )',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      fontSize: 45,
-                      fontWeight: 900
-                    }}>Человек-паук</p>
-                  </div>
-                  <p style={{ fontSize: 18, color: '#BAC1CEFF', fontWeight: 600 }}>Автор: Мэтт Хейг</p>
-                </div>
-                <div style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  columnGap: 25,
-                  height: 100
-                }}>
-                  <Divider sx={{ borderRightWidth: 3, borderColor: 'rgb(45, 64, 163, 0.6)' }} orientation="vertical" />
-                  <p style={{ color: 'rgb(136, 141, 150)', fontWeight: 500, fontSize: 16, lineHeight: 1.7 }}>«Между жизнью и смертью есть библиотека. И в этой библиотеке полки тянутся бесконечно. Каждая книга дает возможность попробовать другую жизнь...»</p>
-                </div>
-                <div style={{ marginTop: 40, display: 'flex', alignItems: 'center', columnGap: 25 }}>
-                  <button className={styles.book_month_button_one}>
-                    <p>Читать сейчас</p>
-                    <GrFormNext style={{ fontSize: 18 }} />
-                  </button>
-                  <button className={styles.book_month_button_two}>
-                    <FaRegBookmark style={{ fontSize: 14 }} />
-                    <p>В список желаемого</p>
-                  </button>
-                </div>
-
+            <div style={{width: '35%', padding: '250px 0'}}>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                width: '100%',
+                minWidth: 500,
+                marginBottom: 20,
+                rowGap: 10
+              }}>
+                <p style={{
+                  fontSize: 32,
+                  fontFamily: 'MTSWide',
+                  color: '#F9FAFBFF',
+                  lineHeight: '1.1'
+                }}>Книжные новинки уже здесь</p>
+                <p style={{ color: '#F9FAFBFF', fontSize: 18 }}>Откройте для себя лучшие произведения современных авторов. Читайте без ограничений по подписке Max Premium. Тысячи книг всегда под рукой.
+                </p>
               </div>
-
-
+              <p style={{ fontSize: 32, fontWeight: 500, color: '#489fe6', marginBottom: 15}}>49 ₽/мес — и всё включено</p>
+              <div>
+                <button className={styles.book_month_button_one}>Приобрести подписку</button>
+              </div>
             </div>
-            <div className={styles.book_month_two}>
-            </div>
+              
+              <div className={styles.book_month_two}></div>
+            
 
 
           </div>
+
           <HistoryRow books={[]} />
-          <RecommsRow books={[]}/>
+          <RecommsRow books={[]} />
         </div>
-         <MainFooter/>
+        <MainFooter />
       </div>
-       
+
     </>
 
   )

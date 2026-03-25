@@ -14,6 +14,7 @@ import { StoreContext } from './store/context/GloabalContext'
 import { stores } from './store/stores'
 import Cart from './pages/Cart/Cart'
 import Favs from './pages/Favs/Favs'
+import { GiBookshelf } from 'react-icons/gi'
 
 
 const router = createBrowserRouter([
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
         path: '/',
         loader: protectedLoader
     },
+
     {
         element: <Cart/>,
         path: '/cart',

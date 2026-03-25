@@ -62,10 +62,10 @@ const MainHeader = ({ }) => {
           },
         }}
       />
-      <button className={styles.button_view}>
+      {/* <button className={styles.button_view}>
         <GrOverview style={{ fontSize: 16 }} />
         <p >Смотреть каталог</p>
-      </button>
+      </button> */}
     </div>
   )
 }

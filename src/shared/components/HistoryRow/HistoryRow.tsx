@@ -18,13 +18,13 @@ const HistoryRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                             fontSize: 23,
                             fontWeight: 800,
                             color: '#F9FAFBFF',
-                            fontFamily: 'Montserrat'
+                            fontFamily: 'MTSWide'
                         }}>Продолжить чтение</p>
                         <p style={{
                             fontSize: 13,
                             fontWeight: 600,
                             color: '#BAC1CEFF',
-                            fontFamily: 'Inter'
+                     
                         }}>Ваша недавняя история просмотра книг</p>
                     </div>
                 </div>

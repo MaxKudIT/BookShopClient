@@ -29,23 +29,15 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
             <div style={{
                 width: '100%',
                 display: 'flex',
+                borderBottom: '1px solid rgba(86, 86, 88, 0.2)',
                 justifyContent: 'center',
-                alignItems: 'center',
                 columnGap: 8,
-                marginBottom: 35
+                height: 80,
+                marginBottom: 60
+            
             }}>
-                <div style={{
-                    background: '#6379E9FF',
-                    borderRadius: 50,
-                    padding: 7,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}>
-                    <MdOutlineLocalLibrary style={{ color: '#161A22FF', fontSize: 18 }} />
-
-                </div>
-                <p className={styles.title}>MaxLib</p>
+                
+                <img src='/public/images/logo.png' alt='' style={{width: 90, height: 50}}/>
             </div>
             <div style={{ marginBottom: 65 }}>
                 <div className={styles.title_menu_container}>
@@ -55,7 +47,7 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
                 <div style={{ width: 250, display: 'flex', flexDirection: 'column', rowGap: 17 }}>
                     <button className={styles.button_sidebar_active}>
                         <MdOutlineGridView style={{ fontSize: 15 }} />
-                        <p>Обзор</p>
+                        <p>Главная</p>
                     </button>
 
                     <button className={styles.button_sidebar_unactive}>
