@@ -8,7 +8,7 @@ const Favs = () =>
     return (
         <>
         <Helmet>
-           <title>MaxLib</title>
+           <title>Magma</title>
         </Helmet>
         <FavsM/> 
         </>

@@ -8,6 +8,7 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import { RxExit } from "react-icons/rx";
 import type { FC } from 'react';
 import { Tooltip } from '@mui/material';
+import Logo from '../Logo/Logo';
 
 
 export type SideBarType = {
@@ -29,15 +30,15 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
             <div style={{
                 width: '100%',
                 display: 'flex',
-                borderBottom: '1px solid rgba(86, 86, 88, 0.2)',
+                borderBottom: '2px solid rgba(86, 86, 88, 0.2)',
                 justifyContent: 'center',
                 columnGap: 8,
                 height: 80,
-                marginBottom: 60
-            
+                marginBottom: 60,
+         
             }}>
                 
-                <img src='/public/images/logo.png' alt='' style={{width: 90, height: 50}}/>
+                <Logo/>
             </div>
             <div style={{ marginBottom: 65 }}>
                 <div className={styles.title_menu_container}>
@@ -46,7 +47,7 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
 
                 <div style={{ width: 250, display: 'flex', flexDirection: 'column', rowGap: 17 }}>
                     <button className={styles.button_sidebar_active}>
-                        <MdOutlineGridView style={{ fontSize: 15 }} />
+                        <MdOutlineGridView style={{ fontSize: 15, marginBottom: 2 }} />
                         <p>Главная</p>
                     </button>
 

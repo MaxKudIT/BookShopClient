@@ -2,11 +2,11 @@ import { PiX } from "react-icons/pi";
 
 export const textFieldStyles = {
   height: 50,
-  width: '80%',
-  maxWidth: 1000,
+  width: '100%',
+  maxWidth: 600,
   '& .MuiFilledInput-root': {   
     height: '100%',
-    backgroundColor: 'rgba(143, 155, 173, 0.1)', 
+    backgroundColor: 'rgba(91, 95, 102, 0.1)', 
     borderRadius: 3, 
     
  
@@ -18,11 +18,11 @@ export const textFieldStyles = {
     
 
     '&:hover': {
-      backgroundColor: 'rgba(228, 231, 236, 0.1)', 
+      backgroundColor: 'rgba(153, 175, 212, 0.1)', 
     },
     
     '&.Mui-focused': {
-      backgroundColor: 'rgba(228, 231, 236, 0.1)',
+      backgroundColor: 'rgba(153, 175, 212, 0.1)',
      
     },
     

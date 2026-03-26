@@ -8,7 +8,7 @@ import { rateStars } from "../BookInfoView/BookInfoView";
 import type { CartItemsPreview } from "../../types";
 import type { CartSelectedType } from "../CartView/CartView";
 import { IoIosHeart } from "react-icons/io";
-import { FaHeart } from "react-icons/fa6";
+import { FaHeart, FaMinus, FaPlus } from "react-icons/fa6";
 
 
 
@@ -50,8 +50,8 @@ const ItemViewComponent: FC<CartItemsPreview & {
 
 
 
-                <div style={{ height: '100%', display: 'flex', columnGap: 12 }}>
-                    <Checkbox
+                <div style={{ height: '100%', display: 'flex', columnGap: 20 }}>
+                    {/* <Checkbox
                         checked={isSelected}
                         onChange={(e) => {
                             if (e.target.checked) {
@@ -70,14 +70,14 @@ const ItemViewComponent: FC<CartItemsPreview & {
                                 color: '#d8b3f0ff',
                             },
                         }}
-                    />
+                    /> */}
 
                     <img
                         alt=""
-                        src={ImageUrl}
+                        src={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPTPFv3U6ZVvZh0GYlNFWntSw0PJjFvqNwMA&s'}
                         style={{
                             width: '115px',
-                            height: '100%',
+                            height: '100%'
 
                         }}
                     />
@@ -91,13 +91,24 @@ const ItemViewComponent: FC<CartItemsPreview & {
                         padding: '5px 0'
                     }}>
                         <div style={{ display: 'flex', flexDirection: 'column', rowGap: 5 }}>
-                            <p style={{ color: 'white', fontSize: 18, fontWeight: '500' }}>{Title}</p>
-                            <p style={{ color: 'rgba(255,255,255,0.8', fontSize: 14 }}>{Author}</p>
+                            {/* <p style={{ color: 'white', fontSize: 18, fontWeight: '500' }}>{Title}</p>
+                            <p style={{ color: 'rgba(255,255,255,0.8', fontSize: 14 }}>{Author}</p> */}
+                            <div className={styles.genre_wrapper}>Фантастика</div>
+                              <p style={{ color: '#F9FAFBFF', fontSize: 20, fontWeight: 600 }}>Человек-паук</p>
+                            <p style={{ color: '#BAC1CEFF', fontSize: 14, fontWeight: 500 }}>Марвелпедия</p>
+                        </div>
+                        
+                        <div className={styles.quality_wrapper}>
+                            <div style={{background: 'red', display: 'flex', alignItems: 'center'}}>
+                                 <FaMinus />
+                            </div>
+                            <p>1</p>
+                            <div>
+                                <FaPlus />
+                            </div>
+                             
+                        </div>
 
-                        </div>
-                        <div style={{ display: 'flex', columnGap: 2 }}>
-                            {rateStars(Rate)}
-                        </div>
                     </div>
 
                 </div>

@@ -1,14 +1,10 @@
 .cart_info_wrapper {
-    width: 700px;
-    position: relative;
-    z-index: 3;
-    background-color: rgba(221, 216, 231, 0.1);
+    
+    background-color: red;
     
      border-bottom-left-radius: 20px;
      border-bottom-right-radius: 20px;
-     padding: 30px 20px;
-     padding-bottom: 100px;
-   
+     padding: 0 170px;
      display: flex;
      flex-direction: column;
 }

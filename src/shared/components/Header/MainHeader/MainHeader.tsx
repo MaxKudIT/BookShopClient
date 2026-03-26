@@ -1,5 +1,5 @@
 import { TextField, InputAdornment } from "@mui/material";
-import { IoMdSearch } from "react-icons/io";
+import { IoMdNotificationsOutline, IoMdSearch } from "react-icons/io";
 import { GrOverview } from "react-icons/gr";
 import { textFieldStyles } from "./muiStyles";
 import { getAuth } from "firebase/auth";
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useSearch, useMyBooksSearch } from "../../../../store/context/SearchContext";
 import { useFirebaseAuth } from "../../../hooks/useFirebaseAuth";
 import styles from './MainHeader.module.scss'
+import { IoSettingsOutline } from "react-icons/io5";
 
 
 
@@ -66,6 +67,15 @@ const MainHeader = ({ }) => {
         <GrOverview style={{ fontSize: 16 }} />
         <p >Смотреть каталог</p>
       </button> */}
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div className={styles.icon_wrapper}>
+          <IoMdNotificationsOutline style={{ fontSize: 22 }} className={styles.header_buttons} />
+        </div>
+        <div className={styles.icon_wrapper}>
+          <IoSettingsOutline className={styles.header_buttons} />
+        </div>
+      </div>
+
     </div>
   )
 }

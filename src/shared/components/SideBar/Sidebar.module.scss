@@ -30,7 +30,7 @@ color: #6379e9;
 }
 
 .title_menu {
-font-family: Inter;
+
 font-size: 10px;
 
 font-weight: 700;
@@ -39,15 +39,15 @@ letter-spacing: 1px;
 }
 
 .button_sidebar_active {
-font-size: 13px;
+font-size: 14px;
 font-weight: 700;
 
 width: 250px;
-height: 35px;
+height: 40px;
 padding: 0 25px;
 display: flex;
 align-items: center;
-color: #6379E9FF;
+color: rgb(255, 255, 255, 1);
 background: transparent;
 
 opacity: 1;
@@ -61,23 +61,22 @@ cursor: pointer;
 
 column-gap: 10px;
     &:hover {
-        color: rgb(81, 98, 185);
-        
+        background: rgba(125, 144, 197, 0.1);
     }
 }
 
 .button_sidebar_unactive {
 
-font-size: 13px;
+font-size: 14px;
 
 font-weight: 600;
 
 width: 250px;
-height: 35px;
+height: 40px;
 padding: 0 25px;
 display: flex;
 align-items: center;
-color: #BAC1CEFF;
+color: rgb(165, 174, 189);
 background: transparent;
 opacity: 1;
 
@@ -90,7 +89,8 @@ cursor: pointer;
 column-gap: 10px;
 
     &:hover {
-        color: rgb(148, 149, 158);
+        color: rgb(255, 255, 255, 1);
+         background: rgba(125, 144, 197, 0.1)
     }
 }
 

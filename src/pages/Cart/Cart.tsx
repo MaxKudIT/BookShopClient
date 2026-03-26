@@ -6,7 +6,7 @@ const Cart = () => {
   return (
     <>
       <Helmet>
-        <title>MaxLib</title>
+        <title>Magma</title>
       </Helmet>
       <CartM />
     </>

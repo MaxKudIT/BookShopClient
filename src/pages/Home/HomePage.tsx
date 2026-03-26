@@ -7,7 +7,7 @@ const HomePage = () =>
     return (
         <>
         <Helmet>
-           <title>MaxLib</title>
+           <title>Magma</title>
         </Helmet>
         <Home/>
         </>

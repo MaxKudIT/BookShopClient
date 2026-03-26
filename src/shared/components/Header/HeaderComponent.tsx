@@ -1,9 +1,6 @@
 import React, { useEffect, type FC } from "react";
 import styles from './Header.module.scss'
-import { PiBooks, PiFunnelBold } from "react-icons/pi";
-import { MdAccountCircle } from "react-icons/md";
-import { RiShoppingBag4Fill } from "react-icons/ri";
-import { FaCartPlus } from "react-icons/fa";
+
 import {
   FormControl,
   IconButton,
@@ -12,26 +9,12 @@ import {
   MenuItem,
   Select,
   TextField,
-  Tooltip,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Divider,
-  Box,
-  Typography,
-  ListItemButton
 } from "@mui/material";
 import { IoIosHeart, IoMdCart, IoMdSearch } from "react-icons/io";
-import { IoIosHome } from "react-icons/io";
-import {
-  MdEmail,
-  MdPerson,
-  MdLibraryBooks,
-  MdExitToApp
-} from "react-icons/md";
+
+
 import { IoColorFilterOutline } from "react-icons/io5";
-import { MdAccountBox } from "react-icons/md";
+
 import { selectStyles, textFieldStyles } from "./MainHeader/muiStyles";
 import { IoHomeOutline } from "react-icons/io5";
 import { useMyBooksSearch, useSearch, type GenresDropDown } from "../../../store/context/SearchContext";

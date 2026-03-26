@@ -1,14 +1,16 @@
 .item_view_compo_wrapper {
-    height: 180px;
+    height: 190px;
    
-    border-radius: 15px;
-    border: 1px solid rgba(112, 79, 204, 0.5);
+    border-radius: 12px;
+ 
     display: flex;
     align-items: center;
-    padding: 10px 10px;
+    padding: 15px 20px;
     justify-content: space-between;
-    background: linear-gradient(rgba(42, 81, 190, 0.1), rgba(33, 16, 129, 0.1), rgb(81, 42, 190, 0.1));
-}
+    background: #323843FF;
+    max-width: 800px;
+  
+}   
 
 .clickable_wrapper {
     display: flex;
@@ -26,4 +28,31 @@
     &:hover {
         background-color: rgba(255,255,255,0.1);
     }
+}
+
+.genre_wrapper {
+    font-weight: 500;
+    padding: 3px 25px;
+    border-radius: 30px;
+    width: fit-content;
+    border: 1px solid #ba8aea;
+    color: #ba8aea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.quality_wrapper {
+
+width: 114px;
+height: 42px;
+background: #1E2229FF;
+border-radius: 10px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+border: 1px solid #555D6DFF;
+padding: 0 10px;
+color: #F9FAFBFF
 }
