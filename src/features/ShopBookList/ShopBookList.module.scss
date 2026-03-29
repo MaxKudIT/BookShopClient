@@ -11,7 +11,7 @@
 
 
 .main_body {
-    padding: 150px 170px;
+    padding: 150px 120px;
     padding-bottom: 50px;
 }
 
@@ -20,7 +20,7 @@
     justify-content: space-between;
     padding: 0px 50px;
     height: 678px;
-    width: 1300px;
+    width: 100%;
     border-radius: 40px;
 
     box-shadow: 0px 25px 50px #00000040, 0px 0px 0px #171a1f00;
@@ -39,7 +39,7 @@
         align-self: center;
         border-radius: 20px;
         background: 
-        linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+        linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6)), 
         url('/public/images/back2.png');
       background-size: cover;    
     background-position: center; 

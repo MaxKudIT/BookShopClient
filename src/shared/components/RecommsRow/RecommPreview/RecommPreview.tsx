@@ -14,6 +14,7 @@ const RecommPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
                 display: 'flex', 
                 justifyContent: 'space-between',
                  marginBottom: 10,
+                  padding: '0 5px'
     
                  }}>
                 <div style={{
@@ -29,7 +30,7 @@ const RecommPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
                 <p style={{color: '#BAC1CEFF', fontSize: 10, fontWeight: 700, letterSpacing: 0.2}}>ДРАМА</p>
             </div>
 
-            <div style={{display: 'flex', flexDirection: 'column', rowGap: 2}}>
+            <div style={{display: 'flex', flexDirection: 'column', rowGap: 2,  padding: '0 5px'}}>
                 <p className={styles.preview_recomm_title}>{book.Title}</p>
                 <p style={{color: '#BAC1CEFF', fontWeight: 500, fontSize: 12}}>{book.Author}</p>
             </div>

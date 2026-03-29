@@ -1,7 +1,7 @@
 .recomm_preview_wrapper {
     display: flex;
     flex-direction: column;
-    width: 200px;
+    width: 230px;
 
 
       &:hover {
@@ -18,8 +18,8 @@
 
 
 .book_image {
-   height: 310px;
-    width: 200px;
+   height: 350px;
+    width: 230px;
     opacity: 1;
     transition: all 0.2s;
     border-radius: 15px;

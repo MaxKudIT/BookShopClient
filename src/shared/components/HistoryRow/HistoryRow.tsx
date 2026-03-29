@@ -53,7 +53,7 @@ const HistoryRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                     Author: 'Марвелпедия',
                     Genre: 'Фантастика',
                     Rate: 4.5,
-                    ImageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkTjeaAzUsVqJKJgt4Yd-UrmJEeEcPXaKH4A&s',
+                    ImageUrl: 'https://img.comicbooks.ru/images/products/1/7455/945601823/VGs-GD5boU8.jpg',
                     IsMine: true,
                     Price: 800,
                     Discount: 10
