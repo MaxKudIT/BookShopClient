@@ -521,27 +521,7 @@ const Registration = () => {
           <p style={{ fontFamily: 'Lato' }}>GitHub</p>
         </button>
       </div>
-      <div style={{
-        background: '#6f7ec90d',
-        border: '1px solid #5c6cbe1a',
-        borderRadius: 10,
-        width: '100%',
-        display: 'flex',
-        columnGap: 10,
-        alignItems: 'center',
-        padding: 10,
-
-      }}>
-        <IoMdInformationCircleOutline style={{ color: '#6379E9FF', fontSize: 18, flexShrink: 0 }} />
-        <p style={{
-          color: '#BDC1CAFF',
-          fontSize: 12,
-
-          wordBreak: 'break-word',
-          overflowWrap: 'break-word',
-          lineHeight: 1.5
-        }}>Регистрируйтесь сейчас и успейте получить в подарок 3 фантастические книги!</p>
-      </div>
+     
 
 
     </div>

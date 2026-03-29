@@ -184,7 +184,7 @@ const ShopBookList = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 width: '100%',
-                minWidth: 500,
+                minWidth: 450,
                 marginBottom: 20,
                 rowGap: 10
               }}>

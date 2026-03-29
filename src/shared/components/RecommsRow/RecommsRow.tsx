@@ -16,7 +16,7 @@ import { IoIosCheckmarkCircleOutline } from 'react-icons/io';
 const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
     const genres: string[] = ['История', 'Детективы', 'Научная фантастика', 'Психология', 'Технологии', 'Философия', 'Документальные']
     return (
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', columnGap: 40}}>
             <div className={styles.recomms_row_wrapper}>
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', columnGap: 10 }}>

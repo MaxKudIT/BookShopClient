@@ -236,7 +236,7 @@ const CartF = observer(() => {
                     5 430
                     <FaRubleSign style={{ fontSize: 24, marginBottom: 2 }} />
                   </p>
-                  <p style={{ fontSize: 12, color: 'rgb(165, 174, 189)' }}>ИТОГОВАЯ СУММА СО ВСЕМИ НАЛОГАМИ</p>
+                  <p style={{ fontSize: 14, color: 'rgb(165, 174, 189)' }}>(Итоговая сумма со всеми налогами)</p>
                 </div>
 
               </div>

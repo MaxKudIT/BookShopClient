@@ -27,7 +27,7 @@ const Auth = () => {
             }}>
               <MdOutlineLocalLibrary style={{ color: '#161A22FF', fontSize: 23 }} />
             </div>
-            <p style={{ fontFamily: 'Montserrat', fontSize: 26, color: '#6379E9FF', fontWeight: 500 }}>MaxLib</p>
+            <p style={{ fontFamily: 'Montserrat', fontSize: 26, color: '#6379E9FF', fontWeight: 500 }}>Magma</p>
           </div>
           <p style={{
             fontSize: 40,
@@ -74,7 +74,7 @@ const Auth = () => {
             </div>
           </div>
           <div style={{ display: 'flex', marginTop: 'auto', justifyContent: 'space-between', width: '100%' }}>
-            <p style={{ fontSize: 10, color: 'rgb(107, 111, 117)', fontWeight: 500 }}>© 2026 MAXLIB</p>
+            <p style={{ fontSize: 10, color: 'rgb(107, 111, 117)', fontWeight: 500 }}>© 2026 MAGMA</p>
             <div style={{ display: 'flex', columnGap: 15 }}>
               <a href='https://ru.wikipedia.org/wiki/%D0%9F%D0%BE%D0%BC%D0%BE%D1%89%D1%8C' style={{ fontSize: 10, color: 'rgb(107, 111, 117)', fontWeight: 500 }}>Помощь</a>
               <a href={'https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BD%D1%84%D0%B8%D0%B4%D0%B5%D0%BD%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D1%8C'} style={{ fontSize: 10, color: 'rgb(107, 111, 117)', fontWeight: 500 }}>Конфиденциальность</a>
