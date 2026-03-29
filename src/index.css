@@ -57,3 +57,36 @@ img {
   -ms-user-select: none;
    pointer-events: none;
 }
+
+
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(105, 108, 126, 0.6) rgb(22, 27, 36);
+}
+
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    z-index: 20;
+}
+
+::-webkit-scrollbar-track {
+    background: rgb(22, 27, 36) !important; 
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(99, 121, 233, 0.6);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(99, 121, 233, 0.9);
+}
+
+
+body, html {
+    scrollbar-track-color: rgb(22, 27, 36);  
+}

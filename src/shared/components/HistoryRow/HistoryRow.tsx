@@ -12,7 +12,7 @@ const HistoryRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
         <div className={styles.history_row_wrapper}>
             <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{ display: 'flex', columnGap: 10 }}>
-                    <MdHistory style={{ fontSize: 30, color: '#6379E9FF' }} />
+                    <MdHistory style={{ fontSize: 30, color: '#6379e9' }} />
                     <div style={{ display: 'flex', flexDirection: 'column', rowGap: 5 }}>
                         <p style={{
                             fontSize: 23,

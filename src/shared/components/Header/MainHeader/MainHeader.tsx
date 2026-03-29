@@ -68,12 +68,12 @@ const MainHeader = ({ }) => {
         <p >Смотреть каталог</p>
       </button> */}
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div className={styles.icon_wrapper}>
+        <button className={styles.icon_wrapper}>
           <IoMdNotificationsOutline style={{ fontSize: 22 }} className={styles.header_buttons} />
-        </div>
-        <div className={styles.icon_wrapper}>
+        </button>
+        <button className={styles.icon_wrapper}>
           <IoSettingsOutline className={styles.header_buttons} />
-        </div>
+        </button>
       </div>
 
     </div>

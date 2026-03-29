@@ -6,13 +6,15 @@
     flex-direction: column;
     row-gap: 50px;
     margin-left: 300px;
-    
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 
 .main_body {
     padding: 150px 120px;
     padding-bottom: 50px;
+
 }
 
 .book_month {

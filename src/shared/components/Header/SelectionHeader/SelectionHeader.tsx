@@ -46,7 +46,7 @@ const SelectionHeader = ({ }) => {
 
 
   return (
-    <div className={styles.main_header}>
+    <div className={styles.selection_header}>
       <Logo />
 
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -56,38 +56,38 @@ const SelectionHeader = ({ }) => {
         <div className={styles.header_refers_unactive}>Избранное</div>
       </div>
 
-      <div style={{display: 'flex', columnGap: 30, alignItems: 'center'}}>
+      <div style={{ display: 'flex', columnGap: 15, alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div className={styles.icon_wrapper}>
+          <button className={styles.icon_wrapper}>
             <IoIosSearch style={{ fontSize: 22 }} className={styles.header_buttons} />
-          </div>
-    
-          <div className={styles.icon_wrapper}>
+          </button>
+
+          <button className={styles.icon_wrapper}>
             <IoSettingsOutline className={styles.header_buttons} />
-          </div>
+          </button>
         </div>
 
-         
 
-              <div style={{
-                borderRadius: 50,
-                background: 'rgb(150, 10, 10)',
-                width: 40,
-                height: 40,
-                color: '#F9FAFBFF',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 700,
-                fontSize: 15
-              }}>М</div>
-            
-      
-         
 
-        </div>
+        <div style={{
+          borderRadius: 50,
+          background: 'rgb(150, 10, 10)',
+          width: 40,
+          height: 40,
+          color: '#F9FAFBFF',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontWeight: 700,
+          fontSize: 15
+        }}>P</div>
+
+
+
+
       </div>
-      )
+    </div>
+  )
 }
 
-      export default SelectionHeader;
+export default SelectionHeader;

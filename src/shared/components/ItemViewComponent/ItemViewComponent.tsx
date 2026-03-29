@@ -8,18 +8,18 @@ import { rateStars } from "../BookInfoView/BookInfoView";
 import type { CartItemsPreview } from "../../types";
 import type { CartSelectedType } from "../CartView/CartView";
 import { IoIosHeart } from "react-icons/io";
-import { FaHeart, FaMinus, FaPlus } from "react-icons/fa6";
+import { FaHeart, FaMinus, FaPlus, FaRubleSign } from "react-icons/fa6";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 
 
-type TypeComponent = 'cartItem' | 'favItem'
 
 const ItemViewComponent: FC<CartItemsPreview & {
     addItem: (el: CartSelectedType) => void,
     deleteItem: (id: string) => void,
     isSelected: boolean,
-    type: TypeComponent
-    
+
+
 } & {
     handleDeleteItem: (bookId: string[]) => void
 }> = ({
@@ -38,7 +38,7 @@ const ItemViewComponent: FC<CartItemsPreview & {
 
     handleDeleteItem,
 
-    type
+
 
 
 }) => {
@@ -50,7 +50,7 @@ const ItemViewComponent: FC<CartItemsPreview & {
 
 
 
-                <div style={{ height: '100%', display: 'flex', columnGap: 20 }}>
+                <div style={{ height: '100%', display: 'flex', columnGap: 30 }}>
                     {/* <Checkbox
                         checked={isSelected}
                         onChange={(e) => {
@@ -76,7 +76,7 @@ const ItemViewComponent: FC<CartItemsPreview & {
                         alt=""
                         src={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPTPFv3U6ZVvZh0GYlNFWntSw0PJjFvqNwMA&s'}
                         style={{
-                            width: '115px',
+                            width: '130px',
                             height: '100%'
 
                         }}
@@ -90,80 +90,96 @@ const ItemViewComponent: FC<CartItemsPreview & {
 
                         padding: '5px 0'
                     }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', rowGap: 5 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', rowGap: 10 }}>
                             {/* <p style={{ color: 'white', fontSize: 18, fontWeight: '500' }}>{Title}</p>
                             <p style={{ color: 'rgba(255,255,255,0.8', fontSize: 14 }}>{Author}</p> */}
                             <div className={styles.genre_wrapper}>Фантастика</div>
-                              <p style={{ color: '#F9FAFBFF', fontSize: 20, fontWeight: 600 }}>Человек-паук</p>
-                            <p style={{ color: '#BAC1CEFF', fontSize: 14, fontWeight: 500 }}>Марвелпедия</p>
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                <p style={{ color: '#F9FAFBFF', fontSize: 20, fontWeight: 600 }}>Человек-паук</p>
+                                <p style={{ color: '#BAC1CEFF', fontSize: 14, fontWeight: 500 }}>Марвелпедия</p>
+                            </div>
+
                         </div>
-                        
+
                         <div className={styles.quality_wrapper}>
-                            <div style={{background: 'red', display: 'flex', alignItems: 'center'}}>
-                                 <FaMinus />
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <FaMinus style={{ color: '#555D6DFF' }} />
                             </div>
                             <p>1</p>
-                            <div>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <FaPlus />
                             </div>
-                             
+
                         </div>
 
                     </div>
 
                 </div>
-                <div style={{ display: 'flex', alignItems: 'flex-end', height: '100%', paddingRight: 10, paddingBottom: 20 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', columnGap: 10 }}>
-                        {Price === 0 ? (
-                            <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>Бесплатно</p>
-                        ) : (
-                            Discount !== 0 ? (
-                                <>
-                                    <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
-                                        {DiscountPrice}
-                                        <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
-                                    </p>
-                                    <p style={{
-                                        fontSize: 14,
-                                        color: 'gray',
-                                        textDecoration: 'line-through',
-                                        textDecorationColor: '#a7a7adff'
-                                    }}>-{Price}</p>
-                                    <div style={{
-                                        padding: '4px 6px',
-                                        fontSize: 13,
-                                        borderRadius: 8,
-                                        background: '#0b9128ff',
-                                        color: 'white',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}>
-                                        -{Discount}%
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <p style={{ fontSize: 22, color: '#c386ebff', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }}>
-                                        {Price}
-                                        <MdCurrencyRuble color='#c386ebff' style={{ fontSize: 22 }} />
-                                    </p>
-                                </>
-                            )
-                        )}
-                        <button onClick={() => {
-                            handleDeleteItem([Id])
-                            deleteItem(Id)
-                        }} className={styles.clickable_wrapper}>
-                            {type === 'cartItem' ? (
-                                 <RiDeleteBinLine style={{ color: 'red', fontSize: 20 }} />
-                            ) : (
-                                 <FaHeart style={{ color: 'red', fontSize: 20 }} />
-                            )}
-                           
-                        </button>
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    height: '100%',
+                    paddingRight: 10,
+                    alignItems: 'flex-end',
+                 
 
-                    </div>
+                }}>
+                    <button onClick={() => {
+                        handleDeleteItem([Id])
+                        deleteItem(Id)
+                    }} className={styles.icon_wrapper}>
+                        <FaRegTrashAlt className={styles.trash_button} />
+                    </button>
+
+
+                    {Discount !== 0 ? (
+                        <>
+                            <div style={{ display: 'flex', flexDirection: 'column', rowGap: 5, alignItems: 'center' }}>
+                                <p style={{
+                                    fontSize: 14,
+                                    color: 'gray',
+                                    textDecoration: 'line-through',
+                                    textDecorationColor: '#a7a7adff',
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}>
+                                    -{Price}
+                                    <MdCurrencyRuble style={{ fontSize: 14 }} />
+                                </p>
+                                <p style={{
+                                    fontSize: 22,
+                                    color: '#6379e9',
+                                    fontWeight: 'bold',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    columnGap: 2
+                                }}>
+                                    {Price}
+                                    <MdCurrencyRuble style={{ fontSize: 22 }} />
+                                </p>
+                            </div>
+
+
+                        </>
+                    ) : (
+                        <>
+                            <p style={{
+                                fontSize: 22,
+                                color: '#6379e9',
+                                fontWeight: 'bold',
+                                display: 'flex',
+                                alignItems: 'center',
+                                columnGap: 2
+
+                            }}>
+                                {Price}
+                                <FaRubleSign style={{ fontSize: 18 }} />
+                            </p>
+                        </>
+                    )
+                    }
+
 
                 </div>
             </div>

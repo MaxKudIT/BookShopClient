@@ -1,11 +1,11 @@
-.main_header {
+.selection_header {
     width: 100%;
     height: 90px;
     
     display: flex;
     align-items: center;
     justify-content: space-between;
-     padding: 0 170px;
+     padding: 0 240px;
     background: rgba(22, 26, 34, 0.8); 
     position: fixed;
     z-index: 5;
@@ -60,6 +60,8 @@
      display: flex;
      align-items: center;
      justify-content: center;
+     background: transparent;
+     border: none;
       &:hover {
          background: rgba(125, 144, 197, 0.1);
 
