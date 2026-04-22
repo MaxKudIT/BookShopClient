@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, type FC } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-import CartViewComponent from "../ItemViewComponent/ItemViewComponent";
+import CartViewComponent from "../CartItem/CartItem";
 import styles from './CartView.module.scss';
 
 import { RiDeleteBinLine } from "react-icons/ri";

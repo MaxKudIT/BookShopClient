@@ -29,7 +29,7 @@ const RecommsCart: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                     fontWeight: 800,
                     color: '#F9FAFBFF',
                     fontFamily: 'MTSWide'
-                }}>Ваш также может понравиться</p>
+                }}>Вам также может понравиться</p>
 
 
 

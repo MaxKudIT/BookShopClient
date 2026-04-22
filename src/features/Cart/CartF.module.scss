@@ -12,7 +12,17 @@
 .cartf_main_container {
     
      padding: 150px 240px;
+
     
+}
+
+.text_gradient {
+     background: linear-gradient(90deg, #6379E9FF, #BA8AEAFF);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 500;
+
 }
 
 .cartf_total_sum_block {
@@ -26,7 +36,7 @@
 }
 
 .cartf_total_sum_button {
-    background-color: #6379e9;
+    background: linear-gradient(45deg, #6379e9, rgb(67, 126, 204));
     color: #000000FF;
     border-radius: 10px;
     border: none;
@@ -40,7 +50,7 @@
     column-gap: 10px;
     cursor: pointer;
     &:hover {
-        background-color: #5466c0;
+        background: linear-gradient(45deg, #4555a7, rgb(49, 93, 150))
     }
 }
 

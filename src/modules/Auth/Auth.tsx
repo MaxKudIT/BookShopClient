@@ -27,7 +27,7 @@ const Auth = () => {
             }}>
               <MdOutlineLocalLibrary style={{ color: '#161A22FF', fontSize: 23 }} />
             </div>
-            <p style={{ fontFamily: 'Montserrat', fontSize: 26, color: '#6379E9FF', fontWeight: 500 }}>Magma</p>
+            <p style={{ fontFamily: 'MTSWide', fontSize: 26, color: '#6379E9FF', fontWeight: 500 }}>Magma</p>
           </div>
           <p style={{
             fontSize: 40,

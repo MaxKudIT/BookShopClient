@@ -329,7 +329,7 @@ const Authorization = () => {
 
         /> : (
           <>
-            <p>Войти в аккаунт</p>
+            <p style={{fontFamily: 'Inter'}}>Войти в аккаунт</p>
             <GrFormNext style={{ fontSize: 18 }} />
           </>
 

@@ -2,12 +2,12 @@ import { observer } from 'mobx-react-lite';
 import styles from './CartF.module.scss'
 import SelectionHeader from '../../shared/components/Header/SelectionHeader/SelectionHeader';
 import CartView, { type CartSelectedType } from '../../shared/components/CartView/CartView';
-import ItemViewComponent from '../../shared/components/ItemViewComponent/ItemViewComponent';
+import ItemViewComponent from '../../shared/components/CartItem/CartItem';
 import { Divider } from '@mui/material';
 import { FaRubleSign } from 'react-icons/fa6';
 import { IoMdCard, IoMdInformationCircleOutline } from 'react-icons/io';
 import { LuCreditCard } from 'react-icons/lu';
-import { IoShieldCheckmarkOutline } from 'react-icons/io5';
+import { IoCartOutline, IoShieldCheckmarkOutline } from 'react-icons/io5';
 import MainFooter from '../../shared/components/Footer/MainFooter/MainFooter';
 import SelectionFooter from '../../shared/components/Footer/SelectionFooter/SelectionFooter';
 import type { FC } from 'react';
@@ -83,9 +83,19 @@ const CartF = observer(() => {
     <div className={styles.cartf_page_style}>
       <SelectionHeader />
       <div className={styles.cartf_main_container}>
-        <div style={{ display: 'flex', columnGap: 10, alignItems: 'center', marginBottom: 30 }}>
-          <p style={{ fontSize: 25, color: "#F9FAFBFF", fontFamily: 'MTSWide' }}>Ваша корзина</p>
-          <p style={{ fontSize: 16, color: '#BDC2CBFF' }}>(3 товара)</p>
+        <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 20 }}>
+          <p style={{ 
+            fontSize: 34, 
+            color: "#F9FAFBFF", 
+            wordSpacing: 3, 
+            display: 'flex', 
+            alignItems: 'center', 
+            columnGap: 10,
+            fontWeight: 500
+            }}>Моя
+            <span className={styles.text_gradient}> Корзина</span>
+          </p>
+          <p style={{ fontSize: 15, color: '#BDC2CBFF' }}>Товары, ожидающие оформления (3)</p>
         </div>
         <div style={{ display: 'flex', columnGap: 50 }}>
           <div style={{
@@ -126,11 +136,11 @@ const CartF = observer(() => {
           </div>
 
           <div style={{
-            width: 600, 
+            width: 600,
             display: 'flex',
             flexDirection: 'column',
             rowGap: 40
-            }}>
+          }}>
             <div className={styles.cartf_total_sum_block}>
               <p style={{ color: '#F9FAFBFF', fontSize: 21, fontWeight: 500, fontFamily: 'MTSWide' }}>Детали заказа</p>
               <Divider sx={{ borderBottomWidth: 2, my: 2, mb: 4, borderColor: '#44506866' }} />
@@ -257,17 +267,17 @@ const CartF = observer(() => {
                 <p>Ваши данные надежно защищены</p>
               </div>
             </div>
-            <div style={{display: 'flex', rowGap: 15, flexDirection: 'column', }}>
-              <ComponentInfoView icon={IoShieldCheckmarkOutline} title='Безопасная оплата' desc='Защита транзакций 256-битным шифрованием'/>
-              <ComponentInfoView icon={IoMdInformationCircleOutline} title='Легкий возврат' desc='14 дней на возврат товара без лишних вопросов'/>
-           
+            <div style={{ display: 'flex', rowGap: 15, flexDirection: 'column', }}>
+              <ComponentInfoView icon={IoShieldCheckmarkOutline} title='Безопасная оплата' desc='Защита транзакций 256-битным шифрованием' />
+              <ComponentInfoView icon={IoMdInformationCircleOutline} title='Легкий возврат' desc='14 дней на возврат товара без лишних вопросов' />
+
             </div>
           </div>
         </div>
 
 
       </div>
-      <RecommsCart books={[]}/>
+      <RecommsCart books={[]} />
       <SelectionFooter />
     </div>
 
@@ -283,7 +293,7 @@ const ComponentInfoView: FC<{ icon: IconType, title: string, desc: string }> = (
     <div className={styles.view_info_block}>
       <Icon style={{ fontSize: 22, marginBottom: 1, flexShrink: 0, color: '#F9FAFBFF' }} />
       <div style={{ display: 'flex', flexDirection: 'column', rowGap: 2 }}>
-        <p style={{ color: '#F9FAFBFF', fontSize: 14, fontWeight: 500}}>{title}</p>
+        <p style={{ color: '#F9FAFBFF', fontSize: 14, fontWeight: 500 }}>{title}</p>
         <p style={{ color: 'rgb(165, 174, 189)', fontSize: 12 }}>{desc}</p>
       </div>
     </div>

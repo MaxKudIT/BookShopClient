@@ -483,7 +483,7 @@ const Registration = () => {
 
         /> : (
           <>
-            <p>Создать аккаунт</p>
+            <p style={{fontFamily: 'Inter'}}>Создать аккаунт</p>
             <GrFormNext style={{ fontSize: 18, color: 'rgb(21, 23, 29)' }} />
           </>
 

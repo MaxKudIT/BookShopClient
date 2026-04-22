@@ -8,6 +8,8 @@ import type { Genres } from '../../shared/types';
 
 export type GenresDropDown = 'Все жанры' | Genres
 
+export type DateDropDown = 'Сначала новые' | 'В алфавитном порядке'
+
 export const SearchingContext = createContext<{
     searchingValue: string,
     setsearchingValue: (value: string) => void,

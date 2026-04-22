@@ -2,7 +2,7 @@ import { Checkbox } from "@mui/material";
 import { MdCurrencyRuble } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
 
-import styles from './ItemViewComponent.module.scss'
+import styles from './CartItem.module.scss'
 import type { FC } from "react";
 import { rateStars } from "../BookInfoView/BookInfoView";
 import type { CartItemsPreview } from "../../types";
@@ -14,7 +14,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 
 
 
-const ItemViewComponent: FC<CartItemsPreview & {
+const CartItem: FC<CartItemsPreview & {
     addItem: (el: CartSelectedType) => void,
     deleteItem: (id: string) => void,
     isSelected: boolean,
@@ -77,7 +77,8 @@ const ItemViewComponent: FC<CartItemsPreview & {
                         src={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPTPFv3U6ZVvZh0GYlNFWntSw0PJjFvqNwMA&s'}
                         style={{
                             width: '130px',
-                            height: '100%'
+                            height: '100%',
+                            opacity: 0.9
 
                         }}
                     />
@@ -190,4 +191,4 @@ const ItemViewComponent: FC<CartItemsPreview & {
 
 
 
-export default ItemViewComponent;
+export default CartItem;

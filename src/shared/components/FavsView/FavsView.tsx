@@ -12,7 +12,7 @@ import type { CartItemsPreview } from "../../types";
 
 import { BsCartCheckFill } from "react-icons/bs";
 import { FaCartPlus, FaHeart } from "react-icons/fa6";
-import ItemViewComponent from "../ItemViewComponent/ItemViewComponent";
+import ItemViewComponent from "../CartItem/CartItem";
 import { buttonStyles } from "../Footer/muiStyles";
 
 
