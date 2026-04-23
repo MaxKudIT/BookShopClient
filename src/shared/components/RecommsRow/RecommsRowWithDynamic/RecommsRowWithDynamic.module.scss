@@ -1,0 +1,67 @@
+
+
+.recomms_row_main {
+   display: flex;
+   column-gap: 30px;
+   align-items: center;
+
+   width: 100%;
+}
+
+.books_button {
+
+    padding: 5px 25px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Inter;
+    font-size: 14px;
+    color: #6379E9FF;
+   
+    background: transparent;
+    border-radius: 14px;
+    border: none; 
+   
+    column-gap: 10px;
+    transition: all 0.1s;
+    cursor: pointer;
+   
+         &:hover {
+   
+          color: rgb(81, 98, 185)
+  
+    }
+}
+
+.side_info_block {
+    width: 270px;
+
+}
+
+
+
+.next {
+    font-size: 21px;
+    color: rgb(165, 174, 189);
+    flex-shrink: 0;
+}
+
+.icon_wrapper {
+     padding: 12px 15px;
+     border-radius: 10px;
+     height: fit-content;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     background: transparent;
+     border: none;
+      &:hover {
+         background: rgba(125, 144, 197, 0.1);
+
+         .next {
+            color: rgb(255, 255, 255,0.9)
+         }
+         
+    }
+}

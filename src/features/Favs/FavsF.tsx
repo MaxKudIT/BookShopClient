@@ -6,6 +6,8 @@ import FavsFilterField from '../../shared/components/FilterField/FavsFilterField
 import FavBookPreview from '../../shared/components/FavBookPreview/FavBookPreview';
 import { IoBagHandleOutline, IoBookOutline } from 'react-icons/io5';
 import SelectionFooter from '../../shared/components/Footer/SelectionFooter/SelectionFooter';
+import { MdShoppingCartCheckout } from 'react-icons/md';
+import Banner from '../../shared/components/Banner/Banner';
 
 const FavsF = observer(() => {
 
@@ -226,55 +228,12 @@ const FavsF = observer(() => {
                         }} />
                     </div>
 
-                    <div style={{
-                        display: 'flex',
-                        width: '100%',
-                        height: 410,
-                        background: '#1E2029FF',
-                        border: '1px solid #353746FF',
-                        borderRadius: 15,
-                        marginTop: 100,
-                        justifyContent: 'center',
-                        
-                    }}>
+                    <Banner icon={MdShoppingCartCheckout} color='#5269E0FF' title='Готовы к новому путешествию?' description='Не оставляйте любимых героев в одиночестве. Оформите подписку сегодня и получите дополнительный месяц бесплатно.' />
 
-                        <div style={{
-                            height: '100%',
-                            width: '40%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            padding: '50px 0',
-                            alignItems: 'center',
-                            minWidth: 500
-                        }}>
-                            <div style={{
-                                background: '#5269E01A',
-                                border: '2px solid #5269E033',
-                                padding: 10,
-                                borderRadius: 10,
-                                marginBottom: 20,
-                                width: 'fit-content'
-                            }}>
-                                <IoBagHandleOutline style={{
-                                    color: '#5269E0FF',
-                                    fontSize: 34
-                                }} />
-                            </div>
 
-                            <p style={{ fontSize: 30, color: '#F9F9FBFF', fontWeight: 700, marginBottom: 10 }}>Готовы к новому путешествию?</p>
-                            <p style={{ color: '#DFE0E7FF', fontSize: 16, marginBottom: 40, textAlign: 'center' }}>Не оставляйте любимых героев в одиночестве. Оформите подписку сегодня и получите дополнительный месяц бесплатно.</p>
-                            <div style={{ display: 'flex', columnGap: 20 }}>
-                                <button className={styles.sub_prem_button_one}>
-                                    Перейти к оформлению
-                                </button>
-                                <button className={styles.sub_prem_button_two}>
-                                    <IoBookOutline />
-                                    Продолжить чтение
-                                </button>
-                            </div>
-                        </div>
 
-                    </div>
+
+
                 </div>
                 <SelectionFooter />
             </div>

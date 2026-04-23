@@ -217,7 +217,7 @@ const FavsView: FC<{ items: CartItemsPreview[] } & RequestingState> = ({
                             Discount={el.Discount}
                             Rate={el.Rate}
 
-                            type="favItem"
+                            
 
                         />))}
                         <Divider sx={{ borderBottomWidth: 2, my: 3, mb: 0, borderColor: 'rgba(94, 67, 156, 1)' }} />

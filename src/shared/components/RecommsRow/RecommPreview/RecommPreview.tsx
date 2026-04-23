@@ -3,7 +3,7 @@ import styles from './RecommPreview.module.scss'
 import { FaRegStar } from "react-icons/fa";
 import type { BookPreviewT } from '../../../types';
 
-const RecommPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
+const RecommPreview: FC<{ book: BookPreviewT, color: 'pink' | 'purple' | 'blue' }> = ({ book, color }) => {
 
     return (
         <div className={styles.recomm_preview_wrapper}>
@@ -11,28 +11,37 @@ const RecommPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
                 <img className={styles.book_image} src={book.ImageUrl} alt="" />
             </div>
             <div style={{
-                display: 'flex', 
+                display: 'flex',
                 justifyContent: 'space-between',
-                 marginBottom: 10,
-                  padding: '0 5px'
-    
-                 }}>
+                marginBottom: 10,
+                padding: '0 5px'
+
+            }}>
                 <div style={{
-                    color: '#BAC1CEFF', 
+                    color: '#BAC1CEFF',
                     display: 'flex',
-                    fontSize: 12, 
+                    fontSize: 12,
                     fontWeight: 600,
-                    columnGap: 5
-                    }}>
-                    <FaRegStar />
-                    {book.Rate}
+                    columnGap: 5,
+                    alignItems: 'center'
+                }}>
+                    <FaRegStar style={{ color: '#F9F9FBFF', fontSize: 14, marginBottom: 2 }} />
+                    <p style={{ color: '#F9F9FBFF', fontSize: 14 }}>{book.Rate}</p>
+                    <p>/</p>
+                    <p>5.0</p>
                 </div>
-                <p style={{color: '#BAC1CEFF', fontSize: 10, fontWeight: 700, letterSpacing: 0.2}}>ДРАМА</p>
+                <p style={{ color: '#BAC1CEFF', fontSize: 10, fontWeight: 700, letterSpacing: 0.2 }}>ДРАМА</p>
             </div>
 
-            <div style={{display: 'flex', flexDirection: 'column', rowGap: 2,  padding: '0 5px'}}>
-                <p className={styles.preview_recomm_title}>{book.Title}</p>
-                <p style={{color: '#BAC1CEFF', fontWeight: 500, fontSize: 12}}>{book.Author}</p>
+            <div style={{ display: 'flex', flexDirection: 'column', rowGap: 2, padding: '0 5px' }}>
+                <p className={
+                    color === 'pink' 
+                    ? styles['preview_recomm_title'] 
+                    : color === 'purple' 
+                    ? styles['preview_recomm_title_type_two'] 
+                    : styles['preview_recomm_title_type_three'] 
+                    }>{book.Title}</p>
+                <p style={{ color: '#BAC1CEFF', fontWeight: 500, fontSize: 12 }}>{book.Author}</p>
             </div>
 
         </div>
@@ -41,3 +50,6 @@ const RecommPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
 }
 
 export default RecommPreview;
+
+
+

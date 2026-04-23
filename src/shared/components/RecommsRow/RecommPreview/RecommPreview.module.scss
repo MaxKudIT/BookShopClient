@@ -12,6 +12,12 @@
         }
           .preview_recomm_title {
             color: #BA8AEAFF; 
+          }
+          .preview_recomm_title_type_two {
+            color: #5269E0FF; 
+        }
+         .preview_recomm_title_type_three {
+            color: #3f81d6; 
         }
     }
 }
@@ -35,7 +41,24 @@
 
 .preview_recomm_title {
     color: #F9FAFBFF;
-    font-weight: 700;
+    font-weight: 600;
+
+    font-size: 15px;
+    transition: all 0.2s;
+}
+
+
+.preview_recomm_title_type_two {
+    color: #F9FAFBFF;
+    font-weight: 600;
+
+    font-size: 15px;
+    transition: all 0.2s;
+}
+
+.preview_recomm_title_type_three {
+    color: #F9FAFBFF;
+    font-weight: 600;
 
     font-size: 15px;
     transition: all 0.2s;

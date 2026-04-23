@@ -1,14 +1,12 @@
 import type { FC } from 'react';
 import styles from './RecommsRow.module.scss'
 import type { BookPreviewT } from '../../types';
-import { MdHistory, MdOutlineWorkspacePremium } from "react-icons/md";
 
-import { GrFormNext } from 'react-icons/gr';
 import RecommPreview from './RecommPreview/RecommPreview';
-import { FaRegCompass } from 'react-icons/fa6';
+
 import { IoCompassOutline } from 'react-icons/io5';
 import { Divider } from '@mui/material';
-import { IoIosCheckmarkCircleOutline } from 'react-icons/io';
+
 
 
 
@@ -40,7 +38,7 @@ const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                 </div>
 
                 <div className={styles.recomms_row_main}>
-                    <RecommPreview book={{
+                    <RecommPreview color='pink'  book={{
                         Id: '1',
                         Title: 'Мастер и Маргарита',
                         Author: 'Михаил Булгаков',
@@ -52,7 +50,7 @@ const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                         Discount: 10
 
                     }} />
-                    <RecommPreview book={{
+                    <RecommPreview color='pink' book={{
                         Id: '1',
                         Title: 'Мастер и Маргарита',
                         Author: 'Михаил Булгаков',
@@ -64,7 +62,7 @@ const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                         Discount: 10
 
                     }} />
-                    <RecommPreview book={{
+                    <RecommPreview color='pink' book={{
                         Id: '1',
                         Title: 'Мастер и Маргарита',
                         Author: 'Михаил Булгаков',
@@ -76,7 +74,7 @@ const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                         Discount: 10
 
                     }} />
-                    <RecommPreview book={{
+                    <RecommPreview color='pink' book={{
                         Id: '1',
                         Title: 'Мастер и Маргарита',
                         Author: 'Михаил Булгаков',

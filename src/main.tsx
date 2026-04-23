@@ -15,6 +15,7 @@ import { stores } from './store/stores'
 import Cart from './pages/Cart/Cart'
 import Favs from './pages/Favs/Favs'
 import { GiBookshelf } from 'react-icons/gi'
+import Recomms from './pages/Recomms/Recomms'
 
 
 const router = createBrowserRouter([
@@ -37,6 +38,11 @@ const router = createBrowserRouter([
     {
         element: <Favs/>,
         path: '/favs',
+        loader: protectedLoader
+    },
+    {
+        element: <Recomms/>,
+        path: '/recomms',
         loader: protectedLoader
     },
     {
