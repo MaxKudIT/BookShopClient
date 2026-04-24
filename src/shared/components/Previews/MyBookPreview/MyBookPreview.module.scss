@@ -1,0 +1,37 @@
+.history_preview_wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+    
+
+      &:hover {
+
+
+        .book_image {
+            filter: brightness(0.8);
+        }
+          .preview_history_title {
+            color: rgb(99, 121, 233); 
+        }
+    }
+}
+
+.book_image {
+   width: 100%;
+    max-width: 320px;           
+    height: auto;              
+    aspect-ratio: 320 / 470;  
+    border-radius: 15px;
+    margin-bottom: 5px;
+    object-fit: cover;         
+    transition: all 0.2s;
+   
+}
+
+.preview_history_title {
+    color: #F9FAFBFF;
+    font-weight: 700;
+  
+    font-size: 15px;
+    transition: all 0.2s;
+}

@@ -27,7 +27,7 @@
     min-width: 1300px;
     box-shadow: 0px 25px 50px #00000040, 0px 0px 0px #171a1f00;
     
-    margin-bottom: 60px;
+    margin-bottom: 30px;
     background: url('/public/images/backd.png');
       background-size: cover;    
     background-position: center; 
@@ -61,7 +61,7 @@
     font-size: 16px;
     color: #F9FAFBFF;
 
-    background: linear-gradient(#347fbd, #205bb4);
+    background: linear-gradient(#2d66bb, #4035d1);
     border-radius: 14px;
     border-width: 0px;
     border-color: #FFFFFFFF;
@@ -70,7 +70,7 @@
     transition: all 0.1s;
     cursor: pointer;
     &:hover {
-        background: linear-gradient(#296392, #19488f);
+        background: linear-gradient(#245296, #2f2799);
     }
 }
 
@@ -99,3 +99,32 @@
     }
 }
 
+
+.next_or_back {
+    font-size: 21px;
+    color: rgb(255, 255, 255,0.9);
+   
+}
+
+.icon_wrapper {
+     padding: 15px 15px;
+     border-radius: 10px;
+     height: fit-content;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     background: transparent;
+     border: none;
+     margin-bottom: 65px;
+     justify-self: center;
+     transition: all 0.1s;
+      cursor: pointer;
+      &:hover {
+         background: rgba(125, 144, 197, 0.1);
+
+         .next_or_back {
+            color: rgb(255, 255, 255,0.9)
+         }
+         
+    }
+}

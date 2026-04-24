@@ -1,13 +1,13 @@
 .bic_block {
     height: 80px;
-    width: 190px;
-    background-color: rgba(17, 17, 27, 0.3);
+    width: 325px;
+
+    background-color: rgba(67, 71, 88, 0.219);
     border-radius: 10px;
    
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    row-gap: 10px;
+    align-items: center;
+    column-gap: 10px;
     padding: 0 15px;
     
 }

@@ -1,54 +1,159 @@
-.books_global_style {
-   padding: 0 30px;
-      background: linear-gradient(145deg, 
-      rgba(3, 5, 34, 0.9) 0%, 
-      rgba(9, 7, 54, 0.9) 30%, 
-      rgba(7, 4, 43, 0.9) 70%
-    );
-   padding-bottom: 30px;
-   overflow-x: hidden;
-   flex-grow: 1;
+.main_container {
+    background: rgb(22, 27, 36);
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    row-gap: 50px;
+    margin-left: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 
 
-
-
-     &::-webkit-scrollbar {
-        width: 10px; 
-        height: 10px; 
-    }
+.main_body {
+    padding: 150px 120px;
+    padding-bottom: 50px;
     
-    &::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background: rgba(123, 109, 194, 0.7);
-        border-radius: 5px;
-        border: 2px solid transparent;
-        background-clip: content-box;
-    }
-    
+}
 
-    &::-webkit-scrollbar-thumb:hover {
-        background: rgba(123, 109, 194, 0.9);
-        width: 10px; 
-    }
-
-    &::-webkit-scrollbar-thumb:active {
-        background: rgba(123, 109, 194, 1);
-    }
+.book_month {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 50px;
+    height: 678px;
+    width: 100%;
+    border-radius: 40px;
+    min-width: 1300px;
+    box-shadow: 0px 25px 50px #00000040, 0px 0px 0px #171a1f00;
     
+    margin-bottom: 60px;
+    background: url('/public/images/backd.png');
+      background-size: cover;    
+    background-position: center; 
+    background-repeat: no-repeat; 
 
-    &::-webkit-scrollbar-button {
-        display: none; 
-    }
-    
-
-    &::-webkit-scrollbar-corner {
-        background: transparent;
-    }
-    
 
 }
+.book_month_two {
+        height: 450px;
+        width: 590px;   
+        align-self: center;
+        border-radius: 20px;
+        background: 
+        linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6)), 
+        url('/public/images/back2.png');
+      background-size: cover;    
+    background-position: center; 
+    background-repeat: no-repeat; 
+
+} 
+
+.book_month_button_one {
+    height: 50px;
+    width: 240px;
+    padding: 0 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ 
+    font-size: 16px;
+    color: #F9FAFBFF;
+
+    background: linear-gradient(#2d66bb, #4035d1);
+    border-radius: 14px;
+    border-width: 0px;
+    border-color: #FFFFFFFF;
+    border-style: solid;
+    column-gap: 10px;
+    transition: all 0.1s;
+    cursor: pointer;
+    &:hover {
+        background: linear-gradient(#245296, #2f2799);
+    }
+}
+
+
+.book_month_button_two {
+    height: 60px;
+    width: 240px;
+    padding: 0 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Inter;
+    font-size: 16px;
+    color: rgb(211, 213, 216);
+   
+    background: rgb(30, 32, 46);
+    border-radius: 14px;
+    border: 1px solid rgb(48, 51, 58, 0.5); 
+   
+    column-gap: 15px;
+    transition: all 0.1s;
+    cursor: pointer;
+    &:hover {
+          color: rgb(148, 149, 158);
+    }
+}
+
+
+
+
+
+// .books_global_style {
+//    padding: 0 30px;
+//       background: linear-gradient(145deg, 
+//       rgba(3, 5, 34, 0.9) 0%, 
+//       rgba(9, 7, 54, 0.9) 30%, 
+//       rgba(7, 4, 43, 0.9) 70%
+//     );
+//    padding-bottom: 30px;
+//    overflow-x: hidden;
+//    flex-grow: 1;
+
+
+
+
+//      &::-webkit-scrollbar {
+//         width: 10px; 
+//         height: 10px; 
+//     }
+    
+//     &::-webkit-scrollbar-track {
+//         background: rgba(0, 0, 0, 0.1);
+//         border-radius: 5px;
+//     }
+//     &::-webkit-scrollbar-thumb {
+//         background: rgba(123, 109, 194, 0.7);
+//         border-radius: 5px;
+//         border: 2px solid transparent;
+//         background-clip: content-box;
+//     }
+    
+
+//     &::-webkit-scrollbar-thumb:hover {
+//         background: rgba(123, 109, 194, 0.9);
+//         width: 10px; 
+//     }
+
+//     &::-webkit-scrollbar-thumb:active {
+//         background: rgba(123, 109, 194, 1);
+//     }
+    
+
+//     &::-webkit-scrollbar-button {
+//         display: none; 
+//     }
+    
+
+//     &::-webkit-scrollbar-corner {
+//         background: transparent;
+//     }
+    
+
+// }
 
 

@@ -13,16 +13,16 @@ const HistoryRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
             <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{ display: 'flex', columnGap: 10 }}>
                     <MdHistory style={{ fontSize: 30, color: '#6379e9' }} />
-                    <div style={{ display: 'flex', flexDirection: 'column', rowGap: 5 }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', rowGap: 2 }}>
                         <p style={{
-                            fontSize: 23,
-                            fontWeight: 800,
+                            fontSize: 24,
+                            fontWeight: 500,
                             color: '#F9FAFBFF',
-                            fontFamily: 'MTSWide'
+                       
                         }}>Продолжить чтение</p>
                         <p style={{
                             fontSize: 13,
-                            fontWeight: 600,
+                           
                             color: '#BAC1CEFF',
                      
                         }}>Ваша недавняя история просмотра книг</p>

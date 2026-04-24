@@ -64,7 +64,7 @@ const RecommsRowWithDynamic: FC<RecommsRowWithDynamicProps> = ({ books, icon: Ic
                 }}>
                     <Icon style={{ fontSize: 28, color: colorCalc(color) }} />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', rowGap: 5 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', rowGap: 2 }}>
                     <p style={{
                         fontSize: 23,
                         fontWeight: 500,
@@ -83,7 +83,7 @@ const RecommsRowWithDynamic: FC<RecommsRowWithDynamicProps> = ({ books, icon: Ic
 
             <div className={styles.recomms_row_main}>
                 <button className={styles.icon_wrapper}>
-                    <IoIosArrowBack className={styles.next} />
+                    <IoIosArrowBack className={styles.next_or_back} />
                 </button>
                 <RecommPreview color={color} book={{
                     Id: '1',
@@ -109,6 +109,18 @@ const RecommsRowWithDynamic: FC<RecommsRowWithDynamicProps> = ({ books, icon: Ic
                     Discount: 10
 
                 }} />
+                  <RecommPreview color={color} book={{
+                    Id: '1',
+                    Title: 'Мастер и Маргарита',
+                    Author: 'Михаил Булгаков',
+                    Genre: 'Драма',
+                    Rate: 4.9,
+                    ImageUrl: 'https://www.moscowbooks.ru/image/book/805/orig/i805305.jpg?cu=20240222135506',
+                    IsMine: true,
+                    Price: 800,
+                    Discount: 10
+
+                }} />
                 <RecommPreview color={color} book={{
                     Id: '1',
                     Title: 'Мастер и Маргарита',
@@ -146,7 +158,7 @@ const RecommsRowWithDynamic: FC<RecommsRowWithDynamicProps> = ({ books, icon: Ic
 
                 }} />
                 <button className={styles.icon_wrapper}>
-                    <GrFormNext style={{ fontSize: 25 }} className={styles.next} />
+                    <GrFormNext style={{ fontSize: 25 }} className={styles.next_or_back} />
                 </button>
 
             </div>
