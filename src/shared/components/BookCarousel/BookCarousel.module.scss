@@ -1,0 +1,32 @@
+.recomms_row_main {
+   display: flex;
+   column-gap: 30px;
+   align-items: center;
+}
+
+.next_or_back {
+    font-size: 21px;
+    color: rgb(165, 174, 189);
+    
+   
+}
+
+.icon_wrapper {
+     padding: 12px 15px;
+     border-radius: 10px;
+     height: fit-content;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     background: transparent;
+     border: none;
+      cursor: pointer;
+      &:hover {
+         background: rgba(125, 144, 197, 0.1);
+
+         .next_or_back {
+            color: rgb(255, 255, 255,0.9)
+         }
+         
+    }
+}

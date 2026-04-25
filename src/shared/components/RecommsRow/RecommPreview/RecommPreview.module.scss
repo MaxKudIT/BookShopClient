@@ -24,10 +24,10 @@
 
 
 .book_image {
-    width: 100%;
-    max-width: 230px;           
+   
+    width: calc(1570px / 6);
     height: auto;             
-    aspect-ratio: 230 / 350;   
+    aspect-ratio: 320 / 470;   
     border-radius: 15px;
     margin-bottom: 5px;
     object-fit: cover;        

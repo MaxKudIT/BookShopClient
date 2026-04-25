@@ -129,7 +129,7 @@ const MyBooksList = () => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '200px' }}>
             <BookList list={[]} viewPage={'home'} />
             <RecommsRowWithDynamic icon={IoCompassOutline} title={'Личные рекомендации'} description={'Сборник книг, которые вам по душе'} books={[]} color={'blue'} />
-
+            
           </div>
 
         </div>

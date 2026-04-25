@@ -23,11 +23,11 @@ const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                             <p style={{
                                 fontSize: 24,
                                 fontWeight: 500,
-                                color: '#F9FAFBFF',
+                                color: '#FFFFFFFF',
                                
                             }}>Личные рекомендации</p>
                             <p style={{
-                                fontSize: 13,
+                                fontSize: 14,
                        
                                 color: '#BAC1CEFF',
                                 

@@ -1,15 +1,12 @@
-
 import styles from './Sidebar.module.scss'
-import { MdOutlineGridView, MdOutlineLocalLibrary } from "react-icons/md";
+import { MdOutlineGridView, MdOutlineShoppingCart, MdOutlineHistory, MdAutoAwesome } from "react-icons/md";
 import { FaRegCompass } from "react-icons/fa6";
 import { GiBookshelf } from "react-icons/gi";
 import { FaRegBookmark } from "react-icons/fa";
-import { MdOutlineShoppingCart } from "react-icons/md";
 import { RxExit } from "react-icons/rx";
-import type { FC } from 'react';
+import type { FC, ReactNode } from 'react';
 import { Tooltip } from '@mui/material';
 import Logo from '../Logo/Logo';
-
 
 export type SideBarType = {
     handleLogout: () => void,
@@ -19,99 +16,100 @@ export type SideBarType = {
     }
 }
 
+type NavItem = {
+    icon: ReactNode;
+    title: string;
+    meta?: string;
+    active?: boolean;
+}
 
 const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
+    const mainMenu: NavItem[] = [
+        { icon: <MdOutlineGridView style={{ fontSize: 16 }} />, title: 'Главная', active: true },
+        { icon: <FaRegCompass style={{ fontSize: 15 }} />, title: 'Исследовать' },
+        { icon: <GiBookshelf style={{ fontSize: 16 }} />, title: 'Моя полка' },
+    ];
 
-
-
+    const collections: NavItem[] = [
+        { icon: <FaRegBookmark style={{ fontSize: 14 }} />, title: 'Избранное', meta: '24' },
+        { icon: <MdOutlineShoppingCart style={{ fontSize: 15 }} />, title: 'Корзина', meta: '3' },
+        { icon: <MdOutlineHistory style={{ fontSize: 15 }} />, title: 'История чтения', meta: 'Новое' },
+        { icon: <MdAutoAwesome style={{ fontSize: 15 }} />, title: 'Рекомендации', meta: 'Для вас' },
+    ];
 
     return (
         <div className={styles.sidebar_main}>
-            <div style={{
-                width: '100%',
-                display: 'flex',
-                borderBottom: '2px solid rgba(86, 86, 88, 0.2)',
-                justifyContent: 'center',
-                columnGap: 8,
-                height: 80,
-                marginBottom: 60,
-         
-            }}>
-                
-                <Logo/>
-            </div>
-            <div style={{ marginBottom: 65 }}>
-                <div className={styles.title_menu_container}>
-                    <p className={styles.title_menu}>МЕНЮ НАВИГАЦИИ</p>
-                </div>
-
-                <div style={{ width: 250, display: 'flex', flexDirection: 'column', rowGap: 17 }}>
-                    <button className={styles.button_sidebar_active}>
-                        <MdOutlineGridView style={{ fontSize: 15, marginBottom: 2 }} />
-                        <p>Главная</p>
-                    </button>
-
-                    <button className={styles.button_sidebar_unactive}>
-                        <FaRegCompass style={{ fontSize: 15 }} />
-                        <p>Исследовать</p>
-                    </button>
-
-                    <button className={styles.button_sidebar_unactive}>
-                        <GiBookshelf style={{ fontSize: 15 }} />
-                        <p>Моя полка</p>
-                    </button>
-                </div>
+            <div className={styles.logo_block}>
+                <Logo />
             </div>
 
-            <div>
-                <div className={styles.title_menu_container}>
-                    <p className={styles.title_menu}>ВАШИ ПОДБОРКИ</p>
+            <div className={styles.sidebar_body}>
+                <div className={styles.menu_card}>
+                    <div className={styles.title_menu_container}>
+                        <p className={styles.title_menu}>БЫСТРЫЙ ДОСТУП</p>
+                      
+                    </div>
+
+                    <div className={styles.menu_list}>
+                        {mainMenu.map((item) => (
+                            <button
+                                key={item.title}
+                                className={item.active ? styles.button_sidebar_active : styles.button_sidebar_unactive}
+                            >
+                                <span className={styles.nav_icon}>{item.icon}</span>
+                                <p>{item.title}</p>
+                            </button>
+                        ))}
+                    </div>
                 </div>
-                <div style={{ width: 250, display: 'flex', flexDirection: 'column', rowGap: 20 }}>
-                    <button className={styles.button_sidebar_unactive}>
-                        <FaRegBookmark style={{ fontSize: 14 }} />
-                        <p>Избранное</p>
-                    </button>
-                    <button className={styles.button_sidebar_unactive}>
-                        <MdOutlineShoppingCart style={{ fontSize: 15 }} />
-                        <p>Корзина</p>
-                    </button>
+
+                <div className={styles.collections_card}>
+                    <div className={styles.title_menu_container}>
+                        <p className={styles.title_menu}>ПЕРСОНАЛЬНЫЙ РАЗДЕЛ</p>
+                      
+                    </div>
+
+                    <div className={styles.menu_list}>
+                        {collections.map((item) => (
+                            <button key={item.title} className={styles.button_sidebar_unactive}>
+                                <span className={styles.nav_icon}>{item.icon}</span>
+                                <p>{item.title}</p>
+                                {item.meta && <span className={styles.meta_badge}>{item.meta}</span>}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
 
             <div className={styles.footer_sidebar}>
+                <div className={styles.footer_glow}></div>
 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div className={styles.footer_top}>
                     <div className={styles.button_profile}>
-                        <div style={{
-                            borderRadius: 50,
-                            background: 'rgb(150, 10, 10)',
-                            width: 35,
-                            height: 35,
-                            color: '#F9FAFBFF',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontWeight: 700,
-                            fontSize: 15
-                        }}>{user.login[0]}</div>
-                        <p style={{ color: '#F9FAFBFF', fontSize: 14, fontWeight: 500 }}>{user.login}</p>
+                        <div className={styles.avatar_circle}>{user.login[0]}</div>
+                        <div className={styles.profile_info}>
+                            <p className={styles.profile_name}>{user.login}</p>
+                            <span className={styles.profile_email}>{user.email}</span>
+                        </div>
                     </div>
-                    <Tooltip slotProps={{
-                        tooltip: {
-                            sx: {
-                              
-                                color: '#F9FAFBFF',   
-                                fontWeight: 500
-                              
-                            }
-                        },
-                     
-                    }} title="Выйти из аккаунта" placement="top">
+
+                    <Tooltip
+                        slotProps={{
+                            tooltip: {
+                                sx: {
+                                    color: '#F9FAFBFF',
+                                    fontWeight: 500
+                                }
+                            },
+                        }}
+                        title="Выйти из аккаунта"
+                        placement="top"
+                    >
                         <RxExit onClick={handleLogout} className={styles.button_exit} />
                     </Tooltip>
                 </div>
 
+             
             </div>
         </div>
     )

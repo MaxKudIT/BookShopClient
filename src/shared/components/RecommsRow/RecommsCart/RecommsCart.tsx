@@ -8,6 +8,7 @@ import { GrFormNext } from 'react-icons/gr';
 import { IoIosArrowBack, IoIosCheckmarkCircleOutline } from 'react-icons/io';
 import type { BookPreviewT } from '../../../types';
 import RecommPreview from '../RecommPreview/RecommPreview';
+import BookCarousel from '../../BookCarousel/BookCarousel';
 
 
 
@@ -32,8 +33,10 @@ const RecommsCart: FC<{ books: BookPreviewT[] }> = ({ books }) => {
 
 
             </div>
+            <BookCarousel books={[]}/>
 
-            <div className={styles.recomms_row_main}>
+
+            {/* <div className={styles.recomms_row_main}>
                 <button className={styles.icon_wrapper}>
                     <IoIosArrowBack className={styles.next} />
                 </button>
@@ -101,7 +104,7 @@ const RecommsCart: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                     <GrFormNext style={{fontSize: 25}} className={styles.next} />
                 </button>
 
-            </div>
+            </div> */}
         </div>
 
 

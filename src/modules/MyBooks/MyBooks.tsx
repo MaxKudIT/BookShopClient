@@ -7,7 +7,7 @@ import MyBooksList from "../../features/MyBooks/MyBooksList";
 const MyBooks = () =>
   {
     return (
-      <div className={styles.home_container}>
+      <div className={styles.mybooks_container}>
       
         <MyBooksList/>
       </div>

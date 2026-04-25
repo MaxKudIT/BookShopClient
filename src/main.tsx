@@ -14,7 +14,7 @@ import { StoreContext } from './store/context/GloabalContext'
 import { stores } from './store/stores'
 import Cart from './pages/Cart/Cart'
 import Favs from './pages/Favs/Favs'
-import { GiBookshelf } from 'react-icons/gi'
+import History from './pages/History/History'
 import Recomms from './pages/Recomms/Recomms'
 
 
@@ -59,6 +59,11 @@ const router = createBrowserRouter([
         element: <BookPage />,
         path: '/books/:id/pages/:pageNumber',
         loader: protectedPurchaseLoader
+    },
+    {
+        element: <History/>,
+        path: '/history',
+        loader: protectedLoader
     }
 ])
 

@@ -1,41 +1,19 @@
 import type { FC } from 'react';
-import styles from './HistoryRow.module.scss'
+import styles from './HistoryRecentRows.module.scss'
 import type { BookPreviewT } from '../../types';
-import { MdHistory } from "react-icons/md";
-import HistoryPreview from './HistoryPreview/HistoryPreview';
-import { GrFormNext } from 'react-icons/gr';
 
-const HistoryRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
+import HistoryRecentPreview from '../Previews/HistoryRecentPreview/HistoryRecentPreview';
+
+
+const HistoryRecentRows: FC<{ books: BookPreviewT[] }> = ({ books }) => {
 
     return (
 
         <div className={styles.history_row_wrapper}>
-            <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
-                <div style={{ display: 'flex', columnGap: 10 }}>
-                    <MdHistory style={{ fontSize: 30, color: '#6379e9' }} />
-                    <div style={{ display: 'flex', flexDirection: 'column', rowGap: 2 }}>
-                        <p style={{
-                            fontSize: 24,
-                            fontWeight: 500,
-                            color: '#FFFFFFFF',
-                       
-                        }}>Продолжить чтение</p>
-                        <p style={{
-                            fontSize: 14,
-                           
-                            color: '#BAC1CEFF',
-                     
-                        }}>Ваша недавняя история просмотра книг</p>
-                    </div>
-                </div>
-                <button className={styles.books_button}>
-                    <p>Все книги</p>
-                    <GrFormNext style={{ fontSize: 18 }} />
-                </button>
-            </div>
+           
 
-            <div className={styles.history_row_main}>
-                <HistoryPreview book={{
+         
+                <HistoryRecentPreview book={{
                     Id: '1',
                     Title: 'Мастер и Маргарита',
                     Author: 'Михаил Булгаков',
@@ -47,7 +25,31 @@ const HistoryRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                     Discount: 10
 
                 }} />
-                <HistoryPreview book={{
+                     <HistoryRecentPreview book={{
+                    Id: '1',
+                    Title: 'Мастер и Маргарита',
+                    Author: 'Михаил Булгаков',
+                    Genre: 'Драма',
+                    Rate: 4.9,
+                    ImageUrl: 'https://www.moscowbooks.ru/image/book/805/orig/i805305.jpg?cu=20240222135506',
+                    IsMine: true,
+                    Price: 800,
+                    Discount: 10
+
+                }} />
+                     <HistoryRecentPreview book={{
+                    Id: '1',
+                    Title: 'Мастер и Маргарита',
+                    Author: 'Михаил Булгаков',
+                    Genre: 'Драма',
+                    Rate: 4.9,
+                    ImageUrl: 'https://www.moscowbooks.ru/image/book/805/orig/i805305.jpg?cu=20240222135506',
+                    IsMine: true,
+                    Price: 800,
+                    Discount: 10
+
+                }} />
+                <HistoryRecentPreview book={{
                     Id: '1',
                     Title: 'Человек-паук',
                     Author: 'Марвелпедия',
@@ -59,7 +61,7 @@ const HistoryRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                     Discount: 10
 
                 }} />
-                <HistoryPreview book={{
+                <HistoryRecentPreview book={{
                     Id: '1',
                     Title: 'Оно',
                     Author: 'Стивен Кинг',
@@ -71,7 +73,7 @@ const HistoryRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                     Discount: 10
 
                 }} />
-                <HistoryPreview book={{
+                <HistoryRecentPreview book={{
                     Id: '1',
                     Title: 'Зеленая Миля',
                     Author: 'Стивен Кинг',
@@ -83,11 +85,11 @@ const HistoryRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                     Discount: 10
 
                 }} />
-            </div>
+           
         </div>
     )
 
 
 }
 
-export default HistoryRow;
+export default HistoryRecentRows;

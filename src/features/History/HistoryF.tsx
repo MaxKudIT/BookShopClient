@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import styles from './ShopBookList.module.scss'
+import styles from './HistoryF.module.scss'
 
 
-import { Alert, Avatar, CircularProgress, Dialog, Divider, Snackbar } from "@mui/material";
+import { Alert, Divider, Snackbar } from "@mui/material";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
@@ -10,7 +10,6 @@ import SideBar from "../../shared/components/SideBar/Sidebar";
 import MainHeader from "../../shared/components/Header/MainHeader/MainHeader";
 
 import { FaChevronDown, FaRegBookmark, FaRegStar } from "react-icons/fa6";
-import { GrFormNext } from "react-icons/gr";
 import { useFirebaseAuth } from "../../shared/hooks/useFirebaseAuth";
 import HistoryRow from "../../shared/components/HistoryRow/HistoryRow";
 import RecommsRow from "../../shared/components/RecommsRow/RecommsRow";
@@ -19,9 +18,11 @@ import { AiOutlineDollarCircle } from "react-icons/ai";
 import { LuBookOpenText } from "react-icons/lu";
 import { MdOutlineAccessTime } from "react-icons/md";
 import BookInfoComponent, { type BICProps } from "../../shared/components/BookInfoComponent/BookInfoComponent";
+import HistoryRecentRows from "../../shared/components/HistoryRecentRows/HistoryRecentRows";
+import HistoryTable from "../../shared/components/HistoryTable/HistoryTable";
 
 
-const ShopBookList = () => {
+const HistoryF = () => {
 
 
 
@@ -223,47 +224,24 @@ const ShopBookList = () => {
         <MainHeader />
         <div className={styles.main_body}>
 
-          <div className={styles.book_month}>
-            <div style={{ width: '35%', padding: '250px 0' }}>
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                width: '100%',
-                minWidth: 450,
-                marginBottom: 25,
-                rowGap: 15
-              }}>
-                <p style={{
-                  fontSize: 32,
-                  fontFamily: 'MTSWide',
-                  color: '#F9FAFBFF',
-                  lineHeight: '1.1'
-                }}>Книжные новинки уже здесь!</p>
-                <p style={{ color: '#F9FAFBFF', fontSize: 17 }}>Откройте для себя лучшие произведения современных авторов. Читайте без ограничений по подписке Max Premium. Тысячи книг всегда под рукой.
-                </p>
-              </div>
-              <p style={{ fontSize: 32, fontWeight: 500, color: '#489fe6', marginBottom: 15 }}>49 ₽/мес — и всё включено</p>
-              <div>
-                <button className={styles.book_month_button_one}>Приобрести подписку</button>
-              </div>
-            </div>
-
-            <div className={styles.book_month_two}></div>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            marginBottom: 60
+          }}>
+            <p style={{ fontSize: 32, color: '#FFFFFFFF', fontWeight: 600 }}>История чтения</p>
+            <p style={{ fontSize: 16, color: '#C0C2C8FF' }}>Ваши недавние визиты и прочитанные страницы</p>
+          </div>
+          <div style={{ display: 'flex', columnGap: 20, alignItems: 'center', marginBottom: 15 }}>
+            <p style={{ fontSize: 24, color: '#FFFFFFFF', fontWeight: 500 }}>Недавно прочитанные</p>
+            <div className={styles.border_vertical_style}></div>
+          </div>
+          <div style={{display: 'flex', flexDirection: 'column', rowGap: 70}}>
+            <HistoryRecentRows books={[]} />
+            <HistoryTable />
           </div>
 
-          <button onClick={scrollToDiv} className={styles.icon_wrapper}>
-            <FaChevronDown style={{ fontSize: 32 }} className={styles.next_or_back} />
-          </button>
-
-
-          <div id="info_block" className={styles.info_block}>
-            <div className={styles.info_block_content}>
-              {statistics.map(el => (
-                <BookInfoComponent color={el.color} icon={el.icon} title={el.title} var1={el.var1} />))}
-            </div>
-          </div>
-          <HistoryRow books={[]} />
-          <RecommsRow books={[]} />
         </div>
         <MainFooter />
       </div>
@@ -273,4 +251,4 @@ const ShopBookList = () => {
   )
 }
 
-export default ShopBookList;
+export default HistoryF;

@@ -50,7 +50,7 @@ const CartItem: FC<CartItemsPreview & {
 
 
 
-                <div style={{ height: '100%', display: 'flex', columnGap: 30 }}>
+                <div style={{ height: '100%', display: 'flex', columnGap: 20 }}>
                     {/* <Checkbox
                         checked={isSelected}
                         onChange={(e) => {
@@ -96,7 +96,7 @@ const CartItem: FC<CartItemsPreview & {
                             <p style={{ color: 'rgba(255,255,255,0.8', fontSize: 14 }}>{Author}</p> */}
                             <div className={styles.genre_wrapper}>Фантастика</div>
                             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                <p style={{ color: '#F9FAFBFF', fontSize: 20, fontWeight: 600 }}>Человек-паук</p>
+                                <p style={{ color: '#FFFFFFFF', fontSize: 20, fontWeight: 600 }}>Человек-паук</p>
                                 <p style={{ color: '#BAC1CEFF', fontSize: 14, fontWeight: 500 }}>Марвелпедия</p>
                             </div>
 
