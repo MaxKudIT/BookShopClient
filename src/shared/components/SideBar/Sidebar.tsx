@@ -7,6 +7,7 @@ import { RxExit } from "react-icons/rx";
 import type { FC, ReactNode } from 'react';
 import { Tooltip } from '@mui/material';
 import Logo from '../Logo/Logo';
+import { PiShieldStar, PiShieldStarBold } from 'react-icons/pi';
 
 export type SideBarType = {
     handleLogout: () => void,
@@ -27,13 +28,13 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
     const mainMenu: NavItem[] = [
         { icon: <MdOutlineGridView style={{ fontSize: 16 }} />, title: 'Главная', active: true },
         { icon: <FaRegCompass style={{ fontSize: 15 }} />, title: 'Исследовать' },
-        { icon: <GiBookshelf style={{ fontSize: 16 }} />, title: 'Моя полка' },
+        { icon: <PiShieldStarBold style={{ fontSize: 17, marginBottom: 2 }} />, title: 'Моя полка' },
     ];
 
     const collections: NavItem[] = [
         { icon: <FaRegBookmark style={{ fontSize: 14 }} />, title: 'Избранное', meta: '24' },
         { icon: <MdOutlineShoppingCart style={{ fontSize: 15 }} />, title: 'Корзина', meta: '3' },
-        { icon: <MdOutlineHistory style={{ fontSize: 15 }} />, title: 'История чтения', meta: 'Новое' },
+        { icon: <MdOutlineHistory style={{ fontSize: 16 }} />, title: 'История чтения', meta: 'Новое' },
         { icon: <MdAutoAwesome style={{ fontSize: 15 }} />, title: 'Рекомендации', meta: 'Для вас' },
     ];
 

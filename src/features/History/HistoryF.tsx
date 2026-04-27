@@ -16,7 +16,7 @@ import RecommsRow from "../../shared/components/RecommsRow/RecommsRow";
 import MainFooter from "../../shared/components/Footer/MainFooter/MainFooter";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { LuBookOpenText } from "react-icons/lu";
-import { MdOutlineAccessTime } from "react-icons/md";
+import { MdHistory, MdOutlineAccessTime } from "react-icons/md";
 import BookInfoComponent, { type BICProps } from "../../shared/components/BookInfoComponent/BookInfoComponent";
 import HistoryRecentRows from "../../shared/components/HistoryRecentRows/HistoryRecentRows";
 import HistoryTable from "../../shared/components/HistoryTable/HistoryTable";
@@ -223,21 +223,41 @@ const HistoryF = () => {
       <div className={styles.main_container}>
         <MainHeader />
         <div className={styles.main_body}>
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            columnGap: 12, 
+            height: 80,
+            marginBottom: 40
+            }}>
+            <div style={{
+              background: '#a3aab81c', 
+              height: '100%', 
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0 15px',
+              borderRadius: 10
+              }}>
+              <MdHistory style={{ fontSize: 45, color: '#6379e9' }} />
+            </div>
 
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            marginBottom: 60
-          }}>
-            <p style={{ fontSize: 32, color: '#FFFFFFFF', fontWeight: 600 }}>История чтения</p>
-            <p style={{ fontSize: 16, color: '#C0C2C8FF' }}>Ваши недавние визиты и прочитанные страницы</p>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              
+            }}>
+              <p style={{ fontSize: 32, color: '#FFFFFFFF', fontWeight: 600 }}>История чтения</p>
+              <p style={{ fontSize: 16, color: '#C0C2C8FF' }}>Ваши недавние визиты и прочитанные страницы</p>
+            </div>
           </div>
+
           <div style={{ display: 'flex', columnGap: 20, alignItems: 'center', marginBottom: 15 }}>
             <p style={{ fontSize: 24, color: '#FFFFFFFF', fontWeight: 500 }}>Недавно прочитанные</p>
             <div className={styles.border_vertical_style}></div>
           </div>
-          <div style={{display: 'flex', flexDirection: 'column', rowGap: 70}}>
+          <div style={{ display: 'flex', flexDirection: 'column', rowGap: 70 }}>
             <HistoryRecentRows books={[]} />
             <HistoryTable />
           </div>

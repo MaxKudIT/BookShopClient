@@ -4,11 +4,23 @@
    align-items: center;
 }
 
+.books_list {
+   display: flex;
+   flex-grow: 1;
+   gap: 20px;
+   min-width: 0;
+   overflow-x: hidden;
+   scroll-behavior: smooth;
+
+   > * {
+      flex: 0 0 calc((100% - 80px) / 5);
+   }
+}
+
 .next_or_back {
     font-size: 21px;
     color: rgb(165, 174, 189);
     
-   
 }
 
 .icon_wrapper {
@@ -29,4 +41,12 @@
          }
          
     }
+}
+
+.icon_wrapper:disabled {
+   pointer-events: none;
+
+   .next_or_back {
+      color: rgba(245, 245, 245, 0.253);
+   }
 }

@@ -30,7 +30,7 @@
 .preview_image {
     aspect-ratio: 320 / 470;
     width: 100%;
-    max-width: 150px;
+    max-width: 130px;
     height: auto;
     opacity: 0.96;
     object-fit: cover;
@@ -54,9 +54,9 @@
 }
 
 .genre_wrapper {
-    font-weight: 600;
+    font-weight: 500;
     padding: 6px 16px;
-    border-radius: 999px;
+    border-radius: 50px;
     width: fit-content;
     border: 1px solid rgba(143, 164, 255, 0.24);
     color: #d9e3ff;
@@ -83,8 +83,9 @@
 
 .preview_author {
     color: #aeb7c7;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
+    margin-bottom: 15px;
 }
 
 .preview_bottom {
@@ -96,7 +97,7 @@
 .rating_row {
     display: flex;
     align-items: center;
-    column-gap: 7px;
+    column-gap: 5px;
     color: #f5f7fb;
     font-size: 15px;
 }
@@ -130,7 +131,8 @@
     column-gap: 6px;
     align-items: center;
     color: #aeb7c7;
-    font-size: 14px;
+    font-size: 12px;
+    font-weight: 500;
     padding: 8px 12px;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.03);

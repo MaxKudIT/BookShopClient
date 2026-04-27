@@ -38,7 +38,7 @@ const FavBookPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
 
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', rowGap: 2, padding: '0 5px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', rowGap: 2, padding: '0 5px', marginBottom: 15}}>
                     <p className={styles.preview_recomm_title}>{book.Title}</p>
                     <p style={{ color: '#BAC1CEFF', fontWeight: 500, fontSize: 13 }}>{book.Author}</p>
                 </div>

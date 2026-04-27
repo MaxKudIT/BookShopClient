@@ -114,7 +114,7 @@ const HistoryTable = () => {
                     borderRadius: '22px',
                     overflowX: 'hidden',
                     overflowY: 'scroll',
-                    maxHeight: 700
+                   
                 }}
             >
                 <Table>
@@ -133,10 +133,10 @@ const HistoryTable = () => {
                                     sx={{
                                         color: '#8F98A8',
                                         fontSize: 12,
-                                        fontWeight: 700,
+                                        fontWeight: 600,
                                         textTransform: 'uppercase',
                                         letterSpacing: '1px',
-                                        py: 2.2
+                                        py: 2.2,
                                     }}
                                 >
                                     {item}
