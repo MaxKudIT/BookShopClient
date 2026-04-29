@@ -13,14 +13,7 @@ const BookInfoModule = () => {
       
      
       <BookInfo />
-      <div style={{
-        width: '100vw',
-        height: '100px',
-        background: 'rgba(170, 122, 202, 0.5)',
-        position: 'absolute',
-        zIndex: -1,
-        bottom: 0
-      }}></div>
+    
     </div>
   )
 }

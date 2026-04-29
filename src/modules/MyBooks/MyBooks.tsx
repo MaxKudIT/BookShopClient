@@ -9,7 +9,7 @@ const MyBooks = () =>
   {
     return (
       <div className={styles.mybooks_container}>
-        <Profile/>
+
         <MyBooksList/>
       </div>
     )

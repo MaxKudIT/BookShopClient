@@ -48,7 +48,7 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
                 <div className={styles.menu_card}>
                     <div className={styles.title_menu_container}>
                         <p className={styles.title_menu}>БЫСТРЫЙ ДОСТУП</p>
-                      
+
                     </div>
 
                     <div className={styles.menu_list}>
@@ -67,7 +67,7 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
                 <div className={styles.collections_card}>
                     <div className={styles.title_menu_container}>
                         <p className={styles.title_menu}>ПЕРСОНАЛЬНЫЙ РАЗДЕЛ</p>
-                      
+
                     </div>
 
                     <div className={styles.menu_list}>
@@ -98,11 +98,22 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
                         slotProps={{
                             tooltip: {
                                 sx: {
-                                    color: '#F9FAFBFF',
-                                    fontWeight: 500
+                                    backgroundColor: '#21252c',
+                                    color: '#ffffff',
+                                    fontSize: 12,
+                                    lineHeight: 1.5,
+                                    padding: '8px 12px',
+                                    borderRadius: '8px',
+
                                 }
                             },
+                            arrow: {
+                                sx: {
+                                    color: '#333333',
+                                }
+                            }
                         }}
+                        arrow
                         title="Выйти из аккаунта"
                         placement="top"
                     >
@@ -110,7 +121,7 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
                     </Tooltip>
                 </div>
 
-             
+
             </div>
         </div>
     )

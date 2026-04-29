@@ -5,7 +5,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-     padding: 0 240px;
     background: rgba(22, 26, 34, 0.8); 
     position: fixed;
     z-index: 5;
@@ -48,6 +47,11 @@
 }
 
 
+.header_refs_container {
+    display: flex;
+    align-items: center;
+}
+
 .header_buttons {
     font-size: 21px;
     color: rgb(165, 174, 189);
@@ -72,3 +76,9 @@
     }
 }
 
+@media (max-width: 1300px) {
+    .header_refs_container {
+        display: none;
+    }
+    
+}

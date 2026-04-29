@@ -2,8 +2,8 @@
 import { observer } from 'mobx-react-lite';
 import styles from './FavsF.module.scss'
 import SelectionHeader from '../../shared/components/Header/SelectionHeader/SelectionHeader';
-import FavsFilterField from '../../shared/components/FilterField/FavsFilterField/FavsFilterField';
-import FavBookPreview from '../../shared/components/FavBookPreview/FavBookPreview';
+import FavsFilterField from '../../shared/components/FilterField/MainBooksFilterField/MainBooksFilterField';
+import FavBookPreview from '../../shared/components/Previews/FavBookPreview/FavBookPreview';
 import { IoBagHandleOutline, IoBookOutline } from 'react-icons/io5';
 import SelectionFooter from '../../shared/components/Footer/SelectionFooter/SelectionFooter';
 import { MdShoppingCartCheckout } from 'react-icons/md';
@@ -135,12 +135,12 @@ const FavsF = observer(() => {
                 <SelectionHeader />
                 <div className={styles.favs_main_container}>
                     <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 20 }}>
-                        <p style={{ fontSize: 34, color: "#F9FAFBFF", wordSpacing: 3, fontWeight: 500 }}>Мое
+                        <p style={{ fontSize: 25, color: "#F9FAFBFF", wordSpacing: 3, fontWeight: 500 }}>Мое
                             <span className={styles.text_gradient}> Избранное</span></p>
-                        <p style={{ fontSize: 15, color: '#BDC2CBFF' }}>Ваша персональная коллекция вдохновения</p>
+                        <p style={{ fontSize: 14, color: '#BDC2CBFF' }}>Ваша персональная коллекция вдохновения</p>
                     </div>
-
-                    <FavsFilterField />
+                        
+                   
                     <div className={styles.favs_books_container}>
                         <FavBookPreview book={{
                             Id: '1',

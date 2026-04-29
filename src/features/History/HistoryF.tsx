@@ -227,20 +227,20 @@ const HistoryF = () => {
             display: 'flex', 
             alignItems: 'center', 
             columnGap: 12, 
-            height: 80,
-            marginBottom: 40
+            height: 55,
+            marginBottom: 30
             }}>
-            <div style={{
+            {/* <div style={{
               background: '#a3aab81c', 
               height: '100%', 
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '0 15px',
+              padding: '0 5px',
               borderRadius: 10
               }}>
-              <MdHistory style={{ fontSize: 45, color: '#6379e9' }} />
-            </div>
+              <MdHistory style={{ fontSize: 40, color: '#6379e9' }} />
+            </div> */}
 
             <div style={{
               display: 'flex',
@@ -248,8 +248,8 @@ const HistoryF = () => {
               justifyContent: 'center',
               
             }}>
-              <p style={{ fontSize: 32, color: '#FFFFFFFF', fontWeight: 600 }}>История чтения</p>
-              <p style={{ fontSize: 16, color: '#C0C2C8FF' }}>Ваши недавние визиты и прочитанные страницы</p>
+              <p style={{ fontSize: 25, color: '#FFFFFFFF', fontWeight: 600 }}>История чтения</p>
+              <p style={{ fontSize: 14, color: '#C0C2C8FF' }}>Ваши недавние визиты и прочитанные страницы</p>
             </div>
           </div>
 

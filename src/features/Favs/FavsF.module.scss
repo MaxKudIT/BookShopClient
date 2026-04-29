@@ -21,13 +21,13 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    font-weight: 500;
+    font-weight: 600;
 
 }
 
 
 .favs_books_container {
-    margin-top: 30px;
+
     margin-bottom: 30px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -39,10 +39,10 @@
 
 @media (max-width: 1350px) {
     .favs_books_container {
-    margin-top: 30px;
     margin-bottom: 30px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     }
+    
 }

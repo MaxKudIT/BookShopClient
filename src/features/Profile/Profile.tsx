@@ -276,6 +276,7 @@ const Profile: FC = () => {
                             textTransform: 'none',
                             borderRadius: '10px',
                             minWidth: 100,
+                            fontWeight: 500
                         }}
                     >
                         Отмена
@@ -289,6 +290,7 @@ const Profile: FC = () => {
                             borderRadius: '10px',
                             minWidth: 132,
                             textTransform: 'none',
+                            fontWeight: 500,
                             '&:hover': {
                                 bgcolor: '#4959aad0',
                             },

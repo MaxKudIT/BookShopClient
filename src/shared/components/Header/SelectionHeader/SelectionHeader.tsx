@@ -3,7 +3,7 @@ import { IoIosSearch, IoMdNotificationsOutline, IoMdSearch } from "react-icons/i
 import { GrOverview } from "react-icons/gr";
 import { textFieldStyles } from "./muiStyles";
 import { getAuth } from "firebase/auth";
-import { useEffect } from "react";
+import { useEffect, type FC } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { useSearch, useMyBooksSearch } from "../../../../store/context/SearchContext";
@@ -14,8 +14,11 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 
 
+type SelectionHeaderProps = {
+  paddingSides?: number
+}
 
-const SelectionHeader = ({ }) => {
+const SelectionHeader: FC<SelectionHeaderProps> = ({paddingSides}) => {
 
   const { setsearchingValue, setGenre } = useSearch()
   const { logout } = useFirebaseAuth()
@@ -46,10 +49,10 @@ const SelectionHeader = ({ }) => {
 
 
   return (
-    <div className={styles.selection_header}>
+    <div  style={paddingSides ? {padding: `0 ${paddingSides}px`} : {padding: '0 240px'}} className={styles.selection_header}>
       <Logo />
 
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className={styles.header_refs_container}>
         <div className={styles.header_refers_active}>Главная</div>
         <div className={styles.header_refers_unactive}>Корзина</div>
         <div className={styles.header_refers_unactive}>Рекомендации</div>

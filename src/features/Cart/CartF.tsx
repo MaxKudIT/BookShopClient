@@ -4,17 +4,17 @@ import SelectionHeader from '../../shared/components/Header/SelectionHeader/Sele
 import CartView, { type CartSelectedType } from '../../shared/components/CartView/CartView';
 import ItemViewComponent from '../../shared/components/CartItem/CartItem';
 import { Divider } from '@mui/material';
-import { FaRubleSign } from 'react-icons/fa6';
+import { FaRubleSign, FaSackDollar } from 'react-icons/fa6';
 import { IoMdCard, IoMdInformationCircleOutline } from 'react-icons/io';
-import { LuCreditCard } from 'react-icons/lu';
 import { IoCartOutline, IoShieldCheckmarkOutline } from 'react-icons/io5';
-import MainFooter from '../../shared/components/Footer/MainFooter/MainFooter';
+
 import SelectionFooter from '../../shared/components/Footer/SelectionFooter/SelectionFooter';
 import type { FC } from 'react';
 import type { IconType } from 'react-icons';
 import RecommsRow from '../../shared/components/RecommsRow/RecommsRow';
 import RecommsCart from '../../shared/components/RecommsRow/RecommsCart/RecommsCart';
 
+import { TbReportMoney } from "react-icons/tb";
 const CartF = observer(() => {
   // const {
   //   favItemsStore: { count: favCount, getCountFav, countFavState },
@@ -85,7 +85,7 @@ const CartF = observer(() => {
       <div className={styles.cartf_main_container}>
         <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 20 }}>
           <p style={{ 
-            fontSize: 34, 
+            fontSize: 25, 
             color: "#F9FAFBFF", 
             wordSpacing: 3, 
             display: 'flex', 
@@ -95,7 +95,7 @@ const CartF = observer(() => {
             }}>Моя
             <span className={styles.text_gradient}> Корзина</span>
           </p>
-          <p style={{ fontSize: 15, color: '#BDC2CBFF' }}>Товары, ожидающие оформления (3)</p>
+          <p style={{ fontSize: 14, color: '#BDC2CBFF' }}>Товары, ожидающие оформления (3)</p>
         </div>
         <div style={{ display: 'flex', columnGap: 50 }}>
           <div style={{
@@ -251,7 +251,7 @@ const CartF = observer(() => {
 
               </div>
               <button className={styles.cartf_total_sum_button}>
-                <IoMdCard style={{ fontSize: 22 }} />
+
                 <p>Перейти к оплате</p>
               </button>
               <div style={{

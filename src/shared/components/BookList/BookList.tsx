@@ -89,13 +89,13 @@ export const BookList: FC<{ list: BookPreviewT[], viewPage: 'home' | 'shop' }> =
                     Discount: 10
 
                 }} />
-                <HistoryPreview book={{
+                 <MyBookPreview book={{
                     Id: '1',
-                    Title: 'Зеленая Миля',
-                    Author: 'Стивен Кинг',
-                    Genre: 'Фантастика',
+                    Title: 'Мастер и Маргарита',
+                    Author: 'Михаил Булгаков',
+                    Genre: 'Драма',
                     Rate: 4.9,
-                    ImageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPhhoSS4VwAoCA2l9iEe1ejrGckq7QZMp1Tw&s',
+                    ImageUrl: 'https://www.moscowbooks.ru/image/book/805/orig/i805305.jpg?cu=20240222135506',
                     IsMine: true,
                     Price: 800,
                     Discount: 10

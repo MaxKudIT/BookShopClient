@@ -7,7 +7,7 @@
 
 .recomms_row_main {
    display: flex;
-   column-gap: 60px;
+   column-gap: 30px;
 }
 
 .books_button {
@@ -38,7 +38,7 @@
 
 .side_info_block {
     width: 270px;
- 
+    flex-shrink: 0;
 }
 
 .premium_wrapper {

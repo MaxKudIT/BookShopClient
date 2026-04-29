@@ -8,7 +8,7 @@ export const textFieldStyles = {
   '& .MuiFilledInput-root': {
 
     height: '100%',
-    background: '#181921FF',
+    background: 'rgba(38, 42, 63, 0.28)',
     border: '1px solid #353746FF',
     borderRadius: 3,
     display: 'flex',
@@ -22,11 +22,11 @@ export const textFieldStyles = {
 
 
     '&:hover': {
-      backgroundColor: 'hsl(233, 13%, 14%)',
+     background: 'rgba(58, 65, 97, 0.28)'
     },
 
     '&.Mui-focused': {
-      backgroundColor: 'hsl(233, 13%, 14%)',
+      background: 'rgba(58, 65, 97, 0.28)'
 
     },
 
@@ -85,20 +85,20 @@ export const selectStyles = {
 
     '& .MuiOutlinedInput-root': {
       border: '1px solid #353746FF',
-      backgroundColor: '#181921FF',
+     background: 'rgba(38, 42, 63, 0.28)',
       borderRadius: '8px',
       fontSize: 12,
       width: '100%',
 
       '&:hover': {
-        backgroundColor: '#181921FF',
+        background: 'rgba(58, 65, 97, 0.28)',
         '& .MuiOutlinedInput-notchedOutline': {
           border: 'none',
         },
       },
 
       '&.Mui-focused': {
-        backgroundColor: '#181921FF !important',
+        background: 'rgba(58, 65, 97, 0.28) !important',
         boxShadow: 'none',
         '& .MuiOutlinedInput-notchedOutline': {
 
@@ -119,10 +119,10 @@ export const selectStyles = {
 
   select: {
 
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    background: 'rgba(38, 42, 63, 0.28)',
 
     borderRadius: '8px',
-    width: 300,
+  
     color: 'rgba(255,255,255,0.9)',
 
 
@@ -135,12 +135,12 @@ export const selectStyles = {
       color: 'rgba(255,255,255,0.9)',
 
       '&:hover': {
-        backgroundColor: 'rgb(34, 36, 44)',
+        background: 'rgba(38, 42, 63, 0.28)',
         borderRadius: '8px',
       },
 
       '&:focus': {
-        backgroundColor: 'rgb(34, 36, 44)',
+        background: 'rgba(38, 42, 63, 0.28)',
         borderRadius: '8px',
       }
     },
@@ -155,7 +155,7 @@ export const selectStyles = {
    
 
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-    background: '#181921FF',
+    background: 'rgb(40, 42, 51)',
     '&, & *': {
 
       marginBottom: 0,
@@ -165,11 +165,11 @@ export const selectStyles = {
      marginTop: '15px',
     '& .MuiMenuItem-root': {
       color: 'rgba(255,255,255, 1)',
-      borderBottom: '1px solid #181921FF',
+      borderBottom: '1px solid rgb(37, 39, 49)',
       padding: '10px 16px',
       fontSize: 12,
       '&:hover': {
-        backgroundColor: 'hsl(233, 13%, 14%)',
+        backgroundColor: 'rgb(49, 53, 68)',
       },
 
       '&.Mui-selected': {

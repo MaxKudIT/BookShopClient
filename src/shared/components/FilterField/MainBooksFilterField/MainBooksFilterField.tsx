@@ -1,5 +1,5 @@
-import { TextField, InputAdornment, Divider, FormControl, MenuItem, Select } from "@mui/material";
-import { IoMdNotificationsOutline, IoMdSearch } from "react-icons/io";
+import { TextField, InputAdornment, Divider, FormControl, MenuItem, Select, Tooltip } from "@mui/material";
+import { IoMdInformationCircleOutline, IoMdNotificationsOutline, IoMdSearch } from "react-icons/io";
 import { GrOverview } from "react-icons/gr";
 import { selectStyles, textFieldStyles } from "./muiStyles";
 import { getAuth } from "firebase/auth";
@@ -8,7 +8,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { useSearch, useMyBooksSearch, type GenresDropDown, type DateDropDown } from "../../../../store/context/SearchContext";
 import { useFirebaseAuth } from "../../../hooks/useFirebaseAuth";
-import styles from './FavsFilterField.module.scss'
+import styles from './MainBooksFilterField.module.scss'
 import { IoColorFilterOutline, IoSettingsOutline } from "react-icons/io5";
 import { PiSortAscending } from "react-icons/pi";
 import { HiArrowsUpDown } from "react-icons/hi2";
@@ -17,7 +17,7 @@ import { LuFilter } from "react-icons/lu";
 export const genresKeys: GenresDropDown[] = ['Все жанры', 'Приключения', 'Драма', 'Ужасы', 'Исторические', 'Фантастика']
 export const dateKeys: DateDropDown[] = ['Сначала новые', 'В алфавитном порядке']
 
-const FavsFilterField = ({ }) => {
+const MainBooksFilterField = ({ }) => {
 
   const { setsearchingValue, setGenre } = useSearch()
   const { logout } = useFirebaseAuth()
@@ -49,7 +49,13 @@ const FavsFilterField = ({ }) => {
 
   return (
     <div className={styles.main_container}>
-      <div style={{ display: 'flex', width: '50%', columnGap: 20, marginRight: 20 }}>
+      <div style={{
+        display: 'flex',
+        width: '50%',
+        columnGap: 10,
+        marginRight: 20,
+        alignItems: 'center'
+      }}>
         <TextField
           onChange={(e) => {
             setsearchingValue(e.target.value)
@@ -58,7 +64,7 @@ const FavsFilterField = ({ }) => {
           sx={textFieldStyles}
           variant="filled"
 
-          placeholder={'Ищите книги в избранном...'}
+          placeholder={'Ищите книги, которые еще не попали к вам в руки...'}
           slotProps={{
             input: {
               startAdornment:
@@ -68,7 +74,31 @@ const FavsFilterField = ({ }) => {
             },
           }}
         />
-       
+        <Tooltip
+        placement="top"
+          title="Поиск книг, которых нет в избранном, корзине и среди купленных"
+          slotProps={{
+            tooltip: {
+              sx: {
+                backgroundColor: '#21252c',  
+                color: '#ffffff',            
+                fontSize: 12,
+                lineHeight: 1.5,
+                padding: '8px 12px',
+                borderRadius: '8px',
+               
+              }
+            },
+            arrow: {
+              sx: {
+                color: '#333333',  
+              }
+            }
+          }}
+          arrow
+        >
+          <IoMdInformationCircleOutline style={{ color: 'rgba(206, 209, 221, 0.75)', fontSize: 20, flexShrink: 0 }} />
+        </Tooltip>
       </div>
 
 
@@ -79,9 +109,9 @@ const FavsFilterField = ({ }) => {
             <Select
               defaultValue="Все жанры"
               renderValue={(selected) => (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px'}}>
-                  <IoColorFilterOutline style={{fontSize: 14}}/>
-                  <span style={{fontSize: 13}}>{selected}</span> 
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <IoColorFilterOutline style={{ fontSize: 14 }} />
+                  <span style={{ fontSize: 13 }}>{selected}</span>
                 </div>
               )}
 
@@ -105,8 +135,8 @@ const FavsFilterField = ({ }) => {
               defaultValue="Сначала новые"
               renderValue={(selected) => (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <HiArrowsUpDown style={{fontSize: 14}}/>
-                  <span style={{fontSize: 13}}>{selected}</span> 
+                  <HiArrowsUpDown style={{ fontSize: 14 }} />
+                  <span style={{ fontSize: 13 }}>{selected}</span>
                 </div>
               )}
 
@@ -129,4 +159,4 @@ const FavsFilterField = ({ }) => {
   )
 }
 
-export default FavsFilterField;
+export default MainBooksFilterField;

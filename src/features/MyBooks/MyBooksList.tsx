@@ -116,29 +116,29 @@ const MyBooksList = () => {
             display: 'flex',
             alignItems: 'center',
             columnGap: 12,
-            height: 65,
-            marginBottom: 40
+            height: 55,
+            marginBottom: 20
           }}>
-            <div style={{
+            {/* <div style={{
               background: '#a3aab81c',
               height: '100%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '0 10px',
+              padding: '0 5px',
               borderRadius: 10
             }}>
-              <PiShieldStar style={{ fontSize: 45, color: '#6379e9' }} />
-            </div>
+              <PiShieldStar style={{ fontSize: 40, color: '#6379e9' }} />
+            </div> */}
 
             <div style={{
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-
+              
             }}>
-              <p style={{ fontSize: 28, color: '#FFFFFFFF', fontWeight: 600 }}>Моя библиотека</p>
-              <p style={{ fontSize: 15, color: '#C0C2C8FF' }}>Все ваши приобретенные издания в одном месте</p>
+              <p style={{ fontSize: 25, color: '#FFFFFFFF', fontWeight: 600 }}>Моя библиотека</p>
+              <p style={{ fontSize: 14, color: '#C0C2C8FF' }}>Все ваши приобретенные издания в одном месте</p>
             </div>
           </div>
           

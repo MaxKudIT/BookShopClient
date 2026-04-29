@@ -16,6 +16,7 @@ import Cart from './pages/Cart/Cart'
 import Favs from './pages/Favs/Favs'
 import History from './pages/History/History'
 import Recomms from './pages/Recomms/Recomms'
+import MainBooksPage from './pages/MainBooks/MainBooksPage'
 
 
 const router = createBrowserRouter([
@@ -29,7 +30,11 @@ const router = createBrowserRouter([
         path: '/',
         loader: protectedLoader
     },
-
+    {
+        element: <MainBooksPage/>,
+        path: '/mainbooks',
+        loader: protectedLoader
+    },
     {
         element: <Cart/>,
         path: '/cart',

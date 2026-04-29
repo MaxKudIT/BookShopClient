@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import styles from './FavBookPreview.module.scss'
 import { FaRegStar, FaRegTrashAlt } from "react-icons/fa";
-import type { BookPreviewT } from '../../types';
+import type { BookPreviewT } from '../../../types';
 import { Divider } from '@mui/material';
 import { MdCurrencyRuble } from 'react-icons/md';
 
