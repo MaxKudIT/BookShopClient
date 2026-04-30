@@ -1,4 +1,3 @@
-import React from "react";
 import BookPageF from "../../features/BookPage/BookPage";
 import styles from './BookPageModule.module.scss'
 

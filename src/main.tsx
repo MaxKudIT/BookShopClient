@@ -63,7 +63,7 @@ const router = createBrowserRouter([
     {
         element: <BookPage />,
         path: '/books/:id/pages/:pageNumber',
-        loader: protectedPurchaseLoader
+        // loader: protectedPurchaseLoader
     },
     {
         element: <History/>,

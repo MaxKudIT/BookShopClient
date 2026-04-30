@@ -1,19 +1,16 @@
-import { useParams } from "react-router-dom";
-
 import { observer } from 'mobx-react-lite';
 import styles from './BookInfo.module.scss'
 import SelectionHeader from "../../shared/components/Header/SelectionHeader/SelectionHeader";
 import SelectionFooter from "../../shared/components/Footer/SelectionFooter/SelectionFooter";
-import { IoIosArrowBack } from "react-icons/io";
-import { FaRegHeart, FaRegStar } from "react-icons/fa6";
-import { MdOutlineShoppingCart } from "react-icons/md";
-import { Divider } from "@mui/material";
+import { IoIosArrowBack, IoMdCheckmarkCircleOutline, IoMdInformationCircleOutline } from "react-icons/io";
+import { FaCrown, FaRegHeart, FaRegStar } from "react-icons/fa6";
+import { MdCurrencyRuble, MdOutlineShoppingCart } from "react-icons/md";
+import { Divider, Tooltip } from "@mui/material";
+import type { BookInfoSentenseProps } from "../../shared/components/BookInfoSentense/BookInfoSentense";
+import BookInfoSentense from "../../shared/components/BookInfoSentense/BookInfoSentense";
+import { PiQuotes } from "react-icons/pi";
 
 const BookInfo = observer(() => {
-
-  const { id } = useParams<{ id: string }>()
-
-
 
   // const {
   //   bookInfoStore: {
@@ -132,6 +129,11 @@ const BookInfo = observer(() => {
   //   return <p>Книга не найдена</p>;
   // }
 
+  const sentensesEls: BookInfoSentenseProps[] = [
+    { icon: IoMdInformationCircleOutline, title: 'Эксклюзивный контент', text: 'Включает дополнительные иллюстрации и карты от автора.' },
+    { icon: PiQuotes, title: 'Рекомендация критиков', text: '"Шедевр современной фантастики, который нельзя пропустить"'},
+    { icon: IoMdCheckmarkCircleOutline, title: 'Гарантия качества', text: 'Высококачественная печать на бумаге премиум-класса.'}
+  ]
   return (
     <div className={styles.bookinfo_page_style}>
       <SelectionHeader paddingSides={400} />
@@ -163,10 +165,15 @@ const BookInfo = observer(() => {
               <p style={{
                 color: '#FAF9FBFF',
                 fontWeight: 700,
-                fontSize: 40,
+                fontSize: 36,
               }}>Мастер и маргарита</p>
-              <div style={{ display: 'flex', columnGap: 15, alignItems: 'center' }}>
-                <p style={{ color: '#b5bece', fontWeight: 500 }}>Михаил Булгаков</p>
+              <div style={{
+                display: 'flex',
+                columnGap: 15,
+                alignItems: 'center',
+                marginBottom: 30
+              }}>
+                <p style={{ color: '#b5bece', fontWeight: 500, fontSize: 16 }}>Михаил Булгаков</p>
                 <Divider orientation="vertical" sx={{ borderLeftWidth: 1, borderColor: '#44506866' }} />
                 <div className={styles.rating_row}>
                   <FaRegStar />
@@ -177,16 +184,117 @@ const BookInfo = observer(() => {
 
                   <p className={styles.rating_text}>4.5</p>
 
-                  <p style={{color: '#99a2b1', marginLeft: 10}}>(1201 отзыв)</p>
+                  <p style={{ color: '#99a2b1', marginLeft: 10, letterSpacing: 0.5 }}>(1201 отзыв)</p>
                 </div>
               </div>
+              <div style={{ display: 'flex', columnGap: 10, alignItems: 'center' }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  color: '#6379E9FF',
+                  fontWeight: 500,
+                  fontSize: 22,
+                  letterSpacing: 0.5
+                }}>
+                  <p>990</p>
+                  <MdCurrencyRuble style={{ fontSize: 22 }} />
+                </div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  color: '#b5bece',
+                  textDecoration: 'line-through',
 
+                }}>
+                  <p>1450 ₽</p>
+                </div>
+              </div>
+              <div className={styles.read_button_wrapper}>
+                <button className={styles.read_button}>
+                  <span className={styles.read_button_text}>Читать онлайн</span>
+                  <span className={styles.premium_badge}>
+                    <FaCrown />
+                    Premium
+                  </span>
+                </button>
+                <Tooltip
+                  placement="top"
+                  title={
+                    <div className={styles.tooltip_content}>
+                      <p className={styles.tooltip_title}>Варианты чтения</p>
+                      <p>Онлайн-доступ открывается по подписке Premium.</p>
+                      <p>Печатный экземпляр можно заказать через корзину.</p>
+                    </div>
+                  }
+                  slotProps={{
+                    popper: {
+                      modifiers: [
+                        {
+                          name: 'offset',
+                          options: {
+                            offset: [0, 10],
+                          },
+                        },
+                      ],
+                    },
+                    tooltip: {
+                      sx: {
+                        backgroundColor: '#21252c',
+                        color: '#ffffff',
+                        fontSize: 12,
+                        lineHeight: 1.5,
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+
+                      }
+                    },
+                    arrow: {
+                      sx: {
+                        color: '#333333',
+                      }
+                    }
+                  }}
+                  arrow
+                >
+                  <span className={styles.premium_tooltip_icon}>
+                    <IoMdInformationCircleOutline />
+                  </span>
+                </Tooltip>
+              </div>
+
+              <div style={{ flexGrow: 1, height: 2, background: '#44506866', marginTop: '40px', marginBottom: '50px' }}></div>
+
+              <div style={{
+                display: 'flex',
+                columnGap: 20,
+                alignItems: 'center',
+                marginBottom: 40
+              }}>
+                <Divider orientation="vertical" sx={{
+                  borderLeftWidth: 3,
+                  borderColor: '#6379E9FF',
+                  height: 'calc(100% + 40px)'
+                }} />
+                <p style={{
+                  fontSize: 17,
+                  fontWeight: 500,
+                  color: 'rgba(250, 249, 251, 0.92)',
+                  fontStyle: 'italic',
+                  letterSpacing: 0.5
+                }}>"Трусость — единственный порок, который делает человека человеком. И единственный, который мешает им стать свободным."</p>
+              </div>
+              <p style={{ fontSize: 16, color: '#c9cfdb', fontWeight: 400, lineHeight: 1.5 }}>
+                В Москве 1930-х годов появляется загадочный иностранный профессор Воланд со своей свитой. Там, где он проходит, привычный мир трещит по швам: начинают сбываться самые невероятные пророчества, люди теряют головы от жадности и трусости, а литературная элита оказывается совсем не тем, чем кажется.
+              </p>
 
             </div>
 
           </div>
         </div>
 
+        <div style={{ display: 'flex', alignItems: 'center', marginTop: 70, width: '100%', columnGap: 20 }}>
+          {sentensesEls.map(el => (<BookInfoSentense text={el.text} title={el.title} icon={el.icon}/>))}
+        </div>
       </div>
       {/* <BookInfoView
         Id={id!}

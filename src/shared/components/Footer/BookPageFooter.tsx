@@ -1,9 +1,7 @@
 import { LinearProgress, TextField } from "@mui/material"
-import ButtonForPage from "../ui/Button/Button"
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
 import styles from './BookPageFooter.module.scss'
 import { useCallback, useEffect, useState, type ChangeEvent, type FC } from "react"
-import { useNavigate, useParams } from "react-router-dom"
 
 
 
@@ -43,22 +41,24 @@ const BookPageFooter: FC<{ currentPage: number, totalPages: number, onPageChange
                 <LinearProgress sx={{
                     height: 5,
                     width: '100%',
-                    backgroundColor: 'rgba(66, 35, 107, 0.5)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.07)',
+                    borderRadius: 999,
                     '& .MuiLinearProgress-bar': {
-                        backgroundColor: '#6d0cbdff',
+                        background: 'linear-gradient(90deg, #6379e9, #ffb84d)',
+                        borderRadius: 999,
                     }
                 }}
                     variant="determinate"
                     value={currentPage / totalPages * 100}
                     color="secondary" />
                 <div className={styles.book_page_footer_second_row}>
-                    <ButtonForPage onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
+                    <button className={styles.footer_button} onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
                         <IoIosArrowBack />
-                        <p>Предыдущая</p>
-                    </ButtonForPage>
+                        <span>Предыдущая</span>
+                    </button>
 
-                    <div style={{ display: 'flex', columnGap: 10, alignItems: 'center' }}>
-                        <p style={{ color: 'rgba(255,255,255,0.9)' }}>Страница {currentPage} из {totalPages}</p>
+                    <div className={styles.page_control}>
+                        <p>Страница <span>{currentPage}</span> из {totalPages}</p>
                         <TextField
                             type="number"
 
@@ -71,9 +71,9 @@ const BookPageFooter: FC<{ currentPage: number, totalPages: number, onPageChange
                                 width: '75px',
 
 
-                                background: 'rgba(73, 65, 107, 0.2)',
-                                border: '1px solid rgba(66, 35, 107, 0.5)',
-                                borderRadius: 4,
+                                background: 'rgba(255, 255, 255, 0.04)',
+                                border: '1px solid rgba(143, 164, 255, 0.16)',
+                                borderRadius: 2,
                                 outline: 'none',
                                 color: 'white',
                                 '& .MuiOutlinedInput-notchedOutline': {
@@ -108,12 +108,12 @@ const BookPageFooter: FC<{ currentPage: number, totalPages: number, onPageChange
                                     '&.Mui-focused': {
 
                                         '& .MuiOutlinedInput-notchedOutline': {
-                                            borderColor: '#7b6dc2',
+                                            borderColor: '#6379e9',
                                             borderWidth: '2px',
                                         },
 
 
-                                        backgroundColor: 'rgba(91, 79, 145, 0.2)',
+                                        backgroundColor: 'rgba(99, 121, 233, 0.1)',
                                     },
 
 
@@ -130,29 +130,29 @@ const BookPageFooter: FC<{ currentPage: number, totalPages: number, onPageChange
 
                                         },
                                         backgroundColor: 'rgba(91, 79, 145, 0.2)',
-                                        borderRadius: 4
+                                        borderRadius: 2
                                     },
                                 },
 
 
                             }}
                         />
-                        <ButtonForPage onClick={() => {
+                        <button className={styles.goto_button} onClick={() => {
 
                             if (inputPage === '' || Number(inputPage) < 0 || Number(inputPage) > totalPages) {
                                 return
                             }
                             onPageChange(Number(inputPage))
                         }}>
-                            <p>Перейти</p>
-                        </ButtonForPage>
+                            <span>Перейти</span>
+                        </button>
                     </div>
 
-                    <ButtonForPage onClick={() => { onPageChange(currentPage + 1) }} disabled={currentPage === totalPages}>
+                    <button className={styles.footer_button} onClick={() => { onPageChange(currentPage + 1) }} disabled={currentPage === totalPages}>
 
                         <IoIosArrowForward />
-                        <p>Следующая</p>
-                    </ButtonForPage>
+                        <span>Следующая</span>
+                    </button>
                 </div>
 
             </div>

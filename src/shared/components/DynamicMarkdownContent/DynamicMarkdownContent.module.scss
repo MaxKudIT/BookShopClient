@@ -1,0 +1,27 @@
+.markdown_content {
+    color: rgba(249, 250, 251, 0.86);
+    letter-spacing: 0.2px;
+    line-height: 1.68;
+    font-size: 16px;
+
+    p {
+        margin-bottom: 14px;
+    }
+
+    strong {
+        color: #ffffff;
+        font-weight: 700;
+    }
+
+    ul {
+        margin-left: 22px;
+        margin-bottom: 14px;
+        padding-left: 0;
+        list-style-type: disc;
+    }
+
+    li {
+        margin-bottom: 10px;
+        line-height: 1.62;
+    }
+}

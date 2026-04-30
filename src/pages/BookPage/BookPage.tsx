@@ -16,7 +16,7 @@ const BookPage = observer(() =>
     return (
         <>
         <Helmet>
-           <title>{book?.Title}</title>
+           <title>{book?.Title || 'Мастер и Маргарита'}</title>
         </Helmet>
        <BookPageModule/>
         </>
