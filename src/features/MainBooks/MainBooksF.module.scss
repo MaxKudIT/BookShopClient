@@ -14,13 +14,14 @@
 .main_body {
     padding: 150px 120px;
     padding-bottom: 50px;
-
-    
 }
 
-
-
-
+.books_content {
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    row-gap: 70px;
+}
 
 
 

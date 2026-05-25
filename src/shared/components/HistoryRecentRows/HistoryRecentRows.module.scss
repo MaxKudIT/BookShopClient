@@ -1,7 +1,7 @@
 .history_row_wrapper {
-     display: grid;
-    grid-template-columns: repeat(3, minmax(450px, 1fr));
-    gap: 30px;
+    display: grid;
+    grid-template-columns: repeat(2, 670px);
+    gap: 24px;
 }
 
 .history_row_main {

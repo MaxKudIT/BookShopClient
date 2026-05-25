@@ -2,81 +2,59 @@ import type { FC } from 'react';
 import styles from './FavBookPreview.module.scss'
 import { FaRegStar, FaRegTrashAlt } from "react-icons/fa";
 import type { BookPreviewT } from '../../../types';
-import { Divider } from '@mui/material';
 import { MdCurrencyRuble } from 'react-icons/md';
-
+import { IoBagAddOutline } from 'react-icons/io5';
 
 const FavBookPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
+    const discountPrice = Math.floor(book.Price - (book.Price / 100 * book.Discount));
 
     return (
-        <div className={styles.fav_preview_wrapper}>
-            <div>
-                <img className={styles.book_image} src={book.ImageUrl} alt="" />
+        <article className={styles.fav_preview_wrapper}>
+            <div className={styles.image_wrapper}>
+                <img className={styles.book_image} src={book.ImageUrl} alt={book.Title} />
             </div>
-            <div style={{ padding: '5px 15px' }}>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    marginBottom: 10,
 
-                }}>
-
-
-                    <div style={{
-                        color: '#BAC1CEFF',
-                        display: 'flex',
-                        fontSize: 12,
-                        fontWeight: 600,
-                        columnGap: 5,
-                        alignItems: 'center'
-                    }}>
-                        <FaRegStar style={{ color: '#F9F9FBFF', fontSize: 14, marginBottom: 2 }} />
-                        <p style={{ color: '#F9F9FBFF', fontSize: 14 }}>{book.Rate}</p>
+            <div className={styles.card_body}>
+                <div className={styles.preview_meta}>
+                    <div className={styles.preview_rate}>
+                        <FaRegStar />
+                        <p>{book.Rate}</p>
                         <p>/</p>
                         <p>5.0</p>
                     </div>
-
+                    <p className={styles.preview_genre}>{book.Genre}</p>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', rowGap: 2, padding: '0 5px', marginBottom: 15}}>
+                <div className={styles.preview_text}>
                     <p className={styles.preview_recomm_title}>{book.Title}</p>
-                    <p style={{ color: '#BAC1CEFF', fontWeight: 500, fontSize: 13 }}>{book.Author}</p>
+                    <p className={styles.preview_author}>{book.Author}</p>
                 </div>
-                <p style={{
-                    marginTop: 10,
-                    background: '#181921FF',
-                    border: '1px solid #353746FF',
-                    width: 'fit-content',
-                    padding: '3px 15px',
-                    borderRadius: 10,
-                    fontSize: 13,
-                    color: '#F9F9FBFF'
-                }}>Детектив</p>
-            </div>
 
-            <Divider sx={{ borderBottomWidth: 1, mt: 2, mb: 2, borderColor: '#353746FF' }} />
-            <div style={{ padding: '0 15px', display: 'flex', justifyContent: 'space-between' }}>
-                <p style={{
-                    fontSize: 22,
-                    color: '#6379e9',
-                    fontWeight: 'bold',
-                    display: 'flex',
-                    alignItems: 'center',
-                    columnGap: 2
-                }}>
-                    {899}
-                    <MdCurrencyRuble style={{ fontSize: 22 }} />
-                </p>
-                <button onClick={() => {
-                    // handleDeleteItem([Id])
-                    // deleteItem(Id)
-                }} className={styles.icon_wrapper}>
-                    <FaRegTrashAlt className={styles.trash_button} />
-                </button>
+                <div className={styles.card_footer}>
+                    <div className={styles.price_group}>
+                        {book.Discount !== 0 && (
+                            <p className={styles.old_price}>
+                                {book.Price}
+                                <MdCurrencyRuble />
+                            </p>
+                        )}
+                        <p className={styles.price}>
+                            {book.Discount !== 0 ? discountPrice : book.Price}
+                            <MdCurrencyRuble />
+                        </p>
+                    </div>
+                    <div className={styles.actions}>
+                        <button className={styles.cart_button} aria-label="Добавить в корзину">
+                            <IoBagAddOutline />
+                        </button>
+                        <button className={styles.icon_wrapper} aria-label="Удалить из избранного">
+                            <FaRegTrashAlt className={styles.trash_button} />
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
+        </article>
     )
-
 }
 
 export default FavBookPreview;

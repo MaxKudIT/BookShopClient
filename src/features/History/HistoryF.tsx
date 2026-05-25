@@ -1,18 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from './HistoryF.module.scss'
 
-
-import { Alert, Divider, Snackbar } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 import SideBar from "../../shared/components/SideBar/Sidebar";
 import MainHeader from "../../shared/components/Header/MainHeader/MainHeader";
 
-import { FaChevronDown, FaRegBookmark, FaRegStar } from "react-icons/fa6";
+import { FaRegStar } from "react-icons/fa6";
 import { useFirebaseAuth } from "../../shared/hooks/useFirebaseAuth";
-import HistoryRow from "../../shared/components/HistoryRow/HistoryRow";
-import RecommsRow from "../../shared/components/RecommsRow/RecommsRow";
 import MainFooter from "../../shared/components/Footer/MainFooter/MainFooter";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { LuBookOpenText } from "react-icons/lu";
@@ -149,19 +146,6 @@ const HistoryF = () => {
 
 
 
-  const scrollToDiv = () => {
-    const element = document.getElementById('info_block');
-    let y: number = 0
-    if (element) {
-      const yOffset = -120;
-      y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-    }
-
-
-    window.scrollTo({ top: y, behavior: 'smooth' });
-  };
-
-
   const statistics: BICProps[] = [
     {
       icon: AiOutlineDollarCircle,
@@ -223,41 +207,29 @@ const HistoryF = () => {
       <div className={styles.main_container}>
         <MainHeader />
         <div className={styles.main_body}>
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            columnGap: 12, 
-            height: 55,
-            marginBottom: 30
-            }}>
-            {/* <div style={{
-              background: '#a3aab81c', 
-              height: '100%', 
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '0 5px',
-              borderRadius: 10
-              }}>
-              <MdHistory style={{ fontSize: 40, color: '#6379e9' }} />
-            </div> */}
-
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              
-            }}>
-              <p style={{ fontSize: 25, color: '#FFFFFFFF', fontWeight: 600 }}>История чтения</p>
-              <p style={{ fontSize: 14, color: '#C0C2C8FF' }}>Ваши недавние визиты и прочитанные страницы</p>
+          <section className={styles.page_intro}>
+            <div className={styles.intro_content}>
+              <div className={styles.intro_icon}>
+                <MdHistory />
+              </div>
+              <div className={styles.intro_text}>
+                <p className={styles.intro_title}>История чтения</p>
+                <p className={styles.intro_subtitle}>Недавние визиты, прочитанные страницы и книги, к которым стоит вернуться</p>
+              </div>
             </div>
-          </div>
 
-          <div style={{ display: 'flex', columnGap: 20, alignItems: 'center', marginBottom: 15 }}>
-            <p style={{ fontSize: 24, color: '#FFFFFFFF', fontWeight: 500 }}>Недавно прочитанные</p>
+            <div className={styles.intro_badge}>120 записей</div>
+          </section>
+
+          <div className={styles.section_header}>
+            <div className={styles.section_title_group}>
+              <p className={styles.section_title}>Недавно прочитанные</p>
+              <p className={styles.section_subtitle}>Книги, которые вы открывали последними</p>
+            </div>
             <div className={styles.border_vertical_style}></div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', rowGap: 70 }}>
+
+          <div className={styles.content_stack}>
             <HistoryRecentRows books={[]} />
             <HistoryTable />
           </div>

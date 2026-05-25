@@ -1,33 +1,28 @@
 import { TextField, InputAdornment, Divider, FormControl, MenuItem, Select, Tooltip } from "@mui/material";
-import { IoMdInformationCircleOutline, IoMdNotificationsOutline, IoMdSearch } from "react-icons/io";
-import { GrOverview } from "react-icons/gr";
+import { IoMdInformationCircleOutline, IoMdSearch } from "react-icons/io";
 import { selectStyles, textFieldStyles } from "./muiStyles";
-import { getAuth } from "firebase/auth";
 import { useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useNavigate } from "react-router-dom";
 import { useSearch, useMyBooksSearch, type GenresDropDown, type DateDropDown } from "../../../../store/context/SearchContext";
-import { useFirebaseAuth } from "../../../hooks/useFirebaseAuth";
 import styles from './MainBooksFilterField.module.scss'
-import { IoColorFilterOutline, IoSettingsOutline } from "react-icons/io5";
-import { PiSortAscending } from "react-icons/pi";
+import { IoColorFilterOutline } from "react-icons/io5";
 import { HiArrowsUpDown } from "react-icons/hi2";
-import { LuFilter } from "react-icons/lu";
 
 export const genresKeys: GenresDropDown[] = ['Все жанры', 'Приключения', 'Драма', 'Ужасы', 'Исторические', 'Фантастика']
 export const dateKeys: DateDropDown[] = ['Сначала новые', 'В алфавитном порядке']
 
-const MainBooksFilterField = ({ }) => {
+const menuProps = {
+  disableScrollLock: true,
+  PaperProps: {
+    sx: selectStyles.menuPaper,
+  },
+  MenuListProps: {
+    sx: selectStyles.menuList,
+  },
+};
 
-  const { setsearchingValue, setGenre } = useSearch()
-  const { logout } = useFirebaseAuth()
-  const navigate = useNavigate();
-
-  const { setsearchingValue: setSearchingValueMy, setGenre: setGenreMy } = useMyBooksSearch()
-
-  const auth = getAuth();
-
-  const [user] = useAuthState(auth)
+const MainBooksFilterField = () => {
+  const { setsearchingValue } = useSearch()
+  const { setsearchingValue: setSearchingValueMy } = useMyBooksSearch()
 
 
   useEffect(() => {
@@ -42,7 +37,7 @@ const MainBooksFilterField = ({ }) => {
 
 
     };
-  }, []);
+  }, [setSearchingValueMy, setsearchingValue]);
 
 
 
@@ -116,11 +111,7 @@ const MainBooksFilterField = ({ }) => {
               )}
 
               sx={selectStyles.select}
-              MenuProps={{
-                PaperProps: {
-                  sx: selectStyles.menuPaper,
-                },
-              }}
+              MenuProps={menuProps}
             >
               {genresKeys.map(genre => (
                 <MenuItem key={genre} value={genre}>{genre}</MenuItem>
@@ -141,11 +132,7 @@ const MainBooksFilterField = ({ }) => {
               )}
 
               sx={selectStyles.select}
-              MenuProps={{
-                PaperProps: {
-                  sx: selectStyles.menuPaper,
-                },
-              }}
+              MenuProps={menuProps}
             >
               {dateKeys.map(genre => (
                 <MenuItem key={genre} value={genre}>{genre}</MenuItem>

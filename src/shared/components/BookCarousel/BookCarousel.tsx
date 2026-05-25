@@ -96,7 +96,8 @@ const testBooks: BookPreviewT[] = [
   },
 ];
 
-const BookCarousel: FC = () => {
+const BookCarousel: FC<{ books?: BookPreviewT[] }> = ({ books = [] }) => {
+  const visibleBooks = books.length ? books : testBooks;
   const booksListRef = useRef<HTMLDivElement>(null);
 
   const scrollBooks = (direction: 'prev' | 'next') => {
@@ -129,7 +130,7 @@ const BookCarousel: FC = () => {
   };
 
   return (
-    <div  className={styles.recomms_row_main}>
+    <div className={styles.recomms_row_main}>
       <button
         className={styles.icon_wrapper}
         type="button"
@@ -144,7 +145,7 @@ const BookCarousel: FC = () => {
       </button>
 
       <div onScroll={updateButtonsState} ref={booksListRef} className={styles.books_list}>
-        {testBooks.map((book) => (
+        {visibleBooks.map((book) => (
           <RecommPreview key={book.Id} color="blue" book={book} />
         ))}
       </div>

@@ -1,300 +1,210 @@
 import { observer } from 'mobx-react-lite';
 import styles from './CartF.module.scss'
 import SelectionHeader from '../../shared/components/Header/SelectionHeader/SelectionHeader';
-import CartView, { type CartSelectedType } from '../../shared/components/CartView/CartView';
 import ItemViewComponent from '../../shared/components/CartItem/CartItem';
-import { Divider } from '@mui/material';
-import { FaRubleSign, FaSackDollar } from 'react-icons/fa6';
+import { FaRubleSign } from 'react-icons/fa6';
 import { IoMdCard, IoMdInformationCircleOutline } from 'react-icons/io';
-import { IoCartOutline, IoShieldCheckmarkOutline } from 'react-icons/io5';
-
+import { IoShieldCheckmarkOutline } from 'react-icons/io5';
 import SelectionFooter from '../../shared/components/Footer/SelectionFooter/SelectionFooter';
 import type { FC } from 'react';
 import type { IconType } from 'react-icons';
-import RecommsRow from '../../shared/components/RecommsRow/RecommsRow';
 import RecommsCart from '../../shared/components/RecommsRow/RecommsCart/RecommsCart';
+import type { CartItemsPreview } from '../../shared/types';
+import type { CartSelectedType } from '../../shared/components/CartView/CartView';
 
-import { TbReportMoney } from "react-icons/tb";
+const cartItems: CartItemsPreview[] = [
+  {
+    Id: 'cart-1',
+    ImageUrl: 'https://img.comicbooks.ru/images/products/1/7455/945601823/VGs-GD5boU8.jpg',
+    Title: 'Человек-паук',
+    Author: 'Марвелпедия',
+    Price: 1490,
+    Discount: 12,
+    Rate: 4.7
+  },
+  {
+    Id: 'cart-2',
+    ImageUrl: 'https://www.moscowbooks.ru/image/book/805/orig/i805305.jpg?cu=20240222135506',
+    Title: 'Мастер и Маргарита',
+    Author: 'Михаил Булгаков',
+    Price: 1200,
+    Discount: 15,
+    Rate: 4.9
+  },
+  {
+    Id: 'cart-3',
+    ImageUrl: 'https://imo10.labirint.ru/books/600284/cover.jpg/242-0',
+    Title: 'Оно',
+    Author: 'Стивен Кинг',
+    Price: 1700,
+    Discount: 0,
+    Rate: 5
+  },
+  {
+    Id: 'cart-4',
+    ImageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPhhoSS4VwAoCA2l9iEe1ejrGckq7QZMp1Tw&s',
+    Title: 'Зеленая Миля',
+    Author: 'Стивен Кинг',
+    Price: 1100,
+    Discount: 8,
+    Rate: 4.9
+  }
+];
+
+const benefits = [
+  {
+    icon: IoShieldCheckmarkOutline,
+    title: 'Безопасная оплата',
+    desc: 'Защита транзакций 256-битным шифрованием'
+  },
+  {
+    icon: IoMdInformationCircleOutline,
+    title: 'Легкий возврат',
+    desc: '14 дней на возврат товара без лишних вопросов'
+  }
+];
+
+const getDiscountPrice = (item: CartItemsPreview) => Math.floor(item.Price - (item.Price / 100 * item.Discount));
+const formatPrice = (value: number) => value.toLocaleString('ru-RU');
+
 const CartF = observer(() => {
-  // const {
-  //   favItemsStore: { count: favCount, getCountFav, countFavState },
-  //   cartItemsStore: {
-  //     getCartItems,
-  //     getCartItemsState,
-  //     cartItemsPreview,
-  //     deleteCartItems,
-  //     deleteCartItemsState,
-  //     count: cartCount,
-  //     getCountCart,
-  //     countCartState
-  //   }
-  // } = useStores();
+  const goodsTotal = cartItems.reduce((sum, item) => sum + item.Price, 0);
+  const finalTotal = cartItems.reduce((sum, item) => sum + getDiscountPrice(item), 0);
+  const discountTotal = goodsTotal - finalTotal;
 
-
-  // const pageLoading = useMemo(() => 
-  //   countFavState.loading || countCartState.loading || getCartItemsState.loading,
-  //   [countFavState.loading, countCartState.loading, getCartItemsState.loading]
-  // );
-
-
-  // const pageError = useMemo(() => 
-  //   countFavState.error || countCartState.error || getCartItemsState.error,
-  //   [countFavState.error, countCartState.error, getCartItemsState.error]
-  // );
-
-
-  // useEffect(() => {
-  //   const loadCounters = async () => {
-  //     await Promise.all([
-  //       getCountFav(),
-  //       getCountCart()
-  //     ]);
-  //   };
-  //   loadCounters();
-  // }, [getCountFav, getCountCart]);
-
-  // useEffect(() => {
-  //   getCartItems();
-  // }, [getCartItems]);
-
-
-  // useEffect(() => {
-  //   if (!deleteCartItemsState.loading && !deleteCartItemsState.error) {
-  //     getCartItems();
-  //   }
-  // }, [deleteCartItemsState.loading, deleteCartItemsState.error, getCartItems]);
+  const noopAddItem = (_el: CartSelectedType) => undefined;
+  const noopDeleteItem = (_id: string) => undefined;
+  const noopDeleteItems = (_bookId: string[]) => undefined;
 
   return (
-    //   <LoadingErrorWrapper loading={pageLoading} error={pageError}>
-    //     <NavMediaComponent 
-    //       countCart={cartCount ?? 0} 
-    //       countFav={favCount ?? 0} 
-    //       pageType="cart" 
-    //     />
-
-
-    //     <CartView 
-    //       items={cartItemsPreview || []} 
-    //       handleDeleteItem={deleteCartItems} 
-    //       loading={getCartItemsState.loading}
-
-    //     />
-    //   </LoadingErrorWrapper>
     <div className={styles.cartf_page_style}>
       <SelectionHeader />
-      <div className={styles.cartf_main_container}>
-        <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 20 }}>
-          <p style={{ 
-            fontSize: 25, 
-            color: "#F9FAFBFF", 
-            wordSpacing: 3, 
-            display: 'flex', 
-            alignItems: 'center', 
-            columnGap: 10,
-            fontWeight: 500
-            }}>Моя
-            <span className={styles.text_gradient}> Корзина</span>
-          </p>
-          <p style={{ fontSize: 14, color: '#BDC2CBFF' }}>Товары, ожидающие оформления (3)</p>
-        </div>
-        <div style={{ display: 'flex', columnGap: 50 }}>
-          <div style={{
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            rowGap: 20
-          }}>
-            <ItemViewComponent Id={''} ImageUrl={''} Title={''} Author={''} Price={0} Discount={0} Rate={0} addItem={function (el: CartSelectedType): void {
-              throw new Error('Function not implemented.');
-            }} deleteItem={function (id: string): void {
-              throw new Error('Function not implemented.');
-            }} isSelected={false} handleDeleteItem={function (bookId: string[]): void {
-              throw new Error('Function not implemented.');
-            }} />
-            <ItemViewComponent Id={''} ImageUrl={''} Title={''} Author={''} Price={1000} Discount={15} Rate={0} addItem={function (el: CartSelectedType): void {
-              throw new Error('Function not implemented.');
-            }} deleteItem={function (id: string): void {
-              throw new Error('Function not implemented.');
-            }} isSelected={false} handleDeleteItem={function (bookId: string[]): void {
-              throw new Error('Function not implemented.');
-            }} />
-            <ItemViewComponent Id={''} ImageUrl={''} Title={''} Author={''} Price={500} Discount={0} Rate={0} addItem={function (el: CartSelectedType): void {
-              throw new Error('Function not implemented.');
-            }} deleteItem={function (id: string): void {
-              throw new Error('Function not implemented.');
-            }} isSelected={false} handleDeleteItem={function (bookId: string[]): void {
-              throw new Error('Function not implemented.');
-            }} />
-            <ItemViewComponent Id={''} ImageUrl={''} Title={''} Author={''} Price={500} Discount={0} Rate={0} addItem={function (el: CartSelectedType): void {
-              throw new Error('Function not implemented.');
-            }} deleteItem={function (id: string): void {
-              throw new Error('Function not implemented.');
-            }} isSelected={false} handleDeleteItem={function (bookId: string[]): void {
-              throw new Error('Function not implemented.');
-            }} />
+      <main className={styles.cartf_main_container}>
+        <section className={styles.cart_header}>
+          <div className={styles.cart_title_group}>
+            <p className={styles.cart_title}>Моя <span className={styles.text_gradient}>Корзина</span></p>
+            <p className={styles.cart_subtitle}>Товары, ожидающие оформления ({cartItems.length})</p>
+          </div>
+          <div className={styles.cart_header_badge}>
+            <IoShieldCheckmarkOutline />
+            <p>Покупка защищена</p>
+          </div>
+        </section>
+
+        <section className={styles.cart_content}>
+          <div className={styles.cart_items_panel}>
+            <div className={styles.panel_header}>
+              <div>
+                <p className={styles.panel_title}>Ваши книги</p>
+                <p className={styles.panel_subtitle}>Проверьте позиции перед оплатой</p>
+              </div>
+              <button className={styles.clear_button}>Очистить</button>
+            </div>
+
+            <div className={styles.cart_items_list}>
+              {cartItems.map((item) => (
+                <ItemViewComponent
+                  key={item.Id}
+                  {...item}
+                  addItem={noopAddItem}
+                  deleteItem={noopDeleteItem}
+                  isSelected={false}
+                  handleDeleteItem={noopDeleteItems}
+                />
+              ))}
+            </div>
           </div>
 
-          <div style={{
-            width: 600,
-            display: 'flex',
-            flexDirection: 'column',
-            rowGap: 40
-          }}>
+          <aside className={styles.cart_sidebar}>
             <div className={styles.cartf_total_sum_block}>
-              <p style={{ color: '#F9FAFBFF', fontSize: 21, fontWeight: 500, fontFamily: 'MTSWide' }}>Детали заказа</p>
-              <Divider sx={{ borderBottomWidth: 2, my: 2, mb: 4, borderColor: '#44506866' }} />
-              <div style={{ display: 'flex', flexDirection: 'column', rowGap: 8 }}>
-                <div style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between'
-                }}>
-                  <p style={{ fontSize: 14, color: 'rgb(165, 174, 189)' }}>Стоимость товаров</p>
-                  <p style={{
-                    fontSize: 14,
-                    color: '#F9FAFBFF',
-                    display: 'flex',
-                    columnGap: 2,
-                    alignItems: 'center',
-                    fontWeight: 500
-                  }}>
-                    5 490
-                    <FaRubleSign style={{ fontSize: 14, }} />
-                  </p>
-                </div>
+              <p className={styles.summary_title}>Детали заказа</p>
+              <div className={styles.summary_divider} />
 
-                <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <p style={{ fontSize: 14, color: '#F9FAFBFF' }}>Скидка</p>
-                  <p style={{
-                    fontSize: 14,
-                    color: '#F9FAFBFF',
-                    display: 'flex',
-                    columnGap: 2,
-                    alignItems: 'center',
-                    fontWeight: 500
-                  }}>
-                    - 670
-                    <FaRubleSign style={{ fontSize: 14 }} />
-                  </p>
-                </div>
+              <div className={styles.summary_rows}>
+                <SummaryRow label="Стоимость товаров" value={formatPrice(goodsTotal)} />
+                <SummaryRow label="Скидка" value={`- ${formatPrice(discountTotal)}`} isAccent />
+                <SummaryRow
+                  label="Доставка"
+                  value="Бесплатно"
+                  icon={IoMdInformationCircleOutline}
+                />
+                <SummaryRow label="Налог (НДС 20%)" value="Включен" />
+              </div>
 
-                <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <p style={{
-                    fontSize: 14,
-                    color: 'rgb(165, 174, 189)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    columnGap: 5
-                  }}>
-                    Доставка
-                    <IoMdInformationCircleOutline style={{ color: 'rgb(138, 145, 158)', fontSize: 14, flexShrink: 0 }} />
-                  </p>
-                  <p style={{
-                    fontSize: 14,
-                    color: '#F9FAFBFF',
-                    display: 'flex',
-                    columnGap: 2,
-                    alignItems: 'center',
-                    fontWeight: 500
-                  }}>
-                    Бесплатно
-                  </p>
-                </div>
+              <div className={styles.summary_divider} />
 
-                <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <p style={{
-                    fontSize: 14,
-                    color: 'rgb(165, 174, 189)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    columnGap: 5
-                  }}>
-                    Налог (НДС 20%)
-
+              <div className={styles.total_row}>
+                <p className={styles.total_label}>Итого к оплате</p>
+                <div className={styles.total_value_group}>
+                  <p className={styles.total_value}>
+                    {formatPrice(finalTotal)}
+                    <FaRubleSign />
                   </p>
-                  <p style={{
-                    fontSize: 14,
-                    color: '#F9FAFBFF',
-                    display: 'flex',
-                    columnGap: 2,
-                    alignItems: 'center',
-                    fontWeight: 500
-                  }}>
-                    Включен
-                  </p>
+                  <p className={styles.total_hint}>Итоговая сумма со всеми налогами</p>
                 </div>
               </div>
-              <Divider sx={{ borderBottomWidth: 2, my: 4, mb: 6, borderColor: '#44506866' }} />
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 30 }}>
-                <p style={{ color: '#F9FAFBFF', fontSize: 20, fontWeight: 600, width: '20%' }}>Итого к оплате</p>
-                <div style={{
-                  width: '40%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  rowGap: 5
-                }}>
-                  <p style={{
-                    display: 'flex',
-                    columnGap: 2,
-                    alignItems: 'center',
-                    fontSize: 24,
-                    color: '#6379e9',
-                    fontWeight: 500
-                  }}>
-                    5 430
-                    <FaRubleSign style={{ fontSize: 24, marginBottom: 2 }} />
-                  </p>
-                  <p style={{ fontSize: 14, color: 'rgb(165, 174, 189)' }}>(Итоговая сумма со всеми налогами)</p>
-                </div>
 
-              </div>
               <button className={styles.cartf_total_sum_button}>
-
+                <IoMdCard />
                 <p>Перейти к оплате</p>
               </button>
-              <div style={{
-                marginTop: 30,
-                display: 'flex',
-                columnGap: 7,
-                alignItems: 'center',
-                color: 'rgb(165, 174, 189)',
-                fontSize: 14,
-                justifyContent: 'center'
-              }}>
-                <IoShieldCheckmarkOutline style={{ fontSize: 17, marginBottom: 1 }} />
+
+              <div className={styles.secure_note}>
+                <IoShieldCheckmarkOutline />
                 <p>Ваши данные надежно защищены</p>
               </div>
             </div>
-            <div style={{ display: 'flex', rowGap: 15, flexDirection: 'column', }}>
-              <ComponentInfoView icon={IoShieldCheckmarkOutline} title='Безопасная оплата' desc='Защита транзакций 256-битным шифрованием' />
-              <ComponentInfoView icon={IoMdInformationCircleOutline} title='Легкий возврат' desc='14 дней на возврат товара без лишних вопросов' />
 
+            <div className={styles.info_list}>
+              {benefits.map((benefit) => (
+                <ComponentInfoView
+                  key={benefit.title}
+                  icon={benefit.icon}
+                  title={benefit.title}
+                  desc={benefit.desc}
+                />
+              ))}
             </div>
-          </div>
-        </div>
-
-
-      </div>
+          </aside>
+        </section>
+      </main>
       <RecommsCart books={[]} />
       <SelectionFooter />
     </div>
-
-
   );
 });
 
 export default CartF;
 
+const SummaryRow: FC<{ label: string, value: string, isAccent?: boolean, icon?: IconType }> = ({
+  label,
+  value,
+  isAccent = false,
+  icon: Icon
+}) => {
+  return (
+    <div className={styles.summary_row}>
+      <p className={styles.summary_label}>
+        {label}
+        {Icon && <Icon />}
+      </p>
+      <p className={isAccent ? styles.summary_value_accent : styles.summary_value}>
+        {value}
+        {!Number.isNaN(Number(value.replace(/\s|-/g, ''))) && <FaRubleSign />}
+      </p>
+    </div>
+  )
+}
 
 const ComponentInfoView: FC<{ icon: IconType, title: string, desc: string }> = ({ icon: Icon, title, desc }) => {
   return (
     <div className={styles.view_info_block}>
-      <Icon style={{ fontSize: 22, marginBottom: 1, flexShrink: 0, color: '#F9FAFBFF' }} />
-      <div style={{ display: 'flex', flexDirection: 'column', rowGap: 2 }}>
-        <p style={{ color: '#F9FAFBFF', fontSize: 14, fontWeight: 500 }}>{title}</p>
-        <p style={{ color: 'rgb(165, 174, 189)', fontSize: 12 }}>{desc}</p>
+      <div className={styles.view_info_icon}>
+        <Icon />
+      </div>
+      <div className={styles.view_info_text}>
+        <p className={styles.view_info_title}>{title}</p>
+        <p className={styles.view_info_desc}>{desc}</p>
       </div>
     </div>
   )

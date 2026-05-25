@@ -4,13 +4,10 @@ import styles from './RecommsF.module.scss'
 import SelectionHeader from '../../shared/components/Header/SelectionHeader/SelectionHeader';
 
 import SelectionFooter from '../../shared/components/Footer/SelectionFooter/SelectionFooter';
-import { LiaMagicSolid } from "react-icons/lia";
 import { BsMagic } from 'react-icons/bs';
-import RecommsCart from '../../shared/components/RecommsRow/RecommsCart/RecommsCart';
 import RecommsRowWithDynamic from '../../shared/components/RecommsRow/RecommsRowWithDynamic/RecommsRowWithDynamic';
 import { AiOutlineRise } from 'react-icons/ai';
 import { RiShoppingBag4Line, RiTimerFlashLine } from 'react-icons/ri';
-import { IoBagHandleOutline, IoBookOutline } from 'react-icons/io5';
 import Banner from '../../shared/components/Banner/Banner';
 
 const RecommsF = observer(() => {

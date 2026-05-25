@@ -37,6 +37,38 @@
 
 .table_shell {
     width: 100%;
+    max-height: 780px;
+    overflow: hidden auto;
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
+    scrollbar-color: rgba(133, 166, 255, 0.32) transparent;
+}
+
+.table_shell::-webkit-scrollbar {
+    width: 12px;
+}
+
+.table_shell::-webkit-scrollbar-track {
+    margin: 14px 0;
+    background: transparent;
+    border-radius: 999px;
+}
+
+.table_shell::-webkit-scrollbar-thumb {
+    background: rgba(133, 166, 255, 0.32);
+    border: 3px solid rgba(24, 29, 38, 0.98);
+    border-radius: 999px;
+}
+
+.table_shell::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+.book_cell {
+    display: flex;
+    align-items: center;
+    column-gap: 12px;
+    min-width: 0;
 }
 
 .book_meta {
@@ -73,11 +105,10 @@
 
 .preview_image {
     aspect-ratio: 320 / 470;
-
     width: 50px;
-
+    flex: 0 0 50px;
     opacity: 0.96;
     object-fit: cover;
-    border-radius: 4px;
-
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
 }

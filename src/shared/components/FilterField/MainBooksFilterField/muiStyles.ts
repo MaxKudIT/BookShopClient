@@ -152,10 +152,27 @@ export const selectStyles = {
   },
 
   menuPaper: {
-   
+    maxHeight: 320,
+    overflowY: 'auto',
 
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
     background: 'rgb(40, 42, 51)',
+    scrollbarWidth: 'thin',
+    scrollbarColor: 'rgba(99, 121, 233, 0.65) rgb(40, 42, 51)',
+    '&::-webkit-scrollbar': {
+      width: 8,
+    },
+    '&::-webkit-scrollbar-track': {
+      background: 'rgb(40, 42, 51)',
+      borderRadius: 10,
+    },
+    '&::-webkit-scrollbar-thumb': {
+      background: 'rgba(99, 121, 233, 0.65)',
+      borderRadius: 10,
+    },
+    '&::-webkit-scrollbar-thumb:hover': {
+      background: 'rgba(99, 121, 233, 0.9)',
+    },
     '&, & *': {
 
       marginBottom: 0,
@@ -182,6 +199,27 @@ export const selectStyles = {
 
       },
 
+    },
+  },
+
+  menuList: {
+    paddingTop: 0,
+    paddingBottom: 0,
+    scrollbarWidth: 'thin',
+    scrollbarColor: 'rgba(99, 121, 233, 0.65) rgb(40, 42, 51)',
+    '&::-webkit-scrollbar': {
+      width: 8,
+    },
+    '&::-webkit-scrollbar-track': {
+      background: 'rgb(40, 42, 51)',
+      borderRadius: 10,
+    },
+    '&::-webkit-scrollbar-thumb': {
+      background: 'rgba(99, 121, 233, 0.65)',
+      borderRadius: 10,
+    },
+    '&::-webkit-scrollbar-thumb:hover': {
+      background: 'rgba(99, 121, 233, 0.9)',
     },
   }
 };

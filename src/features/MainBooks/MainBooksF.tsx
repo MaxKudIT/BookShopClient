@@ -14,18 +14,15 @@ import { useFirebaseAuth } from '../../shared/hooks/useFirebaseAuth';
 
 
 import BookList from '../../shared/components/BookList/BookList';
-import FavsFilterField from '../../shared/components/FilterField/MainBooksFilterField/MainBooksFilterField';
 import MainBooksFilterField from '../../shared/components/FilterField/MainBooksFilterField/MainBooksFilterField';
-import BookCarousel from '../../shared/components/BookCarousel/BookCarousel';
 import Banner from '../../shared/components/Banner/Banner';
-import type { IconBaseProps } from 'react-icons';
-import { IoAccessibility } from 'react-icons/io5';
+import { IoSparklesOutline } from 'react-icons/io5';
 
 
 
 const MainBooksF = () => {
 
-    const { logout, logoutError, clearErrors } = useFirebaseAuth();
+    const { logout } = useFirebaseAuth();
 
 
     const auth = getAuth()
@@ -40,7 +37,7 @@ const MainBooksF = () => {
             await logout()
             navigate('/auth')
         }
-        catch (e: any) {
+        catch {
             console.error('Возникла ошибка при выходе из аккаунта!')
         }
     }
@@ -143,10 +140,15 @@ const MainBooksF = () => {
                         </div>
                     </div>
                     <MainBooksFilterField />
-                    <div style={{ display: 'flex', flexDirection: 'column', marginTop: 40, rowGap: 200 }}>
+                    <div className={styles.books_content}>
                         <BookList list={[]} viewPage={'home'} />
-                        <BookCarousel/>
-                        <Banner icon={IoAccessibility} title={'Пока'} description={'Приык'} color={'pink'}/>
+
+                        <Banner
+                            icon={IoSparklesOutline}
+                            title='Найдите следующую книгу для своей полки'
+                            description='Откройте рекомендации, добавляйте интересные истории в избранное и возвращайтесь к ним тогда, когда появится настроение читать.'
+                            color='#8da6ff'
+                        />
                     </div>
 
                 </div>

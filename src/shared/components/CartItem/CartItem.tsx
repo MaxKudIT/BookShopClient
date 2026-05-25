@@ -1,25 +1,18 @@
 import { Checkbox } from "@mui/material";
 import { MdCurrencyRuble } from "react-icons/md";
-import { RiDeleteBinLine } from "react-icons/ri";
-
 import styles from './CartItem.module.scss'
 import type { FC } from "react";
-import { rateStars } from "../BookInfoView/BookInfoView";
 import type { CartItemsPreview } from "../../types";
 import type { CartSelectedType } from "../CartView/CartView";
-import { IoIosHeart } from "react-icons/io";
-import { FaHeart, FaMinus, FaPlus, FaRubleSign } from "react-icons/fa6";
+import { FaMinus, FaPlus, FaRegStar, FaRubleSign } from "react-icons/fa6";
 import { FaRegTrashAlt } from "react-icons/fa";
 
-
-
+const fallbackImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPTPFv3U6ZVvZh0GYlNFWntSw0PJjFvqNwMA&s';
 
 const CartItem: FC<CartItemsPreview & {
     addItem: (el: CartSelectedType) => void,
     deleteItem: (id: string) => void,
     isSelected: boolean,
-
-
 } & {
     handleDeleteItem: (bookId: string[]) => void
 }> = ({
@@ -30,165 +23,99 @@ const CartItem: FC<CartItemsPreview & {
     Rate,
     Discount,
     ImageUrl,
-
     addItem,
     deleteItem,
-
     isSelected,
-
     handleDeleteItem,
-
-
-
-
 }) => {
-
-        const DiscountPrice = Math.floor(Price - (Price / 100 * Discount))
+        const discountPrice = Math.floor(Price - (Price / 100 * Discount));
 
         return (
-            <div className={styles.item_view_compo_wrapper}>
-
-
-
-                <div style={{ height: '100%', display: 'flex', columnGap: 20 }}>
-                    {/* <Checkbox
+            <article className={styles.item_view_compo_wrapper}>
+                <div className={styles.item_main}>
+                    <Checkbox
                         checked={isSelected}
-                        onChange={(e) => {
-                            if (e.target.checked) {
-                                addItem({id: Id, price: Math.floor(Price - (Price / 100 * Discount))})
+                        onChange={(event) => {
+                            if (event.target.checked) {
+                                addItem({ id: Id, price: discountPrice })
                             } else {
                                 deleteItem(Id)
                             }
                         }}
-                        style={{ alignSelf: 'flex-start' }}
                         sx={{
-                            color: 'white',
+                            color: 'rgba(219, 231, 255, 0.7)',
+                            alignSelf: 'flex-start',
+                            p: 0.5,
                             '& .MuiSvgIcon-root': {
-                                fontSize: 20,
+                                fontSize: 22,
                             },
                             '&.Mui-checked': {
-                                color: '#d8b3f0ff',
+                                color: '#8da6ff',
                             },
-                        }}
-                    /> */}
-
-                    <img
-                        alt=""
-                        src={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPTPFv3U6ZVvZh0GYlNFWntSw0PJjFvqNwMA&s'}
-                        style={{
-                            width: '130px',
-                            height: '100%',
-                            opacity: 0.9
-
                         }}
                     />
 
-                    <div style={{
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
+                    <div className={styles.image_wrapper}>
+                        <img
+                            className={styles.book_image}
+                            alt={Title || 'Книга'}
+                            src={ImageUrl || fallbackImage}
+                        />
+                    </div>
 
-                        padding: '5px 0'
-                    }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', rowGap: 10 }}>
-                            {/* <p style={{ color: 'white', fontSize: 18, fontWeight: '500' }}>{Title}</p>
-                            <p style={{ color: 'rgba(255,255,255,0.8', fontSize: 14 }}>{Author}</p> */}
-                            <div className={styles.genre_wrapper}>Фантастика</div>
-                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                <p style={{ color: '#FFFFFFFF', fontSize: 20, fontWeight: 600 }}>Человек-паук</p>
-                                <p style={{ color: '#BAC1CEFF', fontSize: 14, fontWeight: 500 }}>Марвелпедия</p>
+                    <div className={styles.item_content}>
+                        <div className={styles.item_text}>
+                            <div className={styles.meta_row}>
+                                <div className={styles.genre_wrapper}>Электронная книга</div>
+                                <div className={styles.rate_wrapper}>
+                                    <FaRegStar />
+                                    <p>{Rate || 4.7}</p>
+                                </div>
                             </div>
-
+                            <div className={styles.title_group}>
+                                <p className={styles.item_title}>{Title || 'Человек-паук'}</p>
+                                <p className={styles.item_author}>{Author || 'Марвелпедия'}</p>
+                            </div>
                         </div>
 
                         <div className={styles.quality_wrapper}>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <FaMinus style={{ color: '#555D6DFF' }} />
-                            </div>
+                            <button aria-label="Уменьшить количество" className={styles.quantity_button}>
+                                <FaMinus />
+                            </button>
                             <p>1</p>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <button aria-label="Увеличить количество" className={styles.quantity_button}>
                                 <FaPlus />
-                            </div>
-
+                            </button>
                         </div>
-
                     </div>
-
                 </div>
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    height: '100%',
-                    paddingRight: 10,
-                    alignItems: 'flex-end',
-                 
 
-                }}>
-                    <button onClick={() => {
-                        handleDeleteItem([Id])
-                        deleteItem(Id)
-                    }} className={styles.icon_wrapper}>
+                <div className={styles.item_actions}>
+                    <button
+                        onClick={() => {
+                            handleDeleteItem([Id])
+                            deleteItem(Id)
+                        }}
+                        className={styles.icon_wrapper}
+                    >
                         <FaRegTrashAlt className={styles.trash_button} />
                     </button>
 
-
-                    {Discount !== 0 ? (
-                        <>
-                            <div style={{ display: 'flex', flexDirection: 'column', rowGap: 5, alignItems: 'center' }}>
-                                <p style={{
-                                    fontSize: 14,
-                                    color: 'gray',
-                                    textDecoration: 'line-through',
-                                    textDecorationColor: '#a7a7adff',
-                                    display: 'flex',
-                                    alignItems: 'center'
-                                }}>
-                                    -{Price}
-                                    <MdCurrencyRuble style={{ fontSize: 14 }} />
-                                </p>
-                                <p style={{
-                                    fontSize: 22,
-                                    color: '#6379e9',
-                                    fontWeight: 'bold',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    columnGap: 2
-                                }}>
-                                    {Price}
-                                    <MdCurrencyRuble style={{ fontSize: 22 }} />
-                                </p>
-                            </div>
-
-
-                        </>
-                    ) : (
-                        <>
-                            <p style={{
-                                fontSize: 22,
-                                color: '#6379e9',
-                                fontWeight: 'bold',
-                                display: 'flex',
-                                alignItems: 'center',
-                                columnGap: 2
-
-                            }}>
+                    <div className={styles.price_block}>
+                        {Discount !== 0 && (
+                            <p className={styles.old_price}>
                                 {Price}
-                                <FaRubleSign style={{ fontSize: 18 }} />
+                                <MdCurrencyRuble />
                             </p>
-                        </>
-                    )
-                    }
-
-
+                        )}
+                        <p className={styles.current_price}>
+                            {Discount !== 0 ? discountPrice : Price}
+                            <FaRubleSign />
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </article>
         )
-
-
     }
-
-
 
 export default CartItem;

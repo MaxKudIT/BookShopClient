@@ -1,13 +1,12 @@
 import styles from './Sidebar.module.scss'
 import { MdOutlineGridView, MdOutlineShoppingCart, MdOutlineHistory, MdAutoAwesome } from "react-icons/md";
 import { FaRegCompass } from "react-icons/fa6";
-import { GiBookshelf } from "react-icons/gi";
 import { FaRegBookmark } from "react-icons/fa";
 import { RxExit } from "react-icons/rx";
 import type { FC, ReactNode } from 'react';
 import { Tooltip } from '@mui/material';
 import Logo from '../Logo/Logo';
-import { PiShieldStar, PiShieldStarBold } from 'react-icons/pi';
+import { LuLibraryBig } from 'react-icons/lu';
 
 export type SideBarType = {
     handleLogout: () => void,
@@ -25,17 +24,22 @@ type NavItem = {
 }
 
 const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
-    const mainMenu: NavItem[] = [
+    const navigationMenu: NavItem[] = [
         { icon: <MdOutlineGridView style={{ fontSize: 16 }} />, title: 'Главная', active: true },
         { icon: <FaRegCompass style={{ fontSize: 15 }} />, title: 'Исследовать' },
-        { icon: <PiShieldStarBold style={{ fontSize: 17, marginBottom: 2 }} />, title: 'Моя полка' },
+        { icon: <MdAutoAwesome style={{ fontSize: 15 }} />, title: 'Рекомендации', meta: 'Для вас' },
     ];
 
-    const collections: NavItem[] = [
+    const libraryMenu: NavItem[] = [
+        { icon: <LuLibraryBig style={{ fontSize: 17, marginBottom: 1 }} />, title: 'Моя полка' },
         { icon: <FaRegBookmark style={{ fontSize: 14 }} />, title: 'Избранное', meta: '24' },
         { icon: <MdOutlineShoppingCart style={{ fontSize: 15 }} />, title: 'Корзина', meta: '3' },
         { icon: <MdOutlineHistory style={{ fontSize: 16 }} />, title: 'История чтения', meta: 'Новое' },
-        { icon: <MdAutoAwesome style={{ fontSize: 15 }} />, title: 'Рекомендации', meta: 'Для вас' },
+    ];
+
+    const menuSections = [
+        { title: 'НАВИГАЦИЯ', items: navigationMenu },
+        { title: 'МОЯ БИБЛИОТЕКА', items: libraryMenu },
     ];
 
     return (
@@ -45,41 +49,26 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
             </div>
 
             <div className={styles.sidebar_body}>
-                <div className={styles.menu_card}>
-                    <div className={styles.title_menu_container}>
-                        <p className={styles.title_menu}>БЫСТРЫЙ ДОСТУП</p>
+                {menuSections.map((section) => (
+                    <div key={section.title} className={styles.menu_card}>
+                        <div className={styles.title_menu_container}>
+                            <p className={styles.title_menu}>{section.title}</p>
+                        </div>
 
+                        <div className={styles.menu_list}>
+                            {section.items.map((item) => (
+                                <button
+                                    key={item.title}
+                                    className={item.active ? styles.button_sidebar_active : styles.button_sidebar_unactive}
+                                >
+                                    <span className={styles.nav_icon}>{item.icon}</span>
+                                    <p>{item.title}</p>
+                                    {item.meta && <span className={styles.meta_badge}>{item.meta}</span>}
+                                </button>
+                            ))}
+                        </div>
                     </div>
-
-                    <div className={styles.menu_list}>
-                        {mainMenu.map((item) => (
-                            <button
-                                key={item.title}
-                                className={item.active ? styles.button_sidebar_active : styles.button_sidebar_unactive}
-                            >
-                                <span className={styles.nav_icon}>{item.icon}</span>
-                                <p>{item.title}</p>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                <div className={styles.collections_card}>
-                    <div className={styles.title_menu_container}>
-                        <p className={styles.title_menu}>ПЕРСОНАЛЬНЫЙ РАЗДЕЛ</p>
-
-                    </div>
-
-                    <div className={styles.menu_list}>
-                        {collections.map((item) => (
-                            <button key={item.title} className={styles.button_sidebar_unactive}>
-                                <span className={styles.nav_icon}>{item.icon}</span>
-                                <p>{item.title}</p>
-                                {item.meta && <span className={styles.meta_badge}>{item.meta}</span>}
-                            </button>
-                        ))}
-                    </div>
-                </div>
+                ))}
             </div>
 
             <div className={styles.footer_sidebar}>

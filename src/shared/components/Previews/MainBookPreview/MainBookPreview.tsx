@@ -1,18 +1,14 @@
 import type { FC } from 'react';
-import styles from './RecommPreview.module.scss'
+import styles from './MainBookPreview.module.scss'
 import { FaRegStar } from "react-icons/fa";
 import type { BookPreviewT } from '../../../types';
 import { MdCurrencyRuble } from 'react-icons/md';
 
-const RecommPreview: FC<{ book: BookPreviewT, color: 'pink' | 'purple' | 'blue' }> = ({ book, color }) => {
+const MainBookPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
     const discountPrice = Math.floor(book.Price - (book.Price / 100 * book.Discount));
-    const titleClassName = [
-        styles.preview_title,
-        styles[`preview_title_${color}`]
-    ].join(' ');
 
     return (
-        <article className={styles.recomm_preview_wrapper}>
+        <article className={styles.main_preview_wrapper}>
             <div className={styles.image_wrapper}>
                 <img className={styles.book_image} src={book.ImageUrl} alt={book.Title} />
             </div>
@@ -28,7 +24,7 @@ const RecommPreview: FC<{ book: BookPreviewT, color: 'pink' | 'purple' | 'blue' 
             </div>
 
             <div className={styles.preview_text}>
-                <p className={titleClassName}>{book.Title}</p>
+                <p className={styles.preview_title}>{book.Title}</p>
                 <p className={styles.preview_author}>{book.Author}</p>
             </div>
 
@@ -54,4 +50,4 @@ const RecommPreview: FC<{ book: BookPreviewT, color: 'pink' | 'purple' | 'blue' 
     )
 }
 
-export default RecommPreview;
+export default MainBookPreview;

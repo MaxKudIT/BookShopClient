@@ -200,7 +200,7 @@ const Profile: FC = () => {
 
 
                                     '&.Mui-focused': {
-                                        color: '#768cfada'
+                                      color: '#9eb4f1',
 
                                     },
                                 }
@@ -236,7 +236,7 @@ const Profile: FC = () => {
                                 sx: {
                                     color: '#85a6ff',
                                     '&.Mui-focused': {
-                                        color: '#6379e9d0'
+                                         color: '#9eb4f1',
 
                                     },
                                 }

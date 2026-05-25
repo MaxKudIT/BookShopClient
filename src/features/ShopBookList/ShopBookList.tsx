@@ -1,16 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from './ShopBookList.module.scss'
 
 
-import { Alert, Avatar, CircularProgress, Dialog, Divider, Snackbar } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 import SideBar from "../../shared/components/SideBar/Sidebar";
 import MainHeader from "../../shared/components/Header/MainHeader/MainHeader";
 
-import { FaChevronDown, FaRegBookmark, FaRegStar } from "react-icons/fa6";
-import { GrFormNext } from "react-icons/gr";
+import { FaChevronDown, FaRegStar } from "react-icons/fa6";
 import { useFirebaseAuth } from "../../shared/hooks/useFirebaseAuth";
 import HistoryRow from "../../shared/components/HistoryRow/HistoryRow";
 import RecommsRow from "../../shared/components/RecommsRow/RecommsRow";
@@ -41,7 +40,7 @@ const ShopBookList = () => {
       await logout()
       navigate('/auth')
     }
-    catch (e: any) {
+    catch {
       console.error('Возникла ошибка при выходе из аккаунта!')
     }
   }
@@ -139,7 +138,7 @@ const ShopBookList = () => {
   }, [logoutError]);
 
 
-  const handleClose = (event: any, reason: any) => {
+  const handleClose = (_event: unknown, reason: string) => {
     if (reason === 'clickaway') {
       setOpen(false);
       clearErrors?.();
@@ -224,26 +223,18 @@ const ShopBookList = () => {
         <div className={styles.main_body}>
 
           <div className={styles.book_month}>
-            <div style={{ width: '35%', padding: '250px 0' }}>
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                width: '100%',
-                minWidth: 450,
-                marginBottom: 25,
-                rowGap: 15
-              }}>
-                <p style={{
-                  fontSize: 32,
-                  fontFamily: 'MTSWide',
-                  color: '#F9FAFBFF',
-                  lineHeight: '1.1'
-                }}>Книжные новинки уже здесь!</p>
-                <p style={{ color: '#F9FAFBFF', fontSize: 17 }}>Откройте для себя лучшие произведения современных авторов. Читайте без ограничений по подписке Max Premium. Тысячи книг всегда под рукой.
+            <div className={styles.book_month_content}>
+
+              <div className={styles.book_month_text}>
+                <p className={styles.book_month_title}>Книжные новинки уже здесь!</p>
+                <p className={styles.book_month_description}>Откройте для себя лучшие произведения современных авторов. Читайте без ограничений по подписке Max Premium. Тысячи книг всегда под рукой.
                 </p>
               </div>
-              <p style={{ fontSize: 32, fontWeight: 500, color: '#489fe6', marginBottom: 15 }}>49 ₽/мес — и всё включено</p>
-              <div>
+              <div className={styles.book_month_offer}>
+                <p className={styles.book_month_price}>49 ₽/мес</p>
+                <p className={styles.book_month_price_hint}>и всё включено</p>
+              </div>
+              <div className={styles.book_month_actions}>
                 <button className={styles.book_month_button_one}>Приобрести подписку</button>
               </div>
             </div>
@@ -259,9 +250,10 @@ const ShopBookList = () => {
           <div id="info_block" className={styles.info_block}>
             <div className={styles.info_block_content}>
               {statistics.map(el => (
-                <BookInfoComponent color={el.color} icon={el.icon} title={el.title} var1={el.var1} />))}
+                <BookInfoComponent key={el.title} color={el.color} icon={el.icon} title={el.title} var1={el.var1} />))}
             </div>
           </div>
+
           <HistoryRow books={[]} />
           <RecommsRow books={[]} />
         </div>

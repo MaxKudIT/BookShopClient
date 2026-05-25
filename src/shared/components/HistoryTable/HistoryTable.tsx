@@ -113,16 +113,15 @@ const HistoryTable = () => {
                     border: '1px solid rgba(255, 255, 255, 0.06)',
                     borderRadius: '22px',
                     overflowX: 'hidden',
-                    overflowY: 'scroll',
-                   
+                    overflowY: 'auto'
                 }}
             >
-                <Table>
+                <Table stickyHeader aria-label="История чтения">
                     <TableHead>
                         <TableRow
                             sx={{
-                                background: 'rgba(255, 255, 255, 0.025)',
                                 '& .MuiTableCell-root': {
+                                    background: 'rgba(24, 29, 38, 0.98)',
                                     borderBottom: '1px solid rgba(255, 255, 255, 0.06)'
                                 }
                             }}
@@ -146,9 +145,9 @@ const HistoryTable = () => {
                     </TableHead>
 
                     <TableBody>
-                        {rows.map((row) => (
+                        {rows.map((row, index) => (
                             <TableRow
-                                key={row.id}
+                                key={`${row.id}-${index}`}
                                 hover
                                 sx={{
                                     transition: 'background 0.18s ease',
@@ -164,13 +163,13 @@ const HistoryTable = () => {
                                 }}
                             >
                                 <TableCell sx={{ color: '#F4F7FB', fontSize: 14, fontWeight: 600 }}>
-                                    {row.id}
+                                    {index + 1}
                                 </TableCell>
                                 <TableCell sx={{ py: 2.2 }}>
-                                    <div style={{display: 'flex', columnGap: 12}}>
+                                    <div className={styles.book_cell}>
                                         <img
                                             className={styles.preview_image}
-                                            alt=""
+                                            alt={row.title}
                                             src={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPTPFv3U6ZVvZh0GYlNFWntSw0PJjFvqNwMA&s'}
                                         />
                                         <div className={styles.book_meta}>

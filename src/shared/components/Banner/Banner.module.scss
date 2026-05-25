@@ -1,50 +1,137 @@
-.sub_prem_button_one {
-    height: 50px;
-    width: 240px;
-    padding: 0 12px;
-    font-weight: 800;
+.banner {
+    position: relative;
+    display: flex;
+    width: 100%;
+    min-height: 360px;
+    margin-top: 70px;
+    justify-content: center;
+    border-radius: 26px;
+    background:
+        radial-gradient(circle at top right, rgba(99, 121, 233, 0.2), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(186, 138, 234, 0.13), transparent 30%),
+        linear-gradient(145deg, rgba(29, 35, 48, 0.94), rgba(18, 23, 31, 0.96));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+        0 22px 42px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+.banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.025), transparent);
+    pointer-events: none;
+}
+
+.banner_content {
+    position: relative;
+    z-index: 2;
+    min-width: 500px;
+    width: 48%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 48px 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner_icon {
+    width: 58px;
+    height: 58px;
     display: flex;
     align-items: center;
     justify-content: center;
- 
-    font-size: 16px;
-    color: #181921FF;
-    background: #F9F9FBFF;
-    border-radius: 14px;
-    border-width: 0px;
-    border-color: #FFFFFFFF;
-    border-style: solid;
-    column-gap: 10px;
-    transition: all 0.1s;
-    cursor: pointer;
-    &:hover {
-         background: rgb(166, 166, 180);
+    margin-bottom: 20px;
+    border-radius: 18px;
+    background: rgba(82, 105, 224, 0.12);
+    border: 1px solid rgba(74, 111, 211, 0.22);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    svg {
+        font-size: 34px;
     }
 }
 
+.banner_title {
+    color: #F9F9FBFF;
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    text-align: center;
+}
 
+.banner_description {
+    color: #DFE0E7FF;
+    font-size: 16px;
+    line-height: 1.45;
+    margin-bottom: 34px;
+    text-align: center;
+    max-width: 620px;
+}
 
-.sub_prem_button_two {
-    height: 50px;
+.banner_actions {
+    display: flex;
+    column-gap: 16px;
+}
+
+.sub_prem_button_one {
+    height: 52px;
     width: 240px;
     padding: 0 12px;
     font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: Inter;
+    font-size: 16px;
+    color: #F9FAFBFF;
+    background: linear-gradient(135deg, #5d8cff 0%, #345ed6 52%, #4733c7 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(209, 223, 255, 0.22);
+    column-gap: 10px;
+    box-shadow:
+        0 16px 30px rgba(52, 94, 214, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    transition: transform 0.16s, box-shadow 0.16s, border-color 0.16s, background 0.16s;
+    cursor: pointer;
+
+    &:hover {
+        background: linear-gradient(135deg, #6d9bff 0%, #3d6bec 52%, #5742de 100%);
+        border-color: rgba(223, 231, 255, 0.34);
+        box-shadow:
+            0 20px 38px rgba(52, 94, 214, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.24);
+        transform: translateY(-2px);
+    }
+}
+
+.sub_prem_button_two {
+    height: 52px;
+    width: 240px;
+    padding: 0 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 16px;
     color: rgb(211, 213, 216);
-   
-    background: #181921FF;
-
-    border-radius: 14px;
-    border: 1px solid #353746FF; 
-   
-    column-gap: 15px;
-    transition: all 0.1s;
+    background: rgba(24, 25, 33, 0.72);
+    border-radius: 16px;
+    border: 1px solid rgba(133, 166, 255, 0.14);
+    column-gap: 12px;
+    transition: background 0.16s, border-color 0.16s, color 0.16s, transform 0.16s;
     cursor: pointer;
+
+    svg {
+        font-size: 19px;
+    }
+
     &:hover {
-          color: rgb(172, 173, 182);
+        color: #FFFFFFFF;
+        background: rgba(99, 121, 233, 0.12);
+        border-color: rgba(133, 166, 255, 0.24);
+        transform: translateY(-2px);
     }
 }
