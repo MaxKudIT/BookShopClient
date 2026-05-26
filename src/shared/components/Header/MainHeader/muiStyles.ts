@@ -2,61 +2,57 @@ import { PiX } from "react-icons/pi";
 
 export const textFieldStyles = {
   height: 50,
-  width: '80%',
-  maxWidth: 1000,
-  '& .MuiFilledInput-root': {   
+  width: '100%',
+  '& .MuiFilledInput-root': {
     height: '100%',
-    backgroundColor: 'rgba(143, 155, 173, 0.1)', 
-    borderRadius: 3, 
-    
- 
+    backgroundColor: 'rgba(143, 155, 173, 0.08)',
+    borderRadius: 3,
+
     '&:before, &:after, &:hover:before, &.Mui-focused:after': {
       border: 'none',
-      display: 'none', 
+      display: 'none',
     },
-
-    
 
     '&:hover': {
-      backgroundColor: 'rgba(58, 65, 97, 0.28)', 
+      backgroundColor: 'rgba(58, 65, 97, 0.28)',
     },
-    
+
     '&.Mui-focused': {
       backgroundColor: 'rgba(58, 65, 97, 0.28)',
-     
     },
-    
-  },
-  '& .MuiFilledInput-input': {
-    color: 'rgba(255,255,255,0.9)', 
-    fontSize: '12px',
-    fontWeight: 400,
-    
 
   },
- 
+  '& .MuiFilledInput-input': {
+    color: 'rgba(255,255,255,0.92)',
+    fontSize: '13px',
+    fontWeight: 500,
+    paddingTop: '22px',
+
+  },
+
   '& .MuiInputAdornment-root': {
     '& svg': {
-      color: '#666666', 
+      color: '#8f98a8',
+      fontSize: 21,
     },
-   
+
   },
-  
+
   '& .MuiInputLabel-root': {
-    color: '#666666 !important',
-    fontSize: 14,
-   
+    color: '#8f98a8 !important',
+    fontSize: 13,
+
   },
 
   '& .MuiFormHelperText-root': {
     color: '#666666',
     fontSize: '12px',
-    
+
     '&.Mui-error': {
       color: '#d32f2f',
     },
   },
-  
+
 };
 
 

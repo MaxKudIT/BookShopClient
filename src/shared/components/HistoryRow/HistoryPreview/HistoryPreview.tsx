@@ -4,6 +4,7 @@ import { FaRegStar } from "react-icons/fa";
 import type { BookPreviewT } from '../../../types';
 
 const HistoryPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
+    const progress = Math.min(96, Math.max(36, Math.round(book.Rate * 18)));
 
     return (
         <div className={styles.history_preview_wrapper}>
@@ -21,6 +22,23 @@ const HistoryPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
             <div className={styles.preview_text}>
                 <p className={styles.preview_history_title}>{book.Title}</p>
                 <p className={styles.preview_author}>{book.Author}</p>
+            </div>
+
+            <div className={styles.progress_block}>
+                <div className={styles.progress_head}>
+                    <p>Прогресс</p>
+                    <span>{progress}%</span>
+                </div>
+                <div
+                    className={styles.progress_track}
+                    role="progressbar"
+                    aria-label={`Прогресс чтения ${progress}%`}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={progress}
+                >
+                    <span style={{ width: `${progress}%` }}></span>
+                </div>
             </div>
 
         </div>

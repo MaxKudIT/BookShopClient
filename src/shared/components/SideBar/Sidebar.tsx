@@ -3,10 +3,12 @@ import { MdOutlineGridView, MdOutlineShoppingCart, MdOutlineHistory, MdAutoAweso
 import { FaRegCompass } from "react-icons/fa6";
 import { FaRegBookmark } from "react-icons/fa";
 import { RxExit } from "react-icons/rx";
-import type { FC, ReactNode } from 'react';
+import { useState, type FC, type ReactNode } from 'react';
 import { Tooltip } from '@mui/material';
 import Logo from '../Logo/Logo';
 import { LuLibraryBig } from 'react-icons/lu';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Profile from '../../../features/Profile/Profile';
 
 export type SideBarType = {
     handleLogout: () => void,
@@ -19,27 +21,31 @@ export type SideBarType = {
 type NavItem = {
     icon: ReactNode;
     title: string;
+    path: string;
     meta?: string;
-    active?: boolean;
 }
 
 const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [profileOpen, setProfileOpen] = useState(false);
+
     const navigationMenu: NavItem[] = [
-        { icon: <MdOutlineGridView style={{ fontSize: 16 }} />, title: 'Главная', active: true },
-        { icon: <FaRegCompass style={{ fontSize: 15 }} />, title: 'Исследовать' },
-        { icon: <MdAutoAwesome style={{ fontSize: 15 }} />, title: 'Рекомендации', meta: 'Для вас' },
+        { icon: <MdOutlineGridView style={{ fontSize: 16 }} />, title: 'Главная', path: '/' },
+        { icon: <FaRegCompass style={{ fontSize: 15 }} />, title: 'Исследовать', path: '/mainbooks' },
+        { icon: <LuLibraryBig style={{ fontSize: 17, marginBottom: 1 }} />, title: 'Моя полка', path: '/mybooks' },
     ];
 
     const libraryMenu: NavItem[] = [
-        { icon: <LuLibraryBig style={{ fontSize: 17, marginBottom: 1 }} />, title: 'Моя полка' },
-        { icon: <FaRegBookmark style={{ fontSize: 14 }} />, title: 'Избранное', meta: '24' },
-        { icon: <MdOutlineShoppingCart style={{ fontSize: 15 }} />, title: 'Корзина', meta: '3' },
-        { icon: <MdOutlineHistory style={{ fontSize: 16 }} />, title: 'История чтения', meta: 'Новое' },
+        { icon: <MdAutoAwesome style={{ fontSize: 15 }} />, title: 'Рекомендации', path: '/recomms', meta: 'Для вас' },
+        { icon: <FaRegBookmark style={{ fontSize: 14 }} />, title: 'Избранное', path: '/favs', meta: '24' },
+        { icon: <MdOutlineShoppingCart style={{ fontSize: 15 }} />, title: 'Корзина', path: '/cart', meta: '3' },
+        { icon: <MdOutlineHistory style={{ fontSize: 16 }} />, title: 'История чтения', path: '/history', meta: 'Новое' },
     ];
 
     const menuSections = [
-        { title: 'НАВИГАЦИЯ', items: navigationMenu },
-        { title: 'МОЯ БИБЛИОТЕКА', items: libraryMenu },
+        { title: 'ОСНОВНОЕ', items: navigationMenu },
+        { title: 'ПЕРСОНАЛЬНОЕ', items: libraryMenu },
     ];
 
     return (
@@ -56,16 +62,22 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
                         </div>
 
                         <div className={styles.menu_list}>
-                            {section.items.map((item) => (
-                                <button
-                                    key={item.title}
-                                    className={item.active ? styles.button_sidebar_active : styles.button_sidebar_unactive}
-                                >
-                                    <span className={styles.nav_icon}>{item.icon}</span>
-                                    <p>{item.title}</p>
-                                    {item.meta && <span className={styles.meta_badge}>{item.meta}</span>}
-                                </button>
-                            ))}
+                            {section.items.map((item) => {
+                                const isActive = location.pathname === item.path;
+
+                                return (
+                                    <button
+                                        key={item.title}
+                                        type="button"
+                                        className={isActive ? styles.button_sidebar_active : styles.button_sidebar_unactive}
+                                        onClick={() => navigate(item.path)}
+                                    >
+                                        <span className={styles.nav_icon}>{item.icon}</span>
+                                        <p>{item.title}</p>
+                                        {item.meta && <span className={styles.meta_badge}>{item.meta}</span>}
+                                    </button>
+                                )
+                            })}
                         </div>
                     </div>
                 ))}
@@ -75,13 +87,17 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
                 <div className={styles.footer_glow}></div>
 
                 <div className={styles.footer_top}>
-                    <div className={styles.button_profile}>
+                    <button
+                        className={styles.button_profile}
+                        type="button"
+                        onClick={() => setProfileOpen(true)}
+                    >
                         <div className={styles.avatar_circle}>{user.login[0]}</div>
                         <div className={styles.profile_info}>
                             <p className={styles.profile_name}>{user.login}</p>
                             <span className={styles.profile_email}>{user.email}</span>
                         </div>
-                    </div>
+                    </button>
 
                     <Tooltip
                         slotProps={{
@@ -112,6 +128,7 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
 
 
             </div>
+            <Profile open={profileOpen} onClose={() => setProfileOpen(false)} user={user} />
         </div>
     )
 }

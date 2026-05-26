@@ -4,6 +4,7 @@ import type { BookPreviewT } from '../../types';
 import RecommPreview from './RecommPreview/RecommPreview';
 import { IoCompassOutline } from 'react-icons/io5';
 import { GrFormNext } from 'react-icons/gr';
+import { useNavigate } from 'react-router-dom';
 
 const genres: string[] = ['История', 'Детективы', 'Научная фантастика', 'Психология', 'Технологии', 'Философия', 'Документальные'];
 
@@ -57,6 +58,7 @@ const defaultBooks: BookPreviewT[] = [
 const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
     const visibleBooks = books.length ? books : defaultBooks;
     const cardColors: Array<'pink' | 'purple' | 'blue'> = ['pink', 'purple', 'blue', 'pink'];
+    const navigate = useNavigate();
 
     return (
         <section className={styles.recomms_section}>
@@ -72,7 +74,7 @@ const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                         </div>
                     </div>
 
-                    <button className={styles.books_button}>
+                    <button className={styles.books_button} type="button" onClick={() => navigate('/recomms')}>
                         <p>Смотреть все</p>
                         <GrFormNext />
                     </button>
@@ -80,7 +82,7 @@ const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
 
                 <div className={styles.recomms_row_main}>
                     {visibleBooks.slice(0, 4).map((book, index) => (
-                        <RecommPreview key={book.Id} color={cardColors[index % cardColors.length]} book={book} />
+                        <RecommPreview key={book.Id} color={'pink'} book={book} />
                     ))}
                 </div>
             </div>

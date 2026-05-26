@@ -4,6 +4,7 @@ import type { BookPreviewT } from '../../types';
 import { MdHistory } from "react-icons/md";
 import HistoryPreview from './HistoryPreview/HistoryPreview';
 import { GrFormNext } from 'react-icons/gr';
+import { useNavigate } from 'react-router-dom';
 
 const defaultBooks: BookPreviewT[] = [
     {
@@ -54,6 +55,7 @@ const defaultBooks: BookPreviewT[] = [
 
 const HistoryRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
     const visibleBooks = books.length ? books : defaultBooks;
+    const navigate = useNavigate();
 
     return (
         <section className={styles.history_row_wrapper}>
@@ -67,7 +69,7 @@ const HistoryRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                         <p className={styles.section_subtitle}>Ваша недавняя история просмотра книг</p>
                     </div>
                 </div>
-                <button className={styles.books_button}>
+                <button className={styles.books_button} type="button" onClick={() => navigate('/history')}>
                     <p>Все книги</p>
                     <GrFormNext />
                 </button>

@@ -1,29 +1,36 @@
 import { TextField, InputAdornment } from "@mui/material";
 import { IoMdNotificationsOutline, IoMdSearch } from "react-icons/io";
-import { GrOverview } from "react-icons/gr";
 import { textFieldStyles } from "./muiStyles";
-import { getAuth } from "firebase/auth";
-import { useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { useSearch, useMyBooksSearch } from "../../../../store/context/SearchContext";
-import { useFirebaseAuth } from "../../../hooks/useFirebaseAuth";
 import styles from './MainHeader.module.scss'
-import { IoSettingsOutline } from "react-icons/io5";
+import { IoSparklesOutline } from "react-icons/io5";
 
+type NotificationItem = {
+  id: string;
+  title: string;
+  text: string;
+  time: string;
+  isNew?: boolean;
+}
 
+const notifications: NotificationItem[] = [
+  {
+    id: 'welcome',
+    title: 'Добро пожаловать',
+    text: 'Мы рады приветствовать вас. Здесь будут отображаться новинки, новости и важные уведомления.',
+    time: 'Сейчас',
+    isNew: true,
+  },
+];
 
-const MainHeader = ({ }) => {
+const MainHeader = () => {
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const notificationsRef = useRef<HTMLDivElement>(null);
 
-  const { setsearchingValue, setGenre } = useSearch()
-  const { logout } = useFirebaseAuth()
-  const navigate = useNavigate();
+  const { setsearchingValue } = useSearch()
 
-  const { setsearchingValue: setSearchingValueMy, setGenre: setGenreMy } = useMyBooksSearch()
-
-  const auth = getAuth();
-
-  const [user] = useAuthState(auth)
+  const { setsearchingValue: setSearchingValueMy } = useMyBooksSearch()
 
 
   useEffect(() => {
@@ -40,40 +47,105 @@ const MainHeader = ({ }) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!notificationsOpen) {
+      return;
+    }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        notificationsRef.current &&
+        !notificationsRef.current.contains(event.target as Node)
+      ) {
+        setNotificationsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [notificationsOpen]);
+
 
 
 
   return (
     <div className={styles.main_header}>
-      <TextField
-        onChange={(e) => {
-          setsearchingValue(e.target.value)
+      <div className={styles.search_shell}>
+        <TextField
+          onChange={(e) => {
+            setsearchingValue(e.target.value)
 
-        }}
-        sx={textFieldStyles}
-        variant="filled"
-        label="Поиск"
-        placeholder={'Ищите книги, авторов и коллекции...'}
-        slotProps={{
-          input: {
-            startAdornment:
-              <InputAdornment position="start">
-                <IoMdSearch />
-              </InputAdornment>
-          },
-        }}
-      />
-      {/* <button className={styles.button_view}>
-        <GrOverview style={{ fontSize: 16 }} />
-        <p >Смотреть каталог</p>
-      </button> */}
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <button className={styles.icon_wrapper}>
-          <IoMdNotificationsOutline style={{ fontSize: 22 }} className={styles.header_buttons} />
-        </button>
-        <button className={styles.icon_wrapper}>
+          }}
+          sx={textFieldStyles}
+          variant="filled"
+          label="Поиск"
+          placeholder={'Ищите книги, авторов и коллекции...'}
+          slotProps={{
+            input: {
+              startAdornment:
+                <InputAdornment position="start">
+                  <IoMdSearch />
+                </InputAdornment>
+            },
+          }}
+        />
+      </div>
+
+      <div className={styles.header_actions}>
+        <div className={styles.premium_chip}>
+          <IoSparklesOutline />
+          <p>Premium</p>
+        </div>
+
+        <div ref={notificationsRef} className={styles.notifications_area}>
+          <button
+            className={`${styles.icon_wrapper} ${notificationsOpen ? styles.icon_wrapper_active : ''}`}
+            type="button"
+            aria-label="Уведомления"
+            aria-expanded={notificationsOpen}
+            onClick={() => setNotificationsOpen((prev) => !prev)}
+          >
+            <IoMdNotificationsOutline style={{ fontSize: 22 }} className={styles.header_buttons} />
+            {notifications.some((item) => item.isNew) && <span className={styles.notification_dot}></span>}
+          </button>
+
+          {notificationsOpen && (
+            <section className={styles.notifications_panel} aria-label="Уведомления">
+              <div className={styles.notifications_header}>
+                <div>
+                  <p className={styles.notifications_title}>Уведомления</p>
+                  <p className={styles.notifications_subtitle}>Новости библиотеки и важные обновления</p>
+                </div>
+                <span className={styles.notifications_count}>{notifications.length}</span>
+              </div>
+
+              <div className={styles.notifications_list}>
+                {notifications.map((item) => (
+                  <article key={item.id} className={styles.notification_item}>
+                    <div className={styles.notification_icon}>
+                      <IoSparklesOutline />
+                    </div>
+
+                    <div className={styles.notification_content}>
+                      <div className={styles.notification_top}>
+                        <p className={styles.notification_title}>{item.title}</p>
+                        <span>{item.time}</span>
+                      </div>
+                      <p className={styles.notification_text}>{item.text}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+
+        {/* <button className={styles.icon_wrapper} type="button" aria-label="Настройки">
           <IoSettingsOutline className={styles.header_buttons} />
-        </button>
+        </button> */}
       </div>
 
     </div>

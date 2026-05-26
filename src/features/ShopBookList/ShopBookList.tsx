@@ -18,6 +18,7 @@ import { AiOutlineDollarCircle } from "react-icons/ai";
 import { LuBookOpenText } from "react-icons/lu";
 import { MdOutlineAccessTime } from "react-icons/md";
 import BookInfoComponent, { type BICProps } from "../../shared/components/BookInfoComponent/BookInfoComponent";
+import SubscriptionModal from "../../shared/components/SubscriptionModal/SubscriptionModal";
 
 
 const ShopBookList = () => {
@@ -130,6 +131,7 @@ const ShopBookList = () => {
 
   //окно ошибки
   const [open, setOpen] = useState(false);
+  const [subscriptionOpen, setSubscriptionOpen] = useState(false);
 
   useEffect(() => {
     if (logoutError) {
@@ -235,7 +237,13 @@ const ShopBookList = () => {
                 <p className={styles.book_month_price_hint}>и всё включено</p>
               </div>
               <div className={styles.book_month_actions}>
-                <button className={styles.book_month_button_one}>Приобрести подписку</button>
+                <button
+                  className={styles.book_month_button_one}
+                  type="button"
+                  onClick={() => setSubscriptionOpen(true)}
+                >
+                  Приобрести подписку
+                </button>
               </div>
             </div>
 
@@ -259,6 +267,7 @@ const ShopBookList = () => {
         </div>
         <MainFooter />
       </div>
+      <SubscriptionModal open={subscriptionOpen} onClose={() => setSubscriptionOpen(false)} />
 
     </>
 

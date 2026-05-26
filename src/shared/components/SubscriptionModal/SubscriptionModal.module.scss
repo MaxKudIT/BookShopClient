@@ -1,0 +1,260 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    background: rgba(8, 11, 18, 0.66);
+    backdrop-filter: blur(12px);
+}
+
+.modal {
+    position: relative;
+    width: min(620px, 100%);
+    display: flex;
+    flex-direction: column;
+    row-gap: 24px;
+    padding: 30px;
+    border-radius: 28px;
+    background:
+        radial-gradient(circle at top right, rgba(99, 121, 233, 0.22), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(186, 138, 234, 0.14), transparent 30%),
+        linear-gradient(145deg, rgba(29, 35, 48, 0.98), rgba(18, 23, 31, 0.98));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+        0 28px 70px rgba(0, 0, 0, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+}
+
+
+
+.close_button {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    z-index: 3;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    color: #dbe7ff;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+    transition: background 0.16s, border-color 0.16s, color 0.16s;
+    
+    svg {
+        font-size: 22px;
+    }
+
+    &:hover {
+        color: #fff;
+        background: rgba(99, 121, 233, 0.16);
+        border-color: rgba(133, 166, 255, 0.22);
+    }
+}
+
+.header,
+.plan_card,
+.benefits,
+.actions {
+    position: relative;
+    z-index: 2;
+   
+}
+
+.header {
+    display: flex;
+    column-gap: 16px;
+    padding-right: 44px;
+}
+
+.icon {
+    width: 54px;
+    height: 54px;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    color: #dbe7ff;
+    font-size: 30px;
+    background: linear-gradient(135deg, rgba(99, 121, 233, 0.42), rgba(186, 138, 234, 0.18));
+    border: 1px solid rgba(133, 166, 255, 0.22);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.header_text {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+}
+
+.eyebrow {
+    color: #8da6ff;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.title {
+    color: #F9FAFBFF;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.16;
+}
+
+.description {
+    max-width: 460px;
+    color: #BAC1CEFF;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.45;
+}
+
+.plan_card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 18px;
+    padding: 20px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.plan_name {
+    color: #F9FAFBFF;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.plan_hint {
+    margin-top: 4px;
+    color: #98A2B3;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.price {
+    display: flex;
+    align-items: flex-end;
+    color: #8da6ff;
+
+    span {
+        font-size: 38px;
+        font-weight: 900;
+        line-height: 0.9;
+    }
+
+    svg {
+        margin-bottom: 3px;
+        font-size: 24px;
+    }
+
+    p {
+        margin-bottom: 5px;
+        color: #BAC1CEFF;
+        font-size: 13px;
+        font-weight: 700;
+    }
+}
+
+.benefits {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.benefit {
+    min-height: 94px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    padding: 16px;
+    border-radius: 18px;
+    color: #dbe7ff;
+    background: rgba(99, 121, 233, 0.09);
+    border: 1px solid rgba(133, 166, 255, 0.12);
+
+    svg {
+        font-size: 22px;
+        flex: 0 0 auto;
+    }
+
+    p {
+        color: #DFE0E7FF;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.35;
+    }
+}
+
+.actions {
+    display: flex;
+    column-gap: 12px;
+}
+
+.primary_button,
+.secondary_button {
+    height: 50px;
+    flex: 1;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.16s, border-color 0.16s, color 0.16s, transform 0.16s, box-shadow 0.16s;
+}
+
+.primary_button {
+    color: #F9FAFBFF;
+    background: linear-gradient(135deg, #5d8cff 0%, #345ed6 52%, #4733c7 100%);
+    border: 1px solid rgba(209, 223, 255, 0.22);
+    box-shadow:
+        0 16px 30px rgba(52, 94, 214, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+    &:hover {
+        background: linear-gradient(135deg, #6d9bff 0%, #3d6bec 52%, #5742de 100%);
+        border-color: rgba(223, 231, 255, 0.34);
+        box-shadow:
+            0 20px 38px rgba(52, 94, 214, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.24);
+        transform: translateY(-2px);
+    }
+}
+
+.secondary_button {
+    color: rgb(211, 213, 216);
+    background: rgba(24, 25, 33, 0.72);
+    border: 1px solid rgba(133, 166, 255, 0.14);
+
+    &:hover {
+        color: #FFFFFFFF;
+        background: rgba(99, 121, 233, 0.12);
+        border-color: rgba(133, 166, 255, 0.24);
+        transform: translateY(-2px);
+    }
+}
+
+@media (max-width: 720px) {
+    .modal {
+        padding: 24px;
+    }
+
+    .header,
+    .plan_card,
+    .actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .benefits {
+        grid-template-columns: 1fr;
+    }
+}

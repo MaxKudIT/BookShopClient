@@ -5,7 +5,7 @@ import { textFieldStyles } from "./muiStyles";
 import { getAuth } from "firebase/auth";
 import { useEffect, type FC } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSearch, useMyBooksSearch } from "../../../../store/context/SearchContext";
 import { useFirebaseAuth } from "../../../hooks/useFirebaseAuth";
 import styles from './SelectionHeader.module.scss'
@@ -18,12 +18,44 @@ type SelectionHeaderProps = {
   paddingSides?: number
 }
 
-const SelectionHeader: FC<SelectionHeaderProps> = ({paddingSides}) => {
+type NavItem = {
+  title: string;
+  path: string;
+}
+
+
+
+
+
+
+const SelectionHeader: FC<SelectionHeaderProps> = ({ paddingSides }) => {
+
+
+  const navigationMenu: NavItem[] = [
+    {
+      title: 'Главная',
+      path: '/'
+    },
+    {
+      title: 'Корзина',
+      path: '/cart'
+    },
+    {
+      title: 'Избранное',
+      path: '/favs'
+    },
+    {
+      title: 'Рекомендации',
+      path: '/recomms'
+    },
+  ]
+
+
 
   const { setsearchingValue, setGenre } = useSearch()
   const { logout } = useFirebaseAuth()
   const navigate = useNavigate();
-
+  const location = useLocation();
   const { setsearchingValue: setSearchingValueMy, setGenre: setGenreMy } = useMyBooksSearch()
 
   const auth = getAuth();
@@ -49,14 +81,14 @@ const SelectionHeader: FC<SelectionHeaderProps> = ({paddingSides}) => {
 
 
   return (
-    <div  style={paddingSides ? {padding: `0 ${paddingSides}px`} : {padding: '0 240px'}} className={styles.selection_header}>
+    <div style={paddingSides ? { padding: `0 ${paddingSides}px` } : { padding: '0 240px' }} className={styles.selection_header}>
       <Logo />
 
       <div className={styles.header_refs_container}>
-        <div className={styles.header_refers_active}>Главная</div>
-        <div className={styles.header_refers_unactive}>Корзина</div>
-        <div className={styles.header_refers_unactive}>Рекомендации</div>
-        <div className={styles.header_refers_unactive}>Избранное</div>
+        {navigationMenu.map(el => (
+          <div onClick={() => navigate(el.path)} className={location.pathname === el.path ? styles.header_refers_active : styles.header_refers_unactive}>{el.title}</div>
+        ))}
+
       </div>
 
       <div style={{ display: 'flex', columnGap: 15, alignItems: 'center' }}>

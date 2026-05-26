@@ -4,7 +4,6 @@ import styles from './MyBooks.module.scss'
 
 
 import MyBooksList from "../../features/MyBooks/MyBooksList";
-import Profile from "../../features/Profile/Profile";
 const MyBooks = () =>
   {
     return (
