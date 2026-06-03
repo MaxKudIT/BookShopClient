@@ -6,7 +6,9 @@ import {
   sendPasswordResetEmail,
   updateProfile,
   type User,
-  signInWithPopup
+  signInWithPopup,
+  linkWithPopup,
+  getAdditionalUserInfo
 } from 'firebase/auth';
 import { auth, githubProvider, googleProvider } from './configs/firebase-config';
 import type { RegFormType } from '../../features/Registration/Registration';
@@ -14,6 +16,11 @@ import type { LoginFormType } from '../../features/Authorization/Authorization';
 
 
 export type AppUser = User & { login: string }
+
+export type OAuthSignInResult = {
+  user: User;
+  isNewUser: boolean;
+}
 
 
 export const useFirebaseAuth = () => {
@@ -102,7 +109,10 @@ export const useFirebaseAuth = () => {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       setUser(user);
-      return user;
+      return {
+        user,
+        isNewUser: getAdditionalUserInfo(result)?.isNewUser ?? false
+      };
     } catch (err: any) {
       const errorMessage = getErrorMessage(err.code, 'google');
       setGoogleError(errorMessage);
@@ -128,11 +138,10 @@ export const useFirebaseAuth = () => {
     try {
       const result = await signInWithPopup(auth, githubProvider);
       const user = result.user;
-      
+
       if (!user.displayName) {
         console.log('GitHub не вернул displayName, создаем из других данных');
 
-    
         if (user.email) {
           const nameFromEmail = user.email.split('@')[0];
           await updateProfile(user, {
@@ -140,21 +149,73 @@ export const useFirebaseAuth = () => {
           });
           console.log('Установлен displayName из email:', nameFromEmail);
         }
-
-
-        setUser(user);
-        return user;
       }
-     } catch (err: any) {
-        const errorMessage = getErrorMessage(err.code, 'gitHub');
-        setGitHubError(errorMessage);
-        throw new Error(errorMessage);
-      } finally {
-        setGitHubLoading(false);
-      }
+
+      setUser(user);
+      return {
+        user,
+        isNewUser: getAdditionalUserInfo(result)?.isNewUser ?? false
+      };
+    } catch (err: any) {
+      const errorMessage = getErrorMessage(err.code, 'gitHub');
+      setGitHubError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setGitHubLoading(false);
     }
-    
-    , []);
+  }, []);
+
+  const linkGoogleProvider = useCallback(async () => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error('Сначала войдите в аккаунт');
+    }
+
+    setGoogleLoading(true);
+    setGoogleError(null);
+
+    try {
+      const result = await linkWithPopup(currentUser, googleProvider);
+      setUser(result.user);
+      return result.user;
+    } catch (err: any) {
+      const errorMessage = getErrorMessage(err.code, 'google');
+      setGoogleError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setGoogleLoading(false);
+    }
+  }, []);
+
+  const linkGitHubProvider = useCallback(async () => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error('Сначала войдите в аккаунт');
+    }
+
+    setGitHubLoading(true);
+    setGitHubError(null);
+
+    try {
+      const result = await linkWithPopup(currentUser, githubProvider);
+      const linkedUser = result.user;
+
+      if (!linkedUser.displayName && linkedUser.email) {
+        await updateProfile(linkedUser, {
+          displayName: linkedUser.email.split('@')[0]
+        });
+      }
+
+      setUser(linkedUser);
+      return linkedUser;
+    } catch (err: any) {
+      const errorMessage = getErrorMessage(err.code, 'gitHub');
+      setGitHubError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setGitHubLoading(false);
+    }
+  }, []);
 
 
 
@@ -179,6 +240,7 @@ export const useFirebaseAuth = () => {
     setRegisterError(null);
     setLoginError(null);
     setGoogleError(null);
+    setGitHubError(null);
     setLogoutError(null);
   }, []);
 
@@ -208,6 +270,8 @@ export const useFirebaseAuth = () => {
     gitHubLoading,
     gitHubError,
 
+    linkGoogleProvider,
+    linkGitHubProvider,
 
     clearErrors
   };
@@ -241,6 +305,9 @@ type GoogleErrors = {
   'auth/popup-blocked': string,
   'auth/cancelled-popup-request': string,
   'auth/account-exists-with-different-credential': string,
+  'auth/credential-already-in-use': string,
+  'auth/email-already-in-use': string,
+  'auth/provider-already-linked': string,
   'auth/auth-domain-config-required': string,
   'auth/operation-not-allowed': string,
   'auth/operation-not-supported-in-this-environment': string,
@@ -266,6 +333,7 @@ type GithubErrors = {
   'auth/account-exists-with-different-credential': string,
   'auth/credential-already-in-use': string,
   'auth/email-already-in-use': string,
+  'auth/provider-already-linked': string,
 
 
   'auth/operation-not-allowed': string,
@@ -321,6 +389,9 @@ const getErrorMessage = (errorCode: FirebaseAuthErrorCode, action: 'register' | 
       'auth/popup-blocked': 'Браузер заблокировал всплывающее окно',
       'auth/cancelled-popup-request': 'Запрос отменен',
       'auth/account-exists-with-different-credential': 'Аккаунт уже существует с другим способом входа',
+      'auth/credential-already-in-use': 'Этот Google уже привязан к другому аккаунту',
+      'auth/email-already-in-use': 'Этот email уже используется другим аккаунтом',
+      'auth/provider-already-linked': 'Google уже привязан к текущему аккаунту',
       'auth/auth-domain-config-required': 'Ошибка конфигурации домена',
       'auth/operation-not-allowed': 'Вход через Google отключен в Firebase Console',
       'auth/operation-not-supported-in-this-environment': 'Операция не поддерживается',
@@ -343,6 +414,7 @@ const getErrorMessage = (errorCode: FirebaseAuthErrorCode, action: 'register' | 
       'auth/account-exists-with-different-credential': 'Аккаунт с таким email уже существует, но с другим способом входа',
       'auth/credential-already-in-use': 'Эти учетные данные GitHub уже привязаны к другому аккаунту',
       'auth/email-already-in-use': 'Этот email уже используется другим аккаунтом',
+      'auth/provider-already-linked': 'GitHub уже привязан к текущему аккаунту',
 
 
       'auth/operation-not-allowed': 'Вход через GitHub отключен в Firebase Console',

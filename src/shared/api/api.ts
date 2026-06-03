@@ -15,7 +15,7 @@ import { StatsA } from './Stats/StatsA'
 import { UserSubA } from './UserSub/UserSubA'
 
 
-export const api = axios.create({baseURL: 'http://192.168.0.106:3000/'})
+export const api = axios.create({baseURL: 'http://192.168.0.109:3000/'})
 
 class Api {
     public readonly books: BookInfoA

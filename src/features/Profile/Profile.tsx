@@ -15,6 +15,10 @@ import {
     Typography,
 } from '@mui/material';
 import { FaCamera } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa6';
+import { FcGoogle } from 'react-icons/fc';
+import { auth } from '../../shared/hooks/configs/firebase-config';
+import { useFirebaseAuth } from '../../shared/hooks/useFirebaseAuth';
 
 type ProfileForm = {
     login: string;
@@ -51,7 +55,7 @@ const saveProfileMock = async (profile: ProfileForm) => {
 const dialogPaperSx = {
     background: 'linear-gradient(180deg, rgb(22, 27, 36) 0%, #0e1122 100%)',
     borderRadius: '18px',
-    color: '#ebe9f0',
+    color: '#ebe9f0'
 
 };
 
@@ -104,6 +108,12 @@ const successAlertSx = {
     color: '#bbf7d0',
 };
 
+const errorAlertSx = {
+    bgcolor: 'rgba(239, 68, 68, 0.12)',
+    border: '1px solid rgba(248, 113, 113, 0.22)',
+    color: '#fecaca',
+};
+
 const cancelButtonSx = {
     borderRadius: '10px',
     color: '#bab5fd',
@@ -123,22 +133,50 @@ const saveButtonSx = {
     },
 };
 
+const providerButtonSx = {
+    borderColor: 'rgba(167, 139, 250, 0.28)',
+    borderRadius: '10px',
+    color: '#f5f3ff',
+    justifyContent: 'flex-start',
+    textTransform: 'none',
+    '&:hover': {
+        borderColor: 'rgba(167, 139, 250, 0.48)',
+        backgroundColor: 'rgba(99, 121, 233, 0.08)',
+    },
+    '&.Mui-disabled': {
+        color: '#c7d2fe',
+        borderColor: 'rgba(167, 139, 250, 0.28)',
+        opacity: 1,
+    },
+};
+
 const dialogBackdropSx = {
     backgroundColor: 'rgba(8, 11, 18, 0.62)',
     backdropFilter: 'blur(12px)',
     WebkitBackdropFilter: 'blur(12px)',
 };
 const Profile: FC<ProfileProps> = ({ open, onClose, user }) => {
+    const {
+        googleLoading,
+        gitHubLoading,
+        linkGoogleProvider,
+        linkGitHubProvider,
+    } = useFirebaseAuth();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [savedProfile, setSavedProfile] = useState<ProfileForm>(() => createInitialProfile(user));
     const [form, setForm] = useState<ProfileForm>(() => createInitialProfile(user));
     const [isSaving, setIsSaving] = useState(false);
     const [message, setMessage] = useState('');
+    const [messageSeverity, setMessageSeverity] = useState<'success' | 'error'>('success');
+    const linkedProviderIds = auth.currentUser?.providerData.map((provider) => provider.providerId) ?? [];
+    const isGoogleLinked = linkedProviderIds.includes('google.com');
+    const isGitHubLinked = linkedProviderIds.includes('github.com');
 
     useEffect(() => {
         if (open) {
             setForm(savedProfile);
             setMessage('');
+            setMessageSeverity('success');
         }
     }, [open]);
 
@@ -170,23 +208,48 @@ const Profile: FC<ProfileProps> = ({ open, onClose, user }) => {
 
             setSavedProfile(nextProfile);
             setForm(nextProfile);
+            setMessageSeverity('success');
             setMessage('Профиль обновлен');
         } finally {
             setIsSaving(false);
         }
     };
 
+    const handleLinkGoogle = async () => {
+        setMessage('');
+        try {
+            await linkGoogleProvider();
+            setMessageSeverity('success');
+            setMessage('Google привязан к аккаунту');
+        } catch (err: any) {
+            setMessageSeverity('error');
+            setMessage(err.message || 'Не удалось привязать Google');
+        }
+    };
+
+    const handleLinkGitHub = async () => {
+        setMessage('');
+        try {
+            await linkGitHubProvider();
+            setMessageSeverity('success');
+            setMessage('GitHub привязан к аккаунту');
+        } catch (err: any) {
+            setMessageSeverity('error');
+            setMessage(err.message || 'Не удалось привязать GitHub');
+        }
+    };
+
     return (
         <Dialog
-        
+
             open={open}
             onClose={handleClose}
             fullWidth
             maxWidth="sm"
             disableScrollLock
-            PaperProps={{ sx: dialogPaperSx} }
-            BackdropProps={{sx: dialogBackdropSx}}
-            
+            PaperProps={{ sx: dialogPaperSx }}
+            BackdropProps={{ sx: dialogBackdropSx }}
+
         >
             <DialogTitle sx={{ pb: 1 }}>
                 <Typography component="h2" sx={titleSx}>
@@ -255,15 +318,46 @@ const Profile: FC<ProfileProps> = ({ open, onClose, user }) => {
                         sx={textFieldSx}
                     />
 
+                    <Stack spacing={1.5}>
+                        <Typography sx={{ color: '#f5f3ff', fontSize: 15, fontWeight: 700 }}>
+                            Способы входа
+                        </Typography>
+                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+                            <Button
+                                variant="outlined"
+                                startIcon={<FcGoogle />}
+                                onClick={handleLinkGoogle}
+                                disabled={isGoogleLinked || googleLoading}
+                                sx={providerButtonSx}
+                                fullWidth
+                            >
+                                {isGoogleLinked ? 'Google привязан' : 'Привязать Google'}
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                startIcon={<FaGithub />}
+                                onClick={handleLinkGitHub}
+                                disabled={isGitHubLinked || gitHubLoading}
+                                sx={providerButtonSx}
+                                fullWidth
+                            >
+                                {isGitHubLinked ? 'GitHub привязан' : 'Привязать GitHub'}
+                            </Button>
+                        </Stack>
+                    </Stack>
+
                     {message && (
-                        <Alert severity="success" sx={successAlertSx}>
+                        <Alert
+                            severity={messageSeverity}
+                            sx={messageSeverity === 'success' ? successAlertSx : errorAlertSx}
+                        >
                             {message}
                         </Alert>
                     )}
                 </Stack>
             </DialogContent>
 
-            <DialogActions sx={{ px: 3, pb: 3 }}>
+            <DialogActions sx={{ px: 3, pb: 3, mt: 5 }}>
                 <Button onClick={handleClose} disabled={isSaving} sx={cancelButtonSx}>
                     Отмена
                 </Button>

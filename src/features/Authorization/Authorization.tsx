@@ -25,6 +25,8 @@ import { useFirebaseAuth } from '../../shared/hooks/useFirebaseAuth';
 import { GrFormNext } from 'react-icons/gr';
 import { FaGithub } from 'react-icons/fa6';
 import { IoMdInformationCircleOutline } from 'react-icons/io';
+import { usePost } from '../../shared/hooks/queries';
+import type { User } from 'firebase/auth';
 
 
 export type LoginFormType = {
@@ -38,6 +40,9 @@ export type LoginFormType = {
 const Authorization = () => {
 
   const { login, loginLoading, loginError, clearErrors, googleSignIn, googleError, gitHubSignIn, gitHubError } = useFirebaseAuth();
+  const { post: createUser } = usePost<{ FirebaseId: string }, { id: string }>('/users/create');
+  const { post: createCart } = usePost<{ title: string }, { id: string }>('/cart')
+  const { post: createFav } = usePost<{ title: string }, { id: string }>('/fav')
 
 
   const [submitError, setSubmitError] = useState<string>('');
@@ -117,9 +122,27 @@ const Authorization = () => {
     }
   };
 
+  const createOAuthUserResources = async (firebaseUser: User) => {
+    const token = await firebaseUser.getIdToken();
+
+    await createUser({ FirebaseId: firebaseUser.uid });
+    await createCart(
+      { title: `Cart ${firebaseUser.uid}` },
+      { idToken: token }
+    );
+    await createFav(
+      { title: `Fav ${firebaseUser.uid}` },
+      { idToken: token }
+    );
+  };
+
   const handleGoogleLogin = async () => {
     try {
-      await googleSignIn();
+      const oauthResult = await googleSignIn();
+
+      if (oauthResult?.isNewUser) {
+        await createOAuthUserResources(oauthResult.user);
+      }
 
       navigate('/', { replace: true });
 
@@ -128,6 +151,7 @@ const Authorization = () => {
     }
     catch (e: any) {
       console.error(e)
+      setSubmitError(e.message || 'Не удалось войти через Google')
     }
 
 
@@ -135,7 +159,11 @@ const Authorization = () => {
 
   const handleGitHubLogin = async () => {
     try {
-      await gitHubSignIn();
+      const oauthResult = await gitHubSignIn();
+
+      if (oauthResult?.isNewUser) {
+        await createOAuthUserResources(oauthResult.user);
+      }
 
       navigate('/', { replace: true });
 
@@ -144,6 +172,7 @@ const Authorization = () => {
     }
     catch (e: any) {
       console.error(e)
+      setSubmitError(e.message || 'Не удалось войти через GitHub')
     }
 
 

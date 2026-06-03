@@ -23,7 +23,7 @@ import { auth } from '../../shared/hooks/configs/firebase-config';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from 'react-router-dom';
 import { useDelete, usePost } from '../../shared/hooks/queries';
-import { getAuth } from 'firebase/auth';
+import { getAuth, type User } from 'firebase/auth';
 import { FaGithub } from 'react-icons/fa6';
 import { FcGoogle } from 'react-icons/fc';
 import { GrFormNext } from 'react-icons/gr';
@@ -261,12 +261,29 @@ const Registration = () => {
     }
   };
 
+  const createOAuthUserResources = async (firebaseUser: User) => {
+    const token = await firebaseUser.getIdToken();
+
+    await createUser({ FirebaseId: firebaseUser.uid });
+    await createCart(
+      { title: `Cart ${firebaseUser.uid}` },
+      { idToken: token }
+    );
+    await createFav(
+      { title: `Fav ${firebaseUser.uid}` },
+      { idToken: token }
+    );
+  };
+
 
 
   const handleGoogleLogin = async () => {
     try {
-      await googleSignIn();
+      const oauthResult = await googleSignIn();
 
+      if (oauthResult?.isNewUser) {
+        await createOAuthUserResources(oauthResult.user);
+      }
 
 
       navigate('/', { replace: true });
@@ -276,6 +293,7 @@ const Registration = () => {
     }
     catch (e: any) {
       console.error(e)
+      setSubmitError(e.message || 'Не удалось войти через Google')
     }
 
 
@@ -284,7 +302,11 @@ const Registration = () => {
 
   const handleGitHubLogin = async () => {
     try {
-      await gitHubSignIn();
+      const oauthResult = await gitHubSignIn();
+
+      if (oauthResult?.isNewUser) {
+        await createOAuthUserResources(oauthResult.user);
+      }
 
       navigate('/', { replace: true });
 
@@ -293,6 +315,7 @@ const Registration = () => {
     }
     catch (e: any) {
       console.error(e)
+      setSubmitError(e.message || 'Не удалось войти через GitHub')
     }
 
 
