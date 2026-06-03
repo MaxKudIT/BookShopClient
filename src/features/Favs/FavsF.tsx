@@ -84,7 +84,7 @@ const FavsF = observer(() => {
             <main className={styles.favs_main_container}>
                 <section className={styles.favs_header}>
                     <div className={styles.favs_title_group}>
-                        <div style={{display: 'flex', flexDirection: 'column'}}>
+                        <div style={{display: 'flex', flexDirection: 'column', rowGap: 5}}>
                             <p className={styles.favs_title}>Мое <span className={styles.text_gradient}>Избранное</span></p>
                             <p className={styles.favs_subtitle}>Ваша персональная коллекция вдохновения</p>
                         </div>

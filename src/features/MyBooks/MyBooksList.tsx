@@ -135,18 +135,17 @@ const MyBooksList = () => {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              
+
             }}>
               <p style={{ fontSize: 25, color: '#FFFFFFFF', fontWeight: 600 }}>Моя библиотека</p>
               <p style={{ fontSize: 14, color: '#C0C2C8FF' }}>Все ваши приобретенные издания в одном месте</p>
             </div>
           </div>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '200px' }}>
-            <BookList list={[]} viewPage={'home'} />
-            <RecommsRowWithDynamic icon={IoCompassOutline} title={'Личные рекомендации'} description={'Сборник книг, которые вам по душе'} books={[]} color={'blue'} />
-            <BookCarousel books={[]}/>
-          </div>
+
+
+          <BookList list={[]} viewPage={'home'} />
+
+
 
         </div>
         <MainFooter />

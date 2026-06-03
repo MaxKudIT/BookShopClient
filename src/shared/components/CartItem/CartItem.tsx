@@ -23,6 +23,7 @@ const CartItem: FC<CartItemsPreview & {
     Rate,
     Discount,
     ImageUrl,
+    Format,
     addItem,
     deleteItem,
     isSelected,
@@ -66,7 +67,7 @@ const CartItem: FC<CartItemsPreview & {
                     <div className={styles.item_content}>
                         <div className={styles.item_text}>
                             <div className={styles.meta_row}>
-                                <div className={styles.genre_wrapper}>Электронная книга</div>
+                                <div className={styles.genre_wrapper}>{Format || 'Печатная книга'}</div>
                                 <div className={styles.rate_wrapper}>
                                     <FaRegStar />
                                     <p>{Rate || 4.7}</p>

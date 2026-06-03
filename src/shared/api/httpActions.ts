@@ -18,6 +18,14 @@ class HttpActions {
         return api.post(url, data, config);
     };
 
+    public patch = async <T>(
+        url: string,
+        data?: any,
+        config?: AxiosRequestConfig
+    ): AxiosPromise<T> => {
+        return api.patch(url, data, config);
+    };
+
 
     public delete = async <T>(
         url: string,

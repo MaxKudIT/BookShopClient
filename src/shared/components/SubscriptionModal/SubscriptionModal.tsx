@@ -45,10 +45,10 @@ const SubscriptionModal: FC<SubscriptionModalProps> = ({ open, onClose }) => {
                     </div>
                 </div>
 
-                <div className={styles.plan_card}>
+                <div className={styles.plan_card_month}>
                     <div>
                         <p className={styles.plan_name}>Ежемесячный доступ</p>
-                        <p className={styles.plan_hint}>Можно отменить в любой момент</p>
+                       
                     </div>
 
                     <div className={styles.price}>
@@ -58,6 +58,18 @@ const SubscriptionModal: FC<SubscriptionModalProps> = ({ open, onClose }) => {
                     </div>
                 </div>
 
+                <div className={styles.plan_card}>
+                    <div>
+                        <p className={styles.plan_name}>Годовой доступ</p>
+                  
+                    </div>
+
+                    <div className={styles.price}>
+                        <span>479</span>
+                        <MdCurrencyRuble />
+                        <p>/год</p>
+                    </div>
+                </div>
                 <div className={styles.benefits}>
                     {benefits.map((item) => (
                         <div key={item} className={styles.benefit}>
@@ -72,7 +84,7 @@ const SubscriptionModal: FC<SubscriptionModalProps> = ({ open, onClose }) => {
                         Подключить за 49 ₽
                     </button>
                     <button className={styles.secondary_button} type="button" onClick={onClose}>
-                        Вернуться
+                       Подключить за 479 ₽
                     </button>
                 </div>
             </section>

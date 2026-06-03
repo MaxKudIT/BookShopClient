@@ -1,6 +1,6 @@
 import type { Api } from "../../../shared/api/api";
 import { makeInitialAxiosSolt } from "../../../shared/helpers/apiSolt/makeInitialAxiosSolt";
-import type { BookInfoT, CartItemsPreview, ErrorResponse, PageInfoT } from "../../../shared/types";
+import type { CartItemsPreview } from "../../../shared/types";
 import { makeAutoObservable, flow } from 'mobx';
 class CartItemStore {
 
@@ -65,14 +65,14 @@ class CartItemStore {
     });
 
 
-    public isInCartItem = flow(function* (this: CartItemStore, bookId: string)
+    public isInCartItem = flow(function* (this: CartItemStore, physicalBookId: string)
         : Generator<Promise<string | { isInCart: boolean }>, void, string | { isInCart: boolean }> {
 
         this.postCartItemsState2 = { loading: true, error: null };
 
         try {
 
-            const result = yield this.api.carts.isInCartItem(bookId);
+            const result = yield this.api.carts.isInCartItem(physicalBookId);
 
             if (typeof result === 'string') {
                 this.postCartItemsState2 = { loading: false, error: result };
@@ -90,14 +90,14 @@ class CartItemStore {
 
 
 
-      public areAllInCartItem = flow(function* (this: CartItemStore, bookIds: string[])
+      public areAllInCartItem = flow(function* (this: CartItemStore, physicalBookIds: string[])
         : Generator<Promise<string | { areAllInCart: boolean }>, void, string | { areAllInCart: boolean }> {
 
         this.areAllInCartState = { loading: true, error: null };
 
         try {
 
-            const result = yield this.api.carts.areAllInCart(bookIds);
+            const result = yield this.api.carts.areAllInCart(physicalBookIds);
 
             if (typeof result === 'string') {
                 this.areAllInCartState = { loading: false, error: result };
@@ -139,14 +139,14 @@ class CartItemStore {
 
 
 
-    public createCartItem = flow(function* (this: CartItemStore, bookId: string)
+    public createCartItem = flow(function* (this: CartItemStore, physicalBookId: string)
         : Generator<Promise<string | { resultId: string }>, void, string | { resultId: string }> {
 
         this.postCartItemsState = { loading: true, error: null };
 
         try {
 
-            const result = yield this.api.carts.createCartItem(bookId);
+            const result = yield this.api.carts.createCartItem(physicalBookId);
 
             if (typeof result === 'string') {
                 this.postCartItemsState = { loading: false, error: result };
@@ -163,14 +163,14 @@ class CartItemStore {
     });
 
 
-    public deleteCartItems = flow(function* (this: CartItemStore, bookIds: string[])
+    public deleteCartItems = flow(function* (this: CartItemStore, physicalBookIds: string[])
         : Generator<Promise<string | void>, void, string | void> {
 
         this.deleteCartItemsState = { loading: true, error: null };
 
         try {
 
-            const result = yield this.api.carts.deleteCartItem(bookIds);
+            const result = yield this.api.carts.deleteCartItem(physicalBookIds);
 
             if (typeof result === 'string') {
                 this.deleteCartItemsState = { loading: false, error: result };

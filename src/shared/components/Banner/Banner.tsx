@@ -1,7 +1,8 @@
 import { IoBookOutline } from "react-icons/io5";
 import styles from './Banner.module.scss'
 import type { IconType } from "react-icons";
-import type { FC } from "react";
+import { useState, type FC } from "react";
+import SubscriptionModal from "../SubscriptionModal/SubscriptionModal";
 
 export type BannerProps = {
     icon: IconType,
@@ -11,26 +12,45 @@ export type BannerProps = {
 }
 
 const Banner: FC<BannerProps> = ({ icon: Icon, title, description, color }) => {
-    return (
-        <section className={styles.banner}>
-            <div className={styles.banner_content}>
-                <div className={styles.banner_icon} style={{ color }}>
-                    <Icon />
-                </div>
+    const [subscriptionOpen, setSubscriptionOpen] = useState(false);
+    const [bannerVisible, setBannerVisible] = useState(true);
 
-                <p className={styles.banner_title}>{title}</p>
-                <p className={styles.banner_description}>{description}</p>
-                <div className={styles.banner_actions}>
-                    <button className={styles.sub_prem_button_one}>
-                        Перейти к оформлению
-                    </button>
-                    <button className={styles.sub_prem_button_two}>
-                        <IoBookOutline />
-                        Продолжить чтение
-                    </button>
+    if (!bannerVisible) {
+        return null;
+    }
+
+    return (
+        <>
+            <section className={styles.banner}>
+                <div className={styles.banner_content}>
+                    <div className={styles.banner_icon} style={{ color }}>
+                        <Icon />
+                    </div>
+
+                    <p className={styles.banner_title}>{title}</p>
+                    <p className={styles.banner_description}>{description}</p>
+                    <div className={styles.banner_actions}>
+                        <button
+                            className={styles.sub_prem_button_one}
+                            type="button"
+                            onClick={() => setSubscriptionOpen(true)}
+                        >
+                            Перейти к оформлению
+                        </button>
+                        <button
+                            className={styles.sub_prem_button_two}
+                            type="button"
+                            onClick={() => setBannerVisible(false)}
+                        >
+                            <IoBookOutline />
+                            Продолжить чтение
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+
+            <SubscriptionModal open={subscriptionOpen} onClose={() => setSubscriptionOpen(false)} />
+        </>
     )
 }
 

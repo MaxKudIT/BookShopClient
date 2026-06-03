@@ -31,10 +31,10 @@ class CartA {
 
 
 
-    public isInCartItem = async (bookId: string): Promise<{ isInCart: boolean } | string> => {
+    public isInCartItem = async (physicalBookId: string): Promise<{ isInCart: boolean } | string> => {
         const config = await this.httpActions.getAccessToken();
 
-        const resData = this.httpActions.post<{ isInCart: boolean }>(`${this.startUrl}/incart`, { BookId: bookId }, config).
+        const resData = this.httpActions.post<{ isInCart: boolean }>(`${this.startUrl}/incart`, { physicalBookId }, config).
             then(res => {
                 return res.data
             }).
@@ -45,10 +45,10 @@ class CartA {
     }
 
 
-     public areAllInCart = async (bookIds: string[]): Promise<{ areAllInCart: boolean } | string> => {
+     public areAllInCart = async (physicalBookIds: string[]): Promise<{ areAllInCart: boolean } | string> => {
         const config = await this.httpActions.getAccessToken();
 
-        const resData = this.httpActions.post<{ areAllInCart: boolean }>(`${this.startUrl}/allincart`, { BookIds: bookIds }, config).
+        const resData = this.httpActions.post<{ areAllInCart: boolean }>(`${this.startUrl}/allincart`, { physicalBookIds }, config).
             then(res => {
                 return res.data
             }).
@@ -73,10 +73,10 @@ class CartA {
     }
 
 
-    public createCartItem = async (bookId: string): Promise<{ resultId: string } | string> => {
+    public createCartItem = async (physicalBookId: string): Promise<{ resultId: string } | string> => {
         const config = await this.httpActions.getAccessToken();
 
-        const resData = this.httpActions.post<{ id: string }>(`${this.startUrl}`, { BookId: bookId }, config).
+        const resData = this.httpActions.post<{ id: string }>(`${this.startUrl}`, { physicalBookId }, config).
             then(res => {
                 return { resultId: res.data.id }
             }).
@@ -86,10 +86,10 @@ class CartA {
         return resData
     }
 
-    public deleteCartItem = async (bookIds: string[]): Promise<string | void> => {
+    public deleteCartItem = async (physicalBookIds: string[]): Promise<string | void> => {
         const config = await this.httpActions.getAccessToken();
 
-        const resData = this.httpActions.delete(`${this.startUrl}`, bookIds, config).
+        const resData = this.httpActions.delete(`${this.startUrl}`, physicalBookIds, config).
             then(res => {
                 console.log('Success deleting!')
             }).

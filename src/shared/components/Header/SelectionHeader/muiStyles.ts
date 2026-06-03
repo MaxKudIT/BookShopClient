@@ -1,5 +1,3 @@
-import { PiX } from "react-icons/pi";
-
 export const textFieldStyles = {
   height: 50,
   width: '100%',

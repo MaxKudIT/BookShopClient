@@ -97,9 +97,7 @@ const defaultBooks: BookPreviewT[] = [
 
 export const BookList: FC<{ list: BookPreviewT[], viewPage: 'home' | 'shop' }> = ({ list, viewPage }) => {
     const visibleBooks = list.length ? list : defaultBooks;
-    const sectionSubtitle = viewPage === 'home'
-        ? 'Сохраненные книги и истории, к которым легко вернуться'
-        : 'Каталог книг, доступных для покупки и чтения';
+ 
 
     return (
         <section className={styles.books_section}>
@@ -107,7 +105,7 @@ export const BookList: FC<{ list: BookPreviewT[], viewPage: 'home' | 'shop' }> =
                 <div className={styles.section_title_group}>
                     <div>
                         <p className={styles.section_title}>Книжная подборка</p>
-                        <p className={styles.section_subtitle}>{sectionSubtitle}</p>
+                     
                     </div>
                 </div>
                 <p className={styles.books_count}>{visibleBooks.length} книг</p>
