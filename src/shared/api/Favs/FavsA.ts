@@ -1,4 +1,4 @@
-import type { CartItemsPreview, FavItemsPreview } from "../../types"
+import type { FavItemsPreview } from "../../types"
 import type { HttpActions } from "../httpActions"
 
 
@@ -34,7 +34,7 @@ class FavsA {
     public isInFavsItem = async (bookId: string): Promise<{isInFavs: boolean} | string> => {
         const config = await this.httpActions.getAccessToken();
 
-        const resData = this.httpActions.post<{isInCart: boolean}>(`${this.startUrl}/infavs`, {BookId: bookId}, config).
+        const resData = this.httpActions.post<{isInFavs: boolean}>(`${this.startUrl}/infavs`, {BookId: bookId}, config).
                         then(res => {
                             return res.data
                         }).
@@ -77,7 +77,7 @@ class FavsA {
         const config = await this.httpActions.getAccessToken();
 
         const resData = this.httpActions.delete(`${this.startUrl}`, bookIds, config).
-                        then(res => {
+                        then(() => {
                             console.log('Success deleting!')
                         }).
                         catch((err: any) => {

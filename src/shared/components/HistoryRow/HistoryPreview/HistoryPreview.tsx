@@ -2,12 +2,15 @@ import type { FC } from 'react';
 import styles from './HistoryPreview.module.scss'
 import { FaRegStar } from "react-icons/fa";
 import type { BookPreviewT } from '../../../types';
+import { useNavigate } from 'react-router-dom';
 
 const HistoryPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
     const progress = Math.min(96, Math.max(36, Math.round(book.Rate * 18)));
 
+    const navigate = useNavigate();
+
     return (
-        <div className={styles.history_preview_wrapper}>
+        <div onClick={() => navigate(`/books/${book.Id}`)} className={styles.history_preview_wrapper}>
             <div className={styles.image_wrapper}>
                 <img className={styles.book_image} src={book.ImageUrl} alt={book.Title} />
             </div>

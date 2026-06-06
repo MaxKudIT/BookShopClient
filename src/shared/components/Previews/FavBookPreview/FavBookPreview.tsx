@@ -1,11 +1,23 @@
 import type { FC } from 'react';
 import styles from './FavBookPreview.module.scss'
 import { FaRegStar, FaRegTrashAlt } from "react-icons/fa";
-import type { BookPreviewT } from '../../../types';
+import type { BookPreviewT, FavItemsPreview } from '../../../types';
 import { MdCurrencyRuble } from 'react-icons/md';
 import { IoBagAddOutline } from 'react-icons/io5';
 
-const FavBookPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
+type FavPreviewBook = FavItemsPreview & Partial<Pick<BookPreviewT, 'Genre'>>;
+
+const FavBookPreview: FC<{
+    book: FavPreviewBook,
+    onDelete?: (bookId: string) => void,
+    onAddToCart?: (bookId: string) => void,
+    isDeleting?: boolean,
+}> = ({
+    book,
+    onDelete,
+    onAddToCart,
+    isDeleting = false,
+}) => {
     const discountPrice = Math.floor(book.Price - (book.Price / 100 * book.Discount));
 
     return (
@@ -22,7 +34,7 @@ const FavBookPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
                         <p>/</p>
                         <p>5.0</p>
                     </div>
-                    <p className={styles.preview_genre}>{book.Genre}</p>
+                    <p className={styles.preview_genre}>{book.Genre || 'Книга'}</p>
                 </div>
 
                 <div className={styles.preview_text}>
@@ -44,10 +56,20 @@ const FavBookPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
                         </p>
                     </div>
                     <div className={styles.actions}>
-                        <button className={styles.cart_button} aria-label="Добавить в корзину">
+                        <button
+                            className={styles.cart_button}
+                            aria-label="Добавить в корзину"
+                            disabled={!onAddToCart}
+                            onClick={() => onAddToCart?.(book.Id)}
+                        >
                             <IoBagAddOutline />
                         </button>
-                        <button className={styles.icon_wrapper} aria-label="Удалить из избранного">
+                        <button
+                            className={styles.icon_wrapper}
+                            aria-label="Удалить из избранного"
+                            disabled={isDeleting}
+                            onClick={() => onDelete?.(book.Id)}
+                        >
                             <FaRegTrashAlt className={styles.trash_button} />
                         </button>
                     </div>

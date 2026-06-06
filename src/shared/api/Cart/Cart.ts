@@ -90,7 +90,7 @@ class CartA {
         const config = await this.httpActions.getAccessToken();
 
         const resData = this.httpActions.delete(`${this.startUrl}`, physicalBookIds, config).
-            then(res => {
+            then(() => {
                 console.log('Success deleting!')
             }).
             catch((err: any) => {

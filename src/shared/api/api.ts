@@ -10,6 +10,7 @@ import { FavsA } from './Favs/FavsA'
 import { BooksA } from './Books/BooksA'
 import { OrderItemsA } from './OrderItems/OrderItemsA'
 import { OrdersA } from './Orders/OrdersA'
+import { PhysicalBooksA } from './PhysicalBooks/PhysicalBooksA'
 import { ReadingA } from './Reading/ReadingA'
 import { ReadingSessionsA } from './ReadingSessions/ReadingSessionsA'
 import { RecommendationA } from './Recommendation/RecommendationA'
@@ -32,6 +33,7 @@ class Api {
     public readonly myBooks: BooksA
     public readonly orderItems: OrderItemsA
     public readonly orders: OrdersA
+    public readonly physicalBooks: PhysicalBooksA
     public readonly reading: ReadingA
     public readonly readingSessions: ReadingSessionsA
     public readonly recommendations: RecommendationA
@@ -50,6 +52,7 @@ class Api {
         this.myBooks = new BooksA(httpActions)
         this.orderItems = new OrderItemsA(httpActions)
         this.orders = new OrdersA(httpActions)
+        this.physicalBooks = new PhysicalBooksA(httpActions)
         this.reading = new ReadingA(httpActions)
         this.readingSessions = new ReadingSessionsA(httpActions)
         this.recommendations = new RecommendationA(httpActions)

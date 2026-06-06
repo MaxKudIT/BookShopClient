@@ -1,5 +1,8 @@
 .bookinfo_page_style {
-    background: rgb(22, 27, 36);
+    background:
+        radial-gradient(circle at 16% 8%, rgba(99, 121, 233, 0.13), transparent 28%),
+        radial-gradient(circle at 86% 18%, rgba(186, 138, 234, 0.10), transparent 24%),
+        rgb(22, 27, 36);
     height: 100%;
     width: 100%;
     display: flex;
@@ -10,9 +13,7 @@
 }
 
 .bookinfo_main_container {
-     padding: 150px 400px;
-    
-    
+    padding: 145px 400px 90px;
 }
 
 
@@ -37,13 +38,18 @@
 .bookinfo_container {
     display: flex;
     width: 100%;
-    column-gap: 40px;
-    padding: 28px;
-    padding-bottom: 50px;
-    border: 1px solid rgba(143, 164, 255, 0.11);
-    border-radius: 18px;
-    background: rgba(26, 32, 43, 0.62);
-    box-shadow: 0 24px 70px rgba(7, 10, 18, 0.26);
+    column-gap: 46px;
+    padding: 30px;
+    padding-bottom: 46px;
+    border: 1px solid rgba(143, 164, 255, 0.13);
+    border-radius: 24px;
+    background:
+        linear-gradient(145deg, rgba(30, 37, 51, 0.92), rgba(18, 23, 31, 0.96)),
+        rgba(26, 32, 43, 0.72);
+    box-shadow:
+        0 26px 70px rgba(5, 8, 14, 0.34),
+        inset 0 1px 0 rgba(255, 255, 255, 0.055);
+    backdrop-filter: blur(14px);
 }
 
 .first_column_wrapper {
@@ -60,85 +66,232 @@
 
 }
 
+.title_block {
+    display: flex;
+    flex-direction: column;
+    row-gap: 6px;
+}
+
+.book_title {
+    color: #faf9fb;
+    font-weight: 800;
+    font-size: 38px;
+    line-height: 1.08;
+}
+
+.meta_row {
+    display: flex;
+    column-gap: 15px;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.author_name {
+    color: #b8c2d2;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.reviews_text {
+    color: #99a2b1;
+    margin-left: 10px;
+}
+
+.price_row {
+    display: flex;
+    column-gap: 12px;
+    align-items: center;
+    margin-top: 2px;
+}
+
+.price_current {
+    display: flex;
+    align-items: center;
+    color: #8da6ff;
+    font-weight: 800;
+    font-size: 24px;
+}
+
+.price_old {
+    display: flex;
+    align-items: center;
+    color: #8c95a6;
+    text-decoration: line-through;
+}
+
+.content_divider {
+    flex-grow: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(99, 121, 233, 0.28), rgba(186, 138, 234, 0.08), transparent);
+    margin-top: 40px;
+    margin-bottom: 44px;
+}
+
+.quote_block {
+    display: flex;
+    column-gap: 20px;
+    align-items: center;
+    margin-bottom: 38px;
+}
+
+.quote_text {
+    font-size: 17px;
+    font-weight: 600;
+    color: rgba(250, 249, 251, 0.92);
+    font-style: italic;
+    line-height: 1.55;
+}
+
+.description_text {
+    font-size: 16px;
+    color: #c9cfdb;
+    font-weight: 400;
+    line-height: 1.65;
+}
+
+.sentenses_row {
+    display: flex;
+    align-items: stretch;
+    margin-top: 58px;
+    width: 100%;
+    column-gap: 20px;
+}
+
 .book_image {
     width: 100%;
     max-width: 100%;           
     height: auto;             
     aspect-ratio: 300 / 450;   
-    border-radius: 15px;
-    margin-bottom: 5px;
+    border-radius: 18px;
     object-fit: cover;        
-    transition: all 0.2s;
-    margin-bottom: 15px;
-    box-shadow: 0 22px 45px rgba(6, 9, 15, 0.45);
+    transition: transform 0.22s, filter 0.22s, box-shadow 0.22s;
+    margin-bottom: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow:
+        0 22px 45px rgba(6, 9, 15, 0.48),
+        0 0 0 1px rgba(143, 164, 255, 0.05);
+
+    &:hover {
+        filter: brightness(0.9);
+        transform: translateY(-2px);
+        box-shadow:
+            0 28px 58px rgba(5, 8, 14, 0.58),
+            0 0 0 1px rgba(143, 164, 255, 0.12);
+    }
 }
 
 .back_block {
     display: flex; 
     column-gap: 10px;
     align-items: center;
-    color: #a5aebd;
+    background: transparent;
+    color: #aeb7c7;
     font-weight: 500;
-    margin-bottom: 30px;
+    margin-bottom: 26px;
     width: fit-content;
     
     font-size: 14px;
     cursor: pointer;
-    padding: 7px 12px;
-    border-radius: 8px;
-    transition: color 0.2s, background 0.2s;
+    padding: 8px 13px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    transition: color 0.2s, background 0.2s, border-color 0.2s, transform 0.2s;
     &:hover {
         color: rgb(255, 255, 255, 1);
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.055);
+        border-color: rgba(255, 255, 255, 0.07);
+        transform: translateX(-2px);
     }
+}
+
+.state_block,
+.error_block {
+    width: 100%;
+    min-height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 14px;
+    border-radius: 22px;
+    background:
+        linear-gradient(145deg, rgba(30, 37, 51, 0.92), rgba(18, 23, 31, 0.96)),
+        rgba(26, 32, 43, 0.72);
+    border: 1px solid rgba(143, 164, 255, 0.13);
+    color: #d7dbe7;
+    font-size: 16px;
+    font-weight: 650;
+    box-shadow:
+        0 22px 46px rgba(5, 8, 14, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+.error_block {
+    color: #ffb4a8;
+    border-color: rgba(255, 99, 71, 0.3);
+    background:
+        linear-gradient(145deg, rgba(72, 30, 35, 0.55), rgba(18, 23, 31, 0.96)),
+        rgba(26, 32, 43, 0.72);
 }
 
 
 .genre_wrapper {
-    font-weight: 500;
-    padding: 4px 12px;
+    font-weight: 700;
+    padding: 5px 13px;
     border-radius: 50px;
     width: fit-content;
-    border: 1px solid rgba(143, 164, 255, 0.24);
+    border: 1px solid rgba(143, 164, 255, 0.22);
     color: #d9e3ff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 12px;
-    letter-spacing: 0.4px;
-    background: rgba(90, 111, 184, 0.12);
-    margin-bottom: 10px;
+    letter-spacing: 0;
+    background: rgba(99, 121, 233, 0.13);
+    margin-bottom: 13px;
 }
 
 .first_column_button {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.035);
     color: rgb(255, 255, 255);
-    border-radius: 10px;
-    border: 1px solid rgba(99, 121, 233, 0.301);
+    border-radius: 14px;
+    border: 1px solid rgba(133, 166, 255, 0.16);
     width: calc(50% - 5px);
-    height: 45px;
+    height: 46px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 650;
     display: flex;
     align-items: center;
     justify-content: center;
     column-gap: 10px;
     cursor: pointer;
-    transition: transform 0.2s, border-color 0.2s, background 0.2s, color 0.2s;
+    transition: transform 0.18s, border-color 0.18s, background 0.18s, color 0.18s, box-shadow 0.18s;
     &:hover {
        color: #ffffff;
-       border-color: rgba(143, 164, 255, 0.5);
-       background: rgba(99, 121, 233, 0.12);
+       border-color: rgba(143, 164, 255, 0.38);
+       background: rgba(99, 121, 233, 0.13);
+       box-shadow: 0 12px 22px rgba(5, 8, 14, 0.22);
        transform: translateY(-1px);
+    }
+
+    &:disabled {
+        cursor: default;
+        opacity: 0.5;
+        transform: none;
+        box-shadow: none;
     }
 }
 
 .rating_row {
     display: flex;
     align-items: center;
-    column-gap: 5px;
+    column-gap: 6px;
     color: #f5f7fb;
     font-size: 15px;
+
+    svg {
+        color: linear-gradient(135deg, rgba(219, 231, 255, 0.16), rgba(186, 138, 234, 0.18)),
+        rgba(18, 23, 31, 0.28);
+    }
 }
 
 .rating_star_muted {
@@ -163,30 +316,31 @@
 .read_button {
     position: relative;
     overflow: hidden;
-    background-color: #6379E9FF;
-    color: #ffffffe1;
-    border-radius: 15px;
+    background: linear-gradient(135deg, #6379e9 0%, #5269e0 56%, #6e4ed8 100%);
+    color: #ffffff;
+    border-radius: 16px;
     padding: 0 30px;
     min-height: 52px;
-    border: transparent;
+    border: 1px solid rgba(219, 231, 255, 0.18);
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 750;
     display: flex;
     align-items: center;
     justify-content: center;
     column-gap: 12px;
     cursor: pointer;
-    box-shadow: 0 10px 28px rgba(82, 103, 214, 0.34);
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s, filter 0.2s;
+    box-shadow:
+        0 14px 30px rgba(82, 103, 214, 0.34),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s, filter 0.18s, background 0.18s;
     
 
     &:hover {
        transform: translateY(-2px);
-  
-        background-color: rgb(91, 108, 197);
-      
-
-      
+       background: linear-gradient(135deg, #7894ff 0%, #5b74ef 56%, #7b58ee 100%);
+       box-shadow:
+           0 18px 36px rgba(82, 103, 214, 0.42),
+           inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 }
 
@@ -202,8 +356,8 @@
     align-items: center;
     justify-content: center;
     color: rgba(236, 240, 255, 0.92);
-    background: rgba(33, 37, 44, 0.94);
-    border: 1px solid rgba(255, 219, 121, 0.38);
+    background: rgba(30, 35, 46, 0.96);
+    border: 1px solid rgba(143, 164, 255, 0.34);
     box-shadow: 0 8px 18px rgba(6, 9, 15, 0.36);
     cursor: help;
     transition: transform 0.2s, color 0.2s, border-color 0.2s, background 0.2s;
@@ -216,7 +370,7 @@
         transform: translateY(-1px);
         color: #ffffff;
         background: rgba(44, 49, 60, 0.98);
-        border-color: rgba(255, 219, 121, 0.62);
+        border-color: rgba(186, 138, 234, 0.5);
     }
 }
 
@@ -234,18 +388,23 @@
     min-height: 28px;
     padding: 5px 10px;
     border-radius: 999px;
-    background: linear-gradient(135deg, rgba(255, 224, 146, 0.98), rgba(255, 184, 77, 0.96));
-    color: #20170a;
-    border: 1px solid rgba(255, 242, 190, 0.7);
-    box-shadow: 0 6px 18px rgba(255, 184, 77, 0.26);
+    background:
+        linear-gradient(135deg, rgba(219, 231, 255, 0.16), rgba(186, 138, 234, 0.18)),
+        rgba(18, 23, 31, 0.28);
+    color: #eef3ff;
+    border: 1px solid rgba(219, 231, 255, 0.26);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.14),
+        0 6px 16px rgba(6, 9, 15, 0.16);
     font-size: 13px;
     font-weight: 700;
-    letter-spacing: 0.2px;
+    letter-spacing: 0;
     text-transform: uppercase;
 
     svg {
         font-size: 13px;
         flex-shrink: 0;
+        color: #c9d5ff;
     }
 }
 
@@ -258,6 +417,6 @@
 
 .tooltip_title {
     margin-bottom: 2px;
-    color: #ffe092;
+    color: #c9d5ff;
     font-weight: 700;
 }

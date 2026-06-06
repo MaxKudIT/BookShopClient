@@ -1,179 +1,209 @@
+import { useCallback, useEffect, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from './BookInfo.module.scss'
 import SelectionHeader from "../../shared/components/Header/SelectionHeader/SelectionHeader";
 import SelectionFooter from "../../shared/components/Footer/SelectionFooter/SelectionFooter";
 import { IoIosArrowBack, IoMdCheckmarkCircleOutline, IoMdInformationCircleOutline } from "react-icons/io";
-import { FaCrown, FaRegHeart, FaRegStar } from "react-icons/fa6";
+import { FaCrown, FaHeart, FaRegHeart, FaRegStar } from "react-icons/fa6";
 import { MdCurrencyRuble, MdOutlineShoppingCart } from "react-icons/md";
-import { Divider, Tooltip } from "@mui/material";
+import { CircularProgress, Divider, Tooltip } from "@mui/material";
 import type { BookInfoSentenseProps } from "../../shared/components/BookInfoSentense/BookInfoSentense";
 import BookInfoSentense from "../../shared/components/BookInfoSentense/BookInfoSentense";
 import { PiQuotes } from "react-icons/pi";
+import { useStores } from '../../store/context/GloabalContext';
+
+const fallbackImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPTPFv3U6ZVvZh0GYlNFWntSw0PJjFvqNwMA&s';
 
 const BookInfo = observer(() => {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  // const {
-  //   bookInfoStore: {
-  //     book,
-  //     getBookById,
-  //     getBookState
-  //   },
-  //   cartItemsStore: {
-  //     createCartItem,
-  //     postCartItemsState,
-
-  //     isInCartItem,
-  //     isInCartItems,
-  //     postCartItemsState2,
-
-  //     deleteCartItems,
-  //     deleteCartItemsState,
-
-  //     count,
-  //     countCartState,
-  //     getCountCart
-  //   },
-  //   favItemsStore: {
-  //     createFavItem,
-  //     postFavItemsState,
-
-  //     isInFavsItem,
-  //     isInFavsItems,
-  //     postFavItemsState2,
-
-  //     deleteFavItems,
-  //     deleteFavItemsState,
-
-  //     count: favCount,
-  //     countFavState,
-  //     getCountFav
-  //   }
-  // } = useStores()
-
-
-
-  // const handleResultBook = useCallback(async () => {
-  //   if (id) {
-
-  //     await Promise.all([
-  //       getBookById(id),
-  //       isInCartItem(id),
-  //       isInFavsItem(id),
-  //       getCountFav(),
-  //       getCountCart()
-  //     ])
-
-
-  //   } else {
-  //     console.error('Параметр id не найден')
-  //   }
-  // }, [getBookById])
-
-  // useEffect(() => {
-  //   handleResultBook()
-  // }, [handleResultBook]);
-
-
-  // const { loading, error, post } = usePost('/ub/buy');
-
-
-  // const auth = getAuth();
-
-  // const handleBuy = useCallback(async () => {
-  //   try {
-
-  //     if (id) {
-  //       const idToken = await auth.currentUser?.getIdToken();
-  //       await post({ BookIds: [id] }, { idToken: idToken });
-
-  //     } else {
-  //       console.error('Параметр id не найден')
-  //     }
-
-  //   } catch (err) {
-  //     console.error('Ошибка покупки книг:', err);
-  //   }
-  // }, [post]);
-
-
-
-
-
-
-  // if (getBookState.loading || postCartItemsState2.loading || postFavItemsState2.loading || countCartState.loading || countFavState.loading) {
-  //   return (
-
-  //     <CircularProgress
-  //       sx={{
-  //         display: 'flex',
-  //         justifyContent: 'center',
-  //         justifySelf: 'center',
-  //         marginTop: 10,
-  //         alignItems: 'center',
-  //         padding: 0.5,
-  //         color: 'white'
-  //       }}
-
-  //     />
-
-  //   )
-  // }
-
-  // if (getBookState.error || postCartItemsState2.error || postFavItemsState2.error || countFavState.error || countCartState.error) {
-  //   return (
-  //     <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>{getBookState.error || postCartItemsState2.error || postFavItemsState2.error || countFavState.error || countCartState.error}</p>
-  //   )
-  // }
-
-  // if (!book) {
-  //   return <p>Книга не найдена</p>;
-  // }
+  const {
+    bookInfoStore: {
+      book,
+      physicalBookStockInfo,
+      getBookById,
+      getBookState,
+      getPhysicalBookStockInfo,
+      getPhysicalBookStockInfoState,
+    },
+    cartItemsStore: {
+      createCartItem,
+      postCartItemsState,
+      isInCartItem,
+      isInCartItems,
+      postCartItemsState2,
+      deleteCartItems,
+      deleteCartItemsState,
+      getCountCart,
+    },
+    favItemsStore: {
+      createFavItem,
+      postFavItemsState,
+      isInFavsItem,
+      isInFavsItems,
+      postFavItemsState2,
+      deleteFavItems,
+      deleteFavItemsState,
+      getCountFav,
+    },
+  } = useStores();
 
   const sentensesEls: BookInfoSentenseProps[] = [
     { icon: IoMdInformationCircleOutline, title: 'Эксклюзивный контент', text: 'Включает дополнительные иллюстрации и карты от автора.' },
-    { icon: PiQuotes, title: 'Рекомендация критиков', text: '"Шедевр современной фантастики, который нельзя пропустить"'},
-    { icon: IoMdCheckmarkCircleOutline, title: 'Гарантия качества', text: 'Высококачественная печать на бумаге премиум-класса.'}
-  ]
+    { icon: PiQuotes, title: 'Рекомендация критиков', text: '"Шедевр современной фантастики, который нельзя пропустить"' },
+    { icon: IoMdCheckmarkCircleOutline, title: 'Гарантия качества', text: 'Высококачественная печать на бумаге премиум-класса.' }
+  ];
+
+  const physicalBook = useMemo(() => {
+    return physicalBookStockInfo?.PhysicalBooks.find((item) => item.StockCount > 0) ?? null;
+  }, [physicalBookStockInfo]);
+
+  const discountPrice = book
+    ? Math.floor(book.Price - (book.Price / 100 * book.Discount))
+    : 0;
+
+  const isLoading = getBookState.loading || getPhysicalBookStockInfoState.loading || postFavItemsState2.loading;
+  const error = getBookState.error || getPhysicalBookStockInfoState.error;
+
+  const loadBookInfo = useCallback(async () => {
+    if (!id) {
+      return;
+    }
+
+    await Promise.all([
+      getBookById(id),
+      getPhysicalBookStockInfo(id),
+      isInFavsItem(id),
+      getCountFav(),
+      getCountCart(),
+    ]);
+  }, [getBookById, getPhysicalBookStockInfo, getCountCart, getCountFav, id, isInFavsItem]);
+
+  useEffect(() => {
+    loadBookInfo();
+  }, [loadBookInfo]);
+
+  useEffect(() => {
+    if (physicalBook?.Id) {
+      isInCartItem(physicalBook.Id);
+    }
+  }, [isInCartItem, physicalBook?.Id]);
+
+  const handleFavClick = async () => {
+    if (!book || postFavItemsState.loading || deleteFavItemsState.loading) {
+      return;
+    }
+
+    if (isInFavsItems) {
+      await deleteFavItems([book.Id]);
+    } else {
+      await createFavItem(book.Id);
+    }
+
+    await Promise.all([
+      isInFavsItem(book.Id),
+      getCountFav(),
+    ]);
+  };
+
+  const handleCartClick = async () => {
+    if (!physicalBook || postCartItemsState.loading || deleteCartItemsState.loading) {
+      return;
+    }
+
+    if (isInCartItems) {
+      await deleteCartItems([physicalBook.Id]);
+    } else {
+      await createCartItem(physicalBook.Id);
+    }
+
+    await Promise.all([
+      isInCartItem(physicalBook.Id),
+      getCountCart(),
+    ]);
+  };
+
+  if (isLoading) {
+    return (
+      <div className={styles.bookinfo_page_style}>
+        <SelectionHeader paddingSides={400} />
+        <div className={styles.bookinfo_main_container}>
+          <div className={styles.state_block}>
+            <CircularProgress sx={{ color: '#8da6ff' }} />
+            <p>Загружаем книгу...</p>
+          </div>
+        </div>
+        <SelectionFooter />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.bookinfo_page_style}>
+        <SelectionHeader paddingSides={400} />
+        <div className={styles.bookinfo_main_container}>
+          <div className={styles.error_block}>{error}</div>
+        </div>
+        <SelectionFooter />
+      </div>
+    );
+  }
+
+  if (!book) {
+    return (
+      <div className={styles.bookinfo_page_style}>
+        <SelectionHeader paddingSides={400} />
+        <div className={styles.bookinfo_main_container}>
+          <div className={styles.state_block}>Книга не найдена</div>
+        </div>
+        <SelectionFooter />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.bookinfo_page_style}>
       <SelectionHeader paddingSides={400} />
       <div className={styles.bookinfo_main_container}>
-        <div className={styles.back_block}>
+        <button className={styles.back_block} onClick={() => navigate('/mainbooks')}>
           <IoIosArrowBack style={{ fontSize: 16, marginBottom: 2 }} />
           <p>Назад в каталог</p>
-        </div>
+        </button>
+
         <div className={styles.bookinfo_container}>
           <div className={styles.first_column_wrapper}>
-            <img className={styles.book_image} src={'https://www.moscowbooks.ru/image/book/805/orig/i805305.jpg?cu=20240222135506'} alt="" />
+            <img className={styles.book_image} src={book.ImageUrl || fallbackImage} alt={book.Title} />
             <div style={{ display: 'flex', alignItems: 'center', columnGap: 10 }}>
-              <button className={styles.first_column_button}>
-                <FaRegHeart />
-                <p>В избранное</p>
+              <button
+                className={styles.first_column_button}
+                onClick={handleFavClick}
+                disabled={postFavItemsState.loading || deleteFavItemsState.loading || postFavItemsState2.loading}
+              >
+                {isInFavsItems ? <FaHeart /> : <FaRegHeart />}
+                <p>{isInFavsItems ? 'В избранном' : 'В избранное'}</p>
               </button>
-              <button className={styles.first_column_button}>
+              <button
+                className={styles.first_column_button}
+                onClick={handleCartClick}
+                disabled={!physicalBook || postCartItemsState.loading || deleteCartItemsState.loading || postCartItemsState2.loading}
+              >
                 <MdOutlineShoppingCart />
-                <p>В корзину</p>
+                <p>{isInCartItems ? 'В корзине' : physicalBook ? 'В корзину' : 'Нет в наличии'}</p>
               </button>
             </div>
           </div>
 
           <div className={styles.second_column_wrapper}>
             <div className={styles.genre_wrapper}>
-              Драма
+              {book.Genre}
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', rowGap: 5 }}>
-              <p style={{
-                color: '#FAF9FBFF',
-                fontWeight: 700,
-                fontSize: 36,
-              }}>Мастер и маргарита</p>
-              <div style={{
-                display: 'flex',
-                columnGap: 15,
-                alignItems: 'center',
-                marginBottom: 30
-              }}>
-                <p style={{ color: '#b5bece', fontWeight: 500, fontSize: 16 }}>Михаил Булгаков</p>
+            <div className={styles.title_block}>
+              <p className={styles.book_title}>{book.Title}</p>
+              <div className={styles.meta_row}>
+                <p className={styles.author_name}>{book.Author}</p>
                 <Divider orientation="vertical" sx={{ borderLeftWidth: 1, borderColor: '#44506866' }} />
                 <div className={styles.rating_row}>
                   <FaRegStar />
@@ -182,36 +212,34 @@ const BookInfo = observer(() => {
                   <FaRegStar />
                   <FaRegStar className={styles.rating_star_muted} />
 
-                  <p className={styles.rating_text}>4.5</p>
+                  <p className={styles.rating_text}>{book.Rate}</p>
 
-                  <p style={{ color: '#99a2b1', marginLeft: 10, letterSpacing: 0.5 }}>(1201 отзыв)</p>
+                  <p className={styles.reviews_text}>Рейтинг</p>
                 </div>
               </div>
-              <div style={{ display: 'flex', columnGap: 10, alignItems: 'center' }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: '#6379E9FF',
-                  fontWeight: 500,
-                  fontSize: 22,
-                  letterSpacing: 0.5
-                }}>
-                  <p>990</p>
+              <div className={styles.price_row}>
+                <div className={styles.price_current}>
+                  <p>{book.Discount !== 0 ? discountPrice : book.Price}</p>
                   <MdCurrencyRuble style={{ fontSize: 22 }} />
                 </div>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: '#b5bece',
-                  textDecoration: 'line-through',
-
-                }}>
-                  <p>1450 ₽</p>
-                </div>
+                {book.Discount !== 0 && (
+                  <div className={styles.price_old}>
+                    <p>{book.Price} ₽</p>
+                  </div>
+                )}
               </div>
               <div className={styles.read_button_wrapper}>
-                <button className={styles.read_button}>
-                  <span className={styles.read_button_text}>Читать онлайн</span>
+                <button
+                  className={styles.read_button}
+                  onClick={() => {
+                    if (book.IsMine) {
+                      navigate(`/books/${book.Id}/pages/1`);
+                    }
+                  }}
+                >
+                  <span className={styles.read_button_text}>
+                    {book.IsMine ? 'Читать онлайн' : 'Доступ по подписке'}
+                  </span>
                   <span className={styles.premium_badge}>
                     <FaCrown />
                     Premium
@@ -222,8 +250,8 @@ const BookInfo = observer(() => {
                   title={
                     <div className={styles.tooltip_content}>
                       <p className={styles.tooltip_title}>Варианты чтения</p>
-                      <p>Онлайн-доступ открывается по подписке Premium.</p>
-                      <p>Печатный экземпляр можно заказать через корзину.</p>
+                      <p>Онлайн-доступ открывается по подписке Premium или после покупки электронной версии.</p>
+                      <p>Печатный экземпляр можно заказать через корзину, если он есть в наличии.</p>
                     </div>
                   }
                   slotProps={{
@@ -262,83 +290,29 @@ const BookInfo = observer(() => {
                 </Tooltip>
               </div>
 
-              <div style={{ flexGrow: 1, height: 2, background: '#44506866', marginTop: '40px', marginBottom: '50px' }}></div>
+              <div className={styles.content_divider}></div>
 
-              <div style={{
-                display: 'flex',
-                columnGap: 20,
-                alignItems: 'center',
-                marginBottom: 40
-              }}>
+              <div className={styles.quote_block}>
                 <Divider orientation="vertical" sx={{
                   borderLeftWidth: 3,
                   borderColor: '#6379E9FF',
                   height: 'calc(100% + 40px)'
                 }} />
-                <p style={{
-                  fontSize: 17,
-                  fontWeight: 500,
-                  color: 'rgba(250, 249, 251, 0.92)',
-                  fontStyle: 'italic',
-                  letterSpacing: 0.5
-                }}>"Трусость — единственный порок, который делает человека человеком. И единственный, который мешает им стать свободным."</p>
+                <p className={styles.quote_text}>{book.Quote}</p>
               </div>
-              <p style={{ fontSize: 16, color: '#c9cfdb', fontWeight: 400, lineHeight: 1.5 }}>
-                В Москве 1930-х годов появляется загадочный иностранный профессор Воланд со своей свитой. Там, где он проходит, привычный мир трещит по швам: начинают сбываться самые невероятные пророчества, люди теряют головы от жадности и трусости, а литературная элита оказывается совсем не тем, чем кажется.
+              <p className={styles.description_text}>
+                {book.Description}
               </p>
-
             </div>
-
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', marginTop: 70, width: '100%', columnGap: 20 }}>
-          {sentensesEls.map(el => (<BookInfoSentense text={el.text} title={el.title} icon={el.icon}/>))}
+        <div className={styles.sentenses_row}>
+          {sentensesEls.map(el => (<BookInfoSentense key={el.title} text={el.text} title={el.title} icon={el.icon} />))}
         </div>
       </div>
-      {/* <BookInfoView
-        Id={id!}
-        Genre={book.Genre}
-        Title={book.Title}
-        PagesCount={book.PagesCount}
-        Description={book.Description}
-        AboutBook={book.AboutBook}
-        Quote={book.Quote}
-        CreatedDate={book.CreatedDate}
-        ReadingTime={book.ReadingTime}
-        Price={book.Price}
-        Discount={book.Discount}
-        Author={book.Author}
-        ImageUrl={book.ImageUrl}
-        Rate={book.Rate}
-        IsMine={book.IsMine}
-
-        loading={loading}
-        handleBuy={handleBuy}
-        error={error}
-
-        loading2={postCartItemsState.loading}
-        error2={postCartItemsState.error}
-        hanldleAddItem={createCartItem}
-
-        isInCart={isInCartItems}
-
-        loading3={deleteCartItemsState.loading}
-        error3={deleteCartItemsState.error}
-        handleDeleteItem={deleteCartItems}
-
-        isInFavs={isInFavsItems}
-
-        loading4={postFavItemsState.loading}
-        hanldleAddFavItem={createFavItem}
-
-        loading5={deleteFavItemsState.loading}
-        handleDeleteFavItem={deleteFavItems}
-
-      /> */}
       <SelectionFooter />
     </div>
-
   )
 })
 

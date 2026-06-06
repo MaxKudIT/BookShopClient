@@ -1,4 +1,5 @@
 import { observer } from 'mobx-react-lite';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './CartF.module.scss'
 import SelectionHeader from '../../shared/components/Header/SelectionHeader/SelectionHeader';
 import ItemViewComponent from '../../shared/components/CartItem/CartItem';
@@ -11,45 +12,7 @@ import type { IconType } from 'react-icons';
 import RecommsCart from '../../shared/components/RecommsRow/RecommsCart/RecommsCart';
 import type { CartItemsPreview } from '../../shared/types';
 import type { CartSelectedType } from '../../shared/components/CartView/CartView';
-
-const cartItems: CartItemsPreview[] = [
-  {
-    Id: 'cart-1',
-    ImageUrl: 'https://img.comicbooks.ru/images/products/1/7455/945601823/VGs-GD5boU8.jpg',
-    Title: 'Человек-паук',
-    Author: 'Марвелпедия',
-    Price: 1490,
-    Discount: 12,
-    Rate: 4.7
-  },
-  {
-    Id: 'cart-2',
-    ImageUrl: 'https://www.moscowbooks.ru/image/book/805/orig/i805305.jpg?cu=20240222135506',
-    Title: 'Мастер и Маргарита',
-    Author: 'Михаил Булгаков',
-    Price: 1200,
-    Discount: 15,
-    Rate: 4.9
-  },
-  {
-    Id: 'cart-3',
-    ImageUrl: 'https://imo10.labirint.ru/books/600284/cover.jpg/242-0',
-    Title: 'Оно',
-    Author: 'Стивен Кинг',
-    Price: 1700,
-    Discount: 0,
-    Rate: 5
-  },
-  {
-    Id: 'cart-4',
-    ImageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPhhoSS4VwAoCA2l9iEe1ejrGckq7QZMp1Tw&s',
-    Title: 'Зеленая Миля',
-    Author: 'Стивен Кинг',
-    Price: 1100,
-    Discount: 8,
-    Rate: 4.9
-  }
-];
+import { useStores } from '../../store/context/GloabalContext';
 
 const benefits = [
   {
@@ -68,13 +31,56 @@ const getDiscountPrice = (item: CartItemsPreview) => Math.floor(item.Price - (it
 const formatPrice = (value: number) => value.toLocaleString('ru-RU');
 
 const CartF = observer(() => {
+  const {
+    cartItemsStore: {
+      cartItemsPreview,
+      getCartItems,
+      getCartItemsState,
+      deleteCartItems,
+      deleteCartItemsState,
+    },
+  } = useStores();
+
+  const cartItems = cartItemsPreview ?? [];
+  const [selectedItems, setSelectedItems] = useState<CartSelectedType[]>([]);
+
+  useEffect(() => {
+    getCartItems();
+  }, [getCartItems]);
+
+  useEffect(() => {
+    setSelectedItems((prev) => prev.filter((item) => cartItems.some((cartItem) => cartItem.Id === item.id)));
+  }, [cartItems]);
+
+  const selectedIds = useMemo(() => selectedItems.map((item) => item.id), [selectedItems]);
+  const selectedTotal = selectedItems.reduce((sum, item) => sum + item.price, 0);
   const goodsTotal = cartItems.reduce((sum, item) => sum + item.Price, 0);
   const finalTotal = cartItems.reduce((sum, item) => sum + getDiscountPrice(item), 0);
   const discountTotal = goodsTotal - finalTotal;
 
-  const noopAddItem = (_el: CartSelectedType) => undefined;
-  const noopDeleteItem = (_id: string) => undefined;
-  const noopDeleteItems = (_bookId: string[]) => undefined;
+  const addSelectedItem = (item: CartSelectedType) => {
+    setSelectedItems((prev) => {
+      if (prev.some((selected) => selected.id === item.id)) {
+        return prev;
+      }
+
+      return [...prev, item];
+    });
+  };
+
+  const deleteSelectedItem = (id: string) => {
+    setSelectedItems((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const handleDeleteItems = async (ids: string[]) => {
+    if (ids.length === 0 || deleteCartItemsState.loading) {
+      return;
+    }
+
+    await deleteCartItems(ids);
+    setSelectedItems((prev) => prev.filter((item) => !ids.includes(item.id)));
+    await getCartItems();
+  };
 
   return (
     <div className={styles.cartf_page_style}>
@@ -96,23 +102,51 @@ const CartF = observer(() => {
             <div className={styles.panel_header}>
               <div>
                 <p className={styles.panel_title}>Ваши книги</p>
-                <p className={styles.panel_subtitle}>Проверьте позиции перед оплатой</p>
+                <p className={styles.panel_subtitle}>
+                  {selectedItems.length > 0
+                    ? `Выбрано ${selectedItems.length} на сумму ${formatPrice(selectedTotal)} ₽`
+                    : 'Проверьте позиции перед оплатой'}
+                </p>
               </div>
-              <button className={styles.clear_button}>Очистить</button>
+              <button
+                className={styles.clear_button}
+                disabled={cartItems.length === 0 || deleteCartItemsState.loading}
+                onClick={() => handleDeleteItems(cartItems.map((item) => item.Id))}
+              >
+                {deleteCartItemsState.loading ? 'Удаляем...' : 'Очистить'}
+              </button>
             </div>
 
-            <div className={styles.cart_items_list}>
-              {cartItems.map((item) => (
-                <ItemViewComponent
-                  key={item.Id}
-                  {...item}
-                  addItem={noopAddItem}
-                  deleteItem={noopDeleteItem}
-                  isSelected={false}
-                  handleDeleteItem={noopDeleteItems}
-                />
-              ))}
-            </div>
+            {getCartItemsState.loading && (
+              <div className={styles.state_block}>Загружаем корзину...</div>
+            )}
+
+            {getCartItemsState.error && (
+              <div className={styles.error_block}>{getCartItemsState.error}</div>
+            )}
+
+            {deleteCartItemsState.error && (
+              <div className={styles.error_block}>{deleteCartItemsState.error}</div>
+            )}
+
+            {!getCartItemsState.loading && !getCartItemsState.error && cartItems.length === 0 && (
+              <div className={styles.state_block}>В корзине пока нет книг</div>
+            )}
+
+            {!getCartItemsState.loading && !getCartItemsState.error && cartItems.length > 0 && (
+              <div className={styles.cart_items_list}>
+                {cartItems.map((item) => (
+                  <ItemViewComponent
+                    key={item.Id}
+                    {...item}
+                    addItem={addSelectedItem}
+                    deleteItem={deleteSelectedItem}
+                    isSelected={selectedIds.includes(item.Id)}
+                    handleDeleteItem={handleDeleteItems}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           <aside className={styles.cart_sidebar}>
@@ -144,9 +178,12 @@ const CartF = observer(() => {
                 </div>
               </div>
 
-              <button className={styles.cartf_total_sum_button}>
+              <button
+                className={styles.cartf_total_sum_button}
+                disabled={cartItems.length === 0 || getCartItemsState.loading}
+              >
                 <IoMdCard />
-                <p>Перейти к оплате</p>
+                <p>{cartItems.length === 0 ? 'Корзина пуста' : 'Перейти к оплате'}</p>
               </button>
 
               <div className={styles.secure_note}>

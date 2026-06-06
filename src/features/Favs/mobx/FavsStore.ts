@@ -1,6 +1,6 @@
 import type { Api } from "../../../shared/api/api";
 import { makeInitialAxiosSolt } from "../../../shared/helpers/apiSolt/makeInitialAxiosSolt";
-import type { BookInfoT, CartItemsPreview, ErrorResponse, PageInfoT } from "../../../shared/types";
+import type { FavItemsPreview } from "../../../shared/types";
 import { makeAutoObservable, flow } from 'mobx';
 
 
@@ -8,7 +8,7 @@ class FavItemStore {
 
 
 
-    public favItemsPreview: CartItemsPreview[] | null = null;
+    public favItemsPreview: FavItemsPreview[] | null = null;
 
     public getFavItemsState = makeInitialAxiosSolt();
 
@@ -40,7 +40,7 @@ class FavItemStore {
 
 
     public getFavItems = flow(function* (this: FavItemStore)
-        : Generator<Promise<CartItemsPreview[] | string>, void, CartItemsPreview[] | string> {
+        : Generator<Promise<FavItemsPreview[] | string>, void, FavItemsPreview[] | string> {
 
         this.getFavItemsState = { loading: true, error: null };
 

@@ -1,83 +1,57 @@
 import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
 import styles from './FavsF.module.scss'
 import SelectionHeader from '../../shared/components/Header/SelectionHeader/SelectionHeader';
 import FavBookPreview from '../../shared/components/Previews/FavBookPreview/FavBookPreview';
 import SelectionFooter from '../../shared/components/Footer/SelectionFooter/SelectionFooter';
 import { MdShoppingCartCheckout } from 'react-icons/md';
 import Banner from '../../shared/components/Banner/Banner';
-import type { BookPreviewT } from '../../shared/types';
 import { IoLibraryOutline, IoSparklesOutline } from 'react-icons/io5';
-
-const favoriteBooks: BookPreviewT[] = [
-    {
-        Id: 'fav-1',
-        Title: 'Мастер и Маргарита',
-        Author: 'Михаил Булгаков',
-        Genre: 'Драма',
-        Rate: 4.9,
-        ImageUrl: 'https://www.moscowbooks.ru/image/book/805/orig/i805305.jpg?cu=20240222135506',
-        IsMine: true,
-        Price: 800,
-        Discount: 10
-    },
-    {
-        Id: 'fav-2',
-        Title: 'Пикник на обочине',
-        Author: 'Аркадий и Борис Стругацкие',
-        Genre: 'Фантастика',
-        Rate: 4.8,
-        ImageUrl: 'https://imo10.labirint.ru/books/868684/cover.jpg/242-0',
-        IsMine: true,
-        Price: 640,
-        Discount: 5
-    },
-    {
-        Id: 'fav-3',
-        Title: 'Оно',
-        Author: 'Стивен Кинг',
-        Genre: 'Ужасы',
-        Rate: 5,
-        ImageUrl: 'https://imo10.labirint.ru/books/600284/cover.jpg/242-0',
-        IsMine: true,
-        Price: 990,
-        Discount: 12
-    },
-    {
-        Id: 'fav-4',
-        Title: 'Шерлок Холмс',
-        Author: 'Артур Конан Дойл',
-        Genre: 'Приключения',
-        Rate: 4.7,
-        ImageUrl: 'https://imo10.labirint.ru/books/540709/cover.jpg/242-0',
-        IsMine: true,
-        Price: 700,
-        Discount: 0
-    },
-    {
-        Id: 'fav-5',
-        Title: 'Зеленая Миля',
-        Author: 'Стивен Кинг',
-        Genre: 'Фантастика',
-        Rate: 4.9,
-        ImageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPhhoSS4VwAoCA2l9iEe1ejrGckq7QZMp1Tw&s',
-        IsMine: true,
-        Price: 1100,
-        Discount: 8
-    },
-    {
-        Id: 'fav-6',
-        Title: 'Преступление и наказание',
-        Author: 'Федор Достоевский',
-        Genre: 'Драма',
-        Rate: 4.8,
-        ImageUrl: 'https://cv6.litres.ru/pub/c/cover_415/4236675.webp',
-        IsMine: true,
-        Price: 720,
-        Discount: 15
-    }
-];
+import { useStores } from '../../store/context/GloabalContext';
 
 const FavsF = observer(() => {
+    const {
+        favItemsStore: {
+            favItemsPreview,
+            getFavItems,
+            getFavItemsState,
+            deleteFavItems,
+            deleteFavItemsState,
+            getCountFav,
+        },
+    } = useStores();
+
+    const favoriteBooks = favItemsPreview ?? [];
+
+    useEffect(() => {
+        getFavItems();
+        getCountFav();
+    }, [getFavItems, getCountFav]);
+
+    const handleDeleteFav = async (bookId: string) => {
+        if (deleteFavItemsState.loading) {
+            return;
+        }
+
+        await deleteFavItems([bookId]);
+        await Promise.all([
+            getFavItems(),
+            getCountFav(),
+        ]);
+    };
+
+    const handleClearFavs = async () => {
+        if (favoriteBooks.length === 0 || deleteFavItemsState.loading) {
+            return;
+        }
+
+        await deleteFavItems(favoriteBooks.map((book) => book.Id));
+        await Promise.all([
+            getFavItems(),
+            getCountFav(),
+        ]);
+    };
+
     return (
         <div className={styles.favs_page_style}>
             <SelectionHeader />
@@ -106,14 +80,43 @@ const FavsF = observer(() => {
                         <div>
                             <p className={styles.panel_title}>Сохраненные книги</p>
                         </div>
-                        <button className={styles.panel_action}>В корзину все</button>
+                        <button
+                            className={styles.panel_action}
+                            disabled={favoriteBooks.length === 0 || deleteFavItemsState.loading}
+                            onClick={handleClearFavs}
+                        >
+                            {deleteFavItemsState.loading ? 'Удаляем...' : 'Очистить'}
+                        </button>
                     </div>
 
-                    <div className={styles.favs_books_container}>
-                        {favoriteBooks.map((book) => (
-                            <FavBookPreview key={book.Id} book={book} />
-                        ))}
-                    </div>
+                    {getFavItemsState.loading && (
+                        <div className={styles.state_block}>Загружаем избранное...</div>
+                    )}
+
+                    {getFavItemsState.error && (
+                        <div className={styles.error_block}>{getFavItemsState.error}</div>
+                    )}
+
+                    {deleteFavItemsState.error && (
+                        <div className={styles.error_block}>{deleteFavItemsState.error}</div>
+                    )}
+
+                    {!getFavItemsState.loading && !getFavItemsState.error && favoriteBooks.length === 0 && (
+                        <div className={styles.state_block}>В избранном пока нет книг</div>
+                    )}
+
+                    {!getFavItemsState.loading && !getFavItemsState.error && favoriteBooks.length > 0 && (
+                        <div className={styles.favs_books_container}>
+                            {favoriteBooks.map((book) => (
+                                <FavBookPreview
+                                    key={book.Id}
+                                    book={book}
+                                    isDeleting={deleteFavItemsState.loading}
+                                    onDelete={handleDeleteFav}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </section>
 
                 <Banner

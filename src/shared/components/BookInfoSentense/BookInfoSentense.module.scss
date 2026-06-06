@@ -1,0 +1,63 @@
+.sentense_card {
+    width: 33%;
+    min-height: 104px;
+    display: flex;
+    align-items: center;
+    column-gap: 14px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.022)),
+        rgba(31, 38, 52, 0.72);
+    border: 1px solid rgba(143, 164, 255, 0.10);
+    box-shadow:
+        0 16px 28px rgba(5, 8, 14, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.045);
+    transition: transform 0.18s, border-color 0.18s, background 0.18s;
+
+    &:hover {
+        transform: translateY(-2px);
+        border-color: rgba(143, 164, 255, 0.18);
+        background:
+            linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03)),
+            rgba(31, 38, 52, 0.82);
+    }
+}
+
+.sentense_icon {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: rgba(99, 121, 233, 0.15);
+    border: 1px solid rgba(143, 164, 255, 0.12);
+    color: #8da6ff;
+
+    svg {
+        font-size: 25px;
+    }
+}
+
+.sentense_text {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+}
+
+.sentense_title {
+    color: rgba(250, 249, 251, 0.94);
+    font-size: 15px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+    line-height: 1.35;
+}
+
+.sentense_description {
+    color: #aeb7c7;
+    font-size: 13px;
+    line-height: 1.4;
+}

@@ -70,6 +70,24 @@ export type CartItemsPreview = {
 
 }
 
+export type PhysicalBook = {
+    Id: string
+    BookId: string
+    Price: number
+    Discount: number
+    Format: string
+    StockCount: number
+}
+
+export type PhysicalBookStockInfo = {
+    IsInStock: boolean
+    BookId: string
+    Title: string
+    Author: string
+    Rate: number
+    PhysicalBooks: PhysicalBook[]
+}
+
 export type FavItemsPreview = {
     Id: string
     ImageUrl: string

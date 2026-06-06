@@ -61,7 +61,7 @@ const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
     const navigate = useNavigate();
 
     return (
-        <section className={styles.recomms_section}>
+        <section  className={styles.recomms_section}>
             <div className={styles.recomms_row_wrapper}>
                 <div className={styles.section_header}>
                     <div className={styles.section_title_group}>
