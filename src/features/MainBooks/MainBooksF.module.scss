@@ -23,6 +23,27 @@
     row-gap: 70px;
 }
 
+.state_block,
+.error_block {
+    width: 100%;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #d7dbe7;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.error_block {
+    color: #ffb4a8;
+    border-color: rgba(255, 99, 71, 0.32);
+    background: rgba(155, 32, 16, 0.16);
+}
+
 
 
 // .books_global_style {

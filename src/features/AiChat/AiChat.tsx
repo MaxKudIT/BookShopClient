@@ -30,6 +30,7 @@ const AiChat = observer(() => {
         || aiChatStore.deleteMessagesState.error
         || aiChatStore.askState.error;
     const isSending = aiChatStore.askState.loading;
+    const canClearMessages = aiChatStore.messages.length > 0 && !aiChatStore.deleteMessagesState.loading;
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -83,7 +84,7 @@ const AiChat = observer(() => {
                                 type="button"
                                 className={styles.icon_button}
                                 onClick={clearMessages}
-                                disabled={aiChatStore.deleteMessagesState.loading}
+                                disabled={!canClearMessages}
                                 aria-label="Очистить чат"
                             >
                                 <MdDeleteOutline />

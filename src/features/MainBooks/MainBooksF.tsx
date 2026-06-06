@@ -1,4 +1,4 @@
-
+import { useEffect } from 'react';
 import styles from './MainBooksF.module.scss'
 
 
@@ -9,6 +9,7 @@ import MainHeader from '../../shared/components/Header/MainHeader/MainHeader';
 import SideBar from '../../shared/components/SideBar/Sidebar';
 
 import { getAuth } from 'firebase/auth';
+import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
 import { useFirebaseAuth } from '../../shared/hooks/useFirebaseAuth';
 
@@ -17,18 +18,23 @@ import BookList from '../../shared/components/BookList/BookList';
 import MainBooksFilterField from '../../shared/components/FilterField/MainBooksFilterField/MainBooksFilterField';
 import Banner from '../../shared/components/Banner/Banner';
 import { IoSparklesOutline } from 'react-icons/io5';
+import { useStores } from '../../store/context/GloabalContext';
 
 
 
-const MainBooksF = () => {
+const MainBooksF = observer(() => {
 
     const { logout } = useFirebaseAuth();
+    const {
+        myBooksStore: {
+            notmybooks,
+            getNotMyBooks,
+            getNotMyBooksState,
+        },
+    } = useStores();
 
 
     const auth = getAuth()
-
-    console.log(auth)
-
 
     const navigate = useNavigate();
 
@@ -97,6 +103,11 @@ const MainBooksF = () => {
     // }
 
 
+    useEffect(() => {
+        getNotMyBooks();
+    }, [getNotMyBooks]);
+
+
 
 
     return (
@@ -141,7 +152,21 @@ const MainBooksF = () => {
                     </div>
                     <MainBooksFilterField />
                     <div className={styles.books_content}>
-                        <BookList list={[]} viewPage={'home'} />
+                        {getNotMyBooksState.loading && (
+                            <div className={styles.state_block}>Загружаем книги...</div>
+                        )}
+
+                        {getNotMyBooksState.error && (
+                            <div className={styles.error_block}>{getNotMyBooksState.error}</div>
+                        )}
+
+                        {!getNotMyBooksState.loading && !getNotMyBooksState.error && notmybooks.length === 0 && (
+                            <div className={styles.state_block}>Новых книг пока нет</div>
+                        )}
+
+                        {!getNotMyBooksState.loading && !getNotMyBooksState.error && notmybooks.length > 0 && (
+                            <BookList list={notmybooks} viewPage={'home'} />
+                        )}
 
                         <Banner
                             icon={IoSparklesOutline}
@@ -157,6 +182,6 @@ const MainBooksF = () => {
 
         </>
     )
-}
+})
 
 export default MainBooksF;

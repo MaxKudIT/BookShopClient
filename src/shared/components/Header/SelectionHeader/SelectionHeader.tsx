@@ -3,13 +3,15 @@ import { IoIosSearch } from "react-icons/io";
 import { textFieldStyles } from "./muiStyles";
 import { getAuth } from "firebase/auth";
 import { useEffect, useRef, useState, type FC } from "react";
+import { observer } from "mobx-react-lite";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSearch, useMyBooksSearch } from "../../../../store/context/SearchContext";
 import styles from './SelectionHeader.module.scss'
 import Logo from "../../Logo/Logo";
-import { IoClose, IoSearchOutline } from "react-icons/io5";
+import { IoClose, IoSearchOutline, IoSparklesOutline } from "react-icons/io5";
 import Profile from "../../../../features/Profile/Profile";
+import { useStores } from "../../../../store/context/GloabalContext";
 
 
 type SelectionHeaderProps = {
@@ -21,10 +23,16 @@ type NavItem = {
   path: string;
 }
 
-const SelectionHeader: FC<SelectionHeaderProps> = ({ paddingSides }) => {
+const SelectionHeader: FC<SelectionHeaderProps> = observer(({ paddingSides }) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const {
+    subscriptionStore: {
+      activePlan,
+      getStatus,
+    },
+  } = useStores();
 
   const navigationMenu: NavItem[] = [
     {
@@ -72,6 +80,12 @@ const SelectionHeader: FC<SelectionHeaderProps> = ({ paddingSides }) => {
     }
   }, [searchOpen]);
 
+  useEffect(() => {
+    if (user) {
+      getStatus();
+    }
+  }, [user, getStatus]);
+
   const handleSearchChange = (value: string) => {
     setsearchingValue(value);
     setSearchingValueMy(value);
@@ -81,6 +95,27 @@ const SelectionHeader: FC<SelectionHeaderProps> = ({ paddingSides }) => {
     handleSearchChange('');
     setSearchOpen(false);
   };
+
+  const subscriptionView = (() => {
+    if (!activePlan) {
+      return {
+        className: styles.subscription_chip_standard,
+        label: 'Standard',
+      };
+    }
+
+    if (activePlan.DurationDays >= 365) {
+      return {
+        className: styles.subscription_chip_year,
+        label: 'Premium 365',
+      };
+    }
+
+    return {
+      className: styles.subscription_chip_month,
+      label: 'Premium 30',
+    };
+  })();
 
   return (
     <>
@@ -133,6 +168,11 @@ const SelectionHeader: FC<SelectionHeaderProps> = ({ paddingSides }) => {
         )}
 
         <div style={{ display: 'flex', columnGap: 15, alignItems: 'center' }}>
+          <div className={`${styles.subscription_chip} ${subscriptionView.className}`}>
+            <IoSparklesOutline />
+            <p>{subscriptionView.label}</p>
+          </div>
+
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <button
               className={`${styles.icon_wrapper} ${searchOpen ? styles.icon_wrapper_active : ''}`}
@@ -160,6 +200,6 @@ const SelectionHeader: FC<SelectionHeaderProps> = ({ paddingSides }) => {
       {profileOpen && <Profile open={profileOpen} onClose={() => setProfileOpen(false)} user={profileUser} />}
     </>
   )
-}
+})
 
 export default SelectionHeader;

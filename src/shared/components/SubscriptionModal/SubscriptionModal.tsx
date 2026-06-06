@@ -1,6 +1,8 @@
-import type { FC } from 'react';
+import { useEffect, type FC } from 'react';
+import { observer } from 'mobx-react-lite';
 import { IoClose, IoSparklesOutline } from 'react-icons/io5';
 import { MdCheckCircleOutline, MdCurrencyRuble } from 'react-icons/md';
+import { useStores } from '../../../store/context/GloabalContext';
 import styles from './SubscriptionModal.module.scss';
 
 type SubscriptionModalProps = {
@@ -14,7 +16,41 @@ const benefits = [
     'Персональные рекомендации каждый день'
 ];
 
-const SubscriptionModal: FC<SubscriptionModalProps> = ({ open, onClose }) => {
+const SubscriptionModal: FC<SubscriptionModalProps> = observer(({ open, onClose }) => {
+    const {
+        subscriptionStore: {
+            plans,
+            selectedPlanId,
+            getPlans,
+            buyPlan,
+            getPlansState,
+            buyPlanState,
+        },
+    } = useStores();
+
+    useEffect(() => {
+        if (!open) {
+            return;
+        }
+
+        getPlans();
+    }, [open, getPlans]);
+
+    const planPeriod = (durationDays: number) => {
+        if (durationDays >= 365) {
+            return '/год';
+        }
+
+        return '/мес';
+    };
+
+    const handlePurchase = async (planId: string) => {
+        const isSuccess = await buyPlan(planId);
+        if (isSuccess) {
+            onClose();
+        }
+    };
+
     if (!open) {
         return null;
     }
@@ -45,31 +81,34 @@ const SubscriptionModal: FC<SubscriptionModalProps> = ({ open, onClose }) => {
                     </div>
                 </div>
 
-                <div className={styles.plan_card_month}>
-                    <div>
-                        <p className={styles.plan_name}>Ежемесячный доступ</p>
-                       
-                    </div>
+                <div className={styles.plans}>
+                    {getPlansState.loading && (
+                        <div className={styles.plan_card}>
+                            <p className={styles.plan_name}>Загрузка тарифов...</p>
+                        </div>
+                    )}
 
-                    <div className={styles.price}>
-                        <span>49</span>
-                        <MdCurrencyRuble />
-                        <p>/мес</p>
-                    </div>
+                    {!getPlansState.loading && plans.map((plan, index) => (
+                        <div
+                            className={index === 0 ? styles.plan_card_month : styles.plan_card}
+                            key={plan.Id}
+                        >
+                            <div>
+                                <p className={styles.plan_name}>{plan.Title}</p>
+                                {plan.Description && (
+                                    <p className={styles.plan_hint}>{plan.Description}</p>
+                                )}
+                            </div>
+
+                            <div className={styles.price}>
+                                <span>{plan.Price}</span>
+                                <MdCurrencyRuble />
+                                <p>{planPeriod(plan.DurationDays)}</p>
+                            </div>
+                        </div>
+                    ))}
                 </div>
 
-                <div className={styles.plan_card}>
-                    <div>
-                        <p className={styles.plan_name}>Годовой доступ</p>
-                  
-                    </div>
-
-                    <div className={styles.price}>
-                        <span>479</span>
-                        <MdCurrencyRuble />
-                        <p>/год</p>
-                    </div>
-                </div>
                 <div className={styles.benefits}>
                     {benefits.map((item) => (
                         <div key={item} className={styles.benefit}>
@@ -79,17 +118,26 @@ const SubscriptionModal: FC<SubscriptionModalProps> = ({ open, onClose }) => {
                     ))}
                 </div>
 
+                {(getPlansState.error || buyPlanState.error) && (
+                    <p className={styles.error_text}>{buyPlanState.error || getPlansState.error}</p>
+                )}
+
                 <div className={styles.actions}>
-                    <button className={styles.primary_button} type="button">
-                        Подключить за 49 ₽
-                    </button>
-                    <button className={styles.secondary_button} type="button" onClick={onClose}>
-                       Подключить за 479 ₽
-                    </button>
+                    {plans.map((plan, index) => (
+                        <button
+                            className={index === 0 ? styles.primary_button : styles.secondary_button}
+                            disabled={getPlansState.loading || buyPlanState.loading}
+                            key={plan.Id}
+                            onClick={() => handlePurchase(plan.Id)}
+                            type="button"
+                        >
+                            {selectedPlanId === plan.Id ? 'Подключаем...' : `Подключить за ${plan.Price} ₽`}
+                        </button>
+                    ))}
                 </div>
             </section>
         </div>
     );
-};
+});
 
 export default SubscriptionModal;

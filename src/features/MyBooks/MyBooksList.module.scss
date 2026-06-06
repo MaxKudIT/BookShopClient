@@ -18,6 +18,54 @@
     
 }
 
+.page_header {
+    display: flex;
+    align-items: center;
+    column-gap: 12px;
+    min-height: 55px;
+    margin-bottom: 20px;
+}
+
+.page_header_text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.page_title {
+    margin: 0;
+    font-size: 25px;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.page_description {
+    margin: 0;
+    font-size: 14px;
+    color: #c0c2c8;
+}
+
+.state_block,
+.error_block {
+    width: 100%;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #d7dbe7;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.error_block {
+    color: #ffb4a8;
+    border-color: rgba(255, 99, 71, 0.32);
+    background: rgba(155, 32, 16, 0.16);
+}
+
 .book_month {
     display: flex;
     justify-content: space-between;

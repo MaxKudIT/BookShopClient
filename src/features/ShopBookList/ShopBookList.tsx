@@ -4,6 +4,7 @@ import styles from './ShopBookList.module.scss'
 
 import { Alert, Snackbar } from "@mui/material";
 import { getAuth } from "firebase/auth";
+import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 
 import SideBar from "../../shared/components/SideBar/Sidebar";
@@ -19,14 +20,21 @@ import { LuBookOpenText } from "react-icons/lu";
 import { MdOutlineAccessTime } from "react-icons/md";
 import BookInfoComponent, { type BICProps } from "../../shared/components/BookInfoComponent/BookInfoComponent";
 import SubscriptionModal from "../../shared/components/SubscriptionModal/SubscriptionModal";
+import { useStores } from "../../store/context/GloabalContext";
 
 
-const ShopBookList = () => {
+const ShopBookList = observer(() => {
 
 
 
 
   const { logout, logoutError, clearErrors } = useFirebaseAuth();
+  const {
+    statsStore: {
+      userStats,
+      getUserStats,
+    },
+  } = useStores();
 
 
   const auth = getAuth()
@@ -139,6 +147,10 @@ const ShopBookList = () => {
     }
   }, [logoutError]);
 
+  useEffect(() => {
+    getUserStats();
+  }, [getUserStats]);
+
 
   const handleClose = (_event: unknown, reason: string) => {
     if (reason === 'clickaway') {
@@ -166,25 +178,25 @@ const ShopBookList = () => {
     {
       icon: AiOutlineDollarCircle,
       title: 'КУПЛЕНО КНИГ',
-      var1: '128',
+      info: String(userStats?.PurchasedBooks ?? 0),
       color: 'rgba(63, 128, 214, 0.42)'
     },
     {
       icon: LuBookOpenText,
       title: 'ПРОЧИТАНО',
-      var1: '84',
+      info: String(userStats?.ReadBooks ?? 0),
       color: 'rgba(230, 135, 58, 0.47)'
     },
     {
       icon: MdOutlineAccessTime,
-      title: 'ЧАСОВ В ЭТОМ МЕСЯЦЕ',
-      var1: '38',
+      title: 'МИНУТ ЧТЕНИЯ',
+      info: String(userStats?.TotalMinutes ?? 0),
       color: 'rgba(214, 63, 133, 0.4)'
     },
     {
       icon: FaRegStar,
       title: 'СРЕДНЯЯ ОЦЕНКА',
-      var1: '4.7',
+      info: userStats ? userStats.AverageRating.toFixed(1) : '0',
       color: 'rgba(186, 138, 234, 0.51)'
     }
 
@@ -258,7 +270,7 @@ const ShopBookList = () => {
           <div id="info_block" className={styles.info_block}>
             <div className={styles.info_block_content}>
               {statistics.map(el => (
-                <BookInfoComponent key={el.title} color={el.color} icon={el.icon} title={el.title} var1={el.var1} />))}
+                <BookInfoComponent key={el.title} color={el.color} icon={el.icon} title={el.title} info={el.info} />))}
             </div>
           </div>
 
@@ -272,6 +284,6 @@ const ShopBookList = () => {
     </>
 
   )
-}
+})
 
 export default ShopBookList;

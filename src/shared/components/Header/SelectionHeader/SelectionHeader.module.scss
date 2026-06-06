@@ -100,6 +100,61 @@
     }
 }
 
+.subscription_chip {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.16s, box-shadow 0.16s, border-color 0.16s;
+
+    svg {
+        font-size: 17px;
+    }
+
+    p {
+        font-size: 13px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    &:hover {
+        transform: translateY(-1px);
+    }
+}
+
+.subscription_chip_standard {
+    color: #cbd5e1;
+    background: rgba(148, 163, 184, 0.08);
+    border-color: rgba(203, 213, 225, 0.14);
+}
+
+.subscription_chip_month {
+    color: #ecf2ff;
+    background:
+        linear-gradient(135deg, rgba(82, 124, 255, 0.32), rgba(120, 83, 255, 0.18)),
+        rgba(99, 121, 233, 0.14);
+    border-color: rgba(148, 180, 255, 0.42);
+    box-shadow:
+        0 12px 28px rgba(76, 111, 255, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.subscription_chip_year {
+    color: #fff7db;
+    background:
+        radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.36), transparent 18%),
+        linear-gradient(135deg, rgba(255, 203, 92, 0.38), rgba(155, 95, 255, 0.3) 48%, rgba(67, 111, 255, 0.28)),
+        rgba(255, 209, 102, 0.1);
+    border-color: rgba(255, 222, 143, 0.52);
+    box-shadow:
+        0 14px 34px rgba(255, 195, 82, 0.18),
+        0 10px 26px rgba(84, 104, 255, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
 .search_shell {
     width: min(650px, 52vw);
     min-width: 360px;

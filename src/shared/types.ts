@@ -95,10 +95,20 @@ export type UserSubscriptionStatus = {
     Subscription: UserSubscription | null
 }
 
+export type SubscriptionPlan = {
+    Id: string
+    Title: string
+    Price: number
+    DurationDays: number
+    IsActive: boolean
+    Description: string
+}
+
 export type UserStats = {
     TotalMinutes: number
     ReadBooks: number
     AverageRating: number
+    PurchasedBooks: number
 }
 
 export type RecommendationsPageT = {

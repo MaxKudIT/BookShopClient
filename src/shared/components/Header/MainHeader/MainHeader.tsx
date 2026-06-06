@@ -1,10 +1,14 @@
 import { TextField, InputAdornment } from "@mui/material";
+import { getAuth } from "firebase/auth";
+import { observer } from "mobx-react-lite";
 import { IoMdNotificationsOutline, IoMdSearch } from "react-icons/io";
 import { textFieldStyles } from "./muiStyles";
 import { useEffect, useRef, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useSearch, useMyBooksSearch } from "../../../../store/context/SearchContext";
 import styles from './MainHeader.module.scss'
 import { IoSparklesOutline } from "react-icons/io5";
+import { useStores } from "../../../../store/context/GloabalContext";
 
 type NotificationItem = {
   id: string;
@@ -24,9 +28,17 @@ const notifications: NotificationItem[] = [
   },
 ];
 
-const MainHeader = () => {
+const MainHeader = observer(() => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const notificationsRef = useRef<HTMLDivElement>(null);
+  const auth = getAuth();
+  const [user] = useAuthState(auth);
+  const {
+    subscriptionStore: {
+      activePlan,
+      getStatus,
+    },
+  } = useStores();
 
   const { setsearchingValue } = useSearch()
 
@@ -68,7 +80,32 @@ const MainHeader = () => {
     };
   }, [notificationsOpen]);
 
+  useEffect(() => {
+    if (user) {
+      getStatus();
+    }
+  }, [user, getStatus]);
 
+  const subscriptionView = (() => {
+    if (!activePlan) {
+      return {
+        className: styles.subscription_chip_standard,
+        label: 'Standard',
+      };
+    }
+
+    if (activePlan.DurationDays >= 365) {
+      return {
+        className: styles.subscription_chip_year,
+        label: 'Premium 365',
+      };
+    }
+
+    return {
+      className: styles.subscription_chip_month,
+      label: 'Premium 30',
+    };
+  })();
 
 
   return (
@@ -95,9 +132,9 @@ const MainHeader = () => {
       </div>
 
       <div className={styles.header_actions}>
-        <div className={styles.premium_chip}>
+        <div className={`${styles.premium_chip} ${subscriptionView.className}`}>
           <IoSparklesOutline />
-          <p>Premium</p>
+          <p>{subscriptionView.label}</p>
         </div>
 
         <div ref={notificationsRef} className={styles.notifications_area}>
@@ -150,6 +187,6 @@ const MainHeader = () => {
 
     </div>
   )
-}
+})
 
 export default MainHeader;

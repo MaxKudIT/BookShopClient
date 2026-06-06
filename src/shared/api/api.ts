@@ -7,18 +7,21 @@ import type { HttpActions } from './httpActions'
 import { BookPageA } from './BookPage/BookPage'
 import { CartA } from './Cart/Cart'
 import { FavsA } from './Favs/FavsA'
+import { BooksA } from './Books/BooksA'
 import { OrderItemsA } from './OrderItems/OrderItemsA'
 import { OrdersA } from './Orders/OrdersA'
 import { ReadingA } from './Reading/ReadingA'
 import { ReadingSessionsA } from './ReadingSessions/ReadingSessionsA'
 import { RecommendationA } from './Recommendation/RecommendationA'
 import { StatsA } from './Stats/StatsA'
+import { SubscriptionPlansA } from './SubscriptionPlans/SubscriptionPlansA'
 import { UserSubA } from './UserSub/UserSubA'
 
 
 export const api = axios.create({baseURL: 'http://192.168.0.109:3000/'})
 
 class Api {
+
     public readonly aiChats: AIChatA
     public readonly books: BookInfoA
     public readonly bookRevs: BookRevsA
@@ -26,12 +29,14 @@ class Api {
     public readonly pages: BookPageA
     public readonly carts: CartA
     public readonly favs: FavsA
+    public readonly myBooks: BooksA
     public readonly orderItems: OrderItemsA
     public readonly orders: OrdersA
     public readonly reading: ReadingA
     public readonly readingSessions: ReadingSessionsA
     public readonly recommendations: RecommendationA
     public readonly stats: StatsA
+    public readonly subscriptionPlans: SubscriptionPlansA
     public readonly userSubscriptions: UserSubA
     
     constructor(httpActions: HttpActions) {
@@ -42,12 +47,14 @@ class Api {
         this.pages = new BookPageA(httpActions)
         this.carts = new CartA(httpActions)
         this.favs = new FavsA(httpActions)
+        this.myBooks = new BooksA(httpActions)
         this.orderItems = new OrderItemsA(httpActions)
         this.orders = new OrdersA(httpActions)
         this.reading = new ReadingA(httpActions)
         this.readingSessions = new ReadingSessionsA(httpActions)
         this.recommendations = new RecommendationA(httpActions)
         this.stats = new StatsA(httpActions)
+        this.subscriptionPlans = new SubscriptionPlansA(httpActions)
         this.userSubscriptions = new UserSubA(httpActions)
     }
 }
