@@ -5,8 +5,10 @@ import { HttpActions } from "../shared/api/httpActions"
 import { BookPageStore } from "../features/BookPage/mobx/BookPageStore";
 import { CartItemStore } from "../features/Cart/mobx/CartStore";
 import { FavItemStore } from "../features/Favs/mobx/FavsStore";
+import { AiChatStore } from "../features/AiChat/mobx/AiChatStore";
 
 export type Stores = {
+    readonly aiChatStore: AiChatStore
     readonly bookInfoStore: BookInfoStore
     readonly bookPageStore: BookPageStore
     readonly cartItemsStore: CartItemStore
@@ -18,6 +20,7 @@ const httpActions = new HttpActions();
 const api = new Api(httpActions);
 
 const stores: Stores = {
+    aiChatStore: new AiChatStore(api),
     bookInfoStore: new BookInfoStore(api),
     bookPageStore: new BookPageStore(api),
     cartItemsStore: new CartItemStore(api),

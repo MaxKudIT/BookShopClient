@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import type { ReactElement } from 'react'
 import AuthPage from './pages/Auth/AuthPage'
 
 import './index.css'
@@ -17,7 +18,14 @@ import Favs from './pages/Favs/Favs'
 import History from './pages/History/History'
 import Recomms from './pages/Recomms/Recomms'
 import MainBooksPage from './pages/MainBooks/MainBooksPage'
+import AiChat from './features/AiChat/AiChat'
 
+const withAiChat = (page: ReactElement) => (
+    <>
+        {page}
+        <AiChat />
+    </>
+)
 
 const router = createBrowserRouter([
     {
@@ -26,47 +34,47 @@ const router = createBrowserRouter([
         loader: publicLoader
     },
     {
-        element: <HomePage />,
+        element: withAiChat(<HomePage />),
         path: '/',
         loader: protectedLoader
     },
     {
-        element: <MainBooksPage/>,
+        element: withAiChat(<MainBooksPage/>),
         path: '/mainbooks',
         loader: protectedLoader
     },
     {
-        element: <Cart/>,
+        element: withAiChat(<Cart/>),
         path: '/cart',
         loader: protectedLoader
     },
     {
-        element: <Favs/>,
+        element: withAiChat(<Favs/>),
         path: '/favs',
         loader: protectedLoader
     },
     {
-        element: <Recomms/>,
+        element: withAiChat(<Recomms/>),
         path: '/recomms',
         loader: protectedLoader
     },
     {
-        element: <BookInfoPage />,
+        element: withAiChat(<BookInfoPage />),
         path: 'books/:id',
         loader: protectedLoader
     },
     {
-        element: <MyBooksPage />,
+        element: withAiChat(<MyBooksPage />),
         path: '/mybooks',
         loader: protectedLoader
     },
     {
-        element: <BookPage />,
+        element: withAiChat(<BookPage />),
         path: '/books/:id/pages/:pageNumber',
         // loader: protectedPurchaseLoader
     },
     {
-        element: <History/>,
+        element: withAiChat(<History/>),
         path: '/history',
         loader: protectedLoader
     }

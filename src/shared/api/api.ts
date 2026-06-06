@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { AIChatA } from './AIChat/AIChatA'
 import { BookInfoA } from './BookInfo/BookInfo'
 import { BookRevsA } from './BookRevs/BookRevsA'
 import { BookViewsA } from './BookViews/BookViewsA'
@@ -18,6 +19,7 @@ import { UserSubA } from './UserSub/UserSubA'
 export const api = axios.create({baseURL: 'http://192.168.0.109:3000/'})
 
 class Api {
+    public readonly aiChats: AIChatA
     public readonly books: BookInfoA
     public readonly bookRevs: BookRevsA
     public readonly bookViews: BookViewsA
@@ -33,6 +35,7 @@ class Api {
     public readonly userSubscriptions: UserSubA
     
     constructor(httpActions: HttpActions) {
+        this.aiChats = new AIChatA(httpActions)
         this.books = new BookInfoA(httpActions);
         this.bookRevs = new BookRevsA(httpActions)
         this.bookViews = new BookViewsA(httpActions)
@@ -50,4 +53,3 @@ class Api {
 }
 
 export {Api}
-

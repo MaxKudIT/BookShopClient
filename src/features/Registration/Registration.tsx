@@ -44,7 +44,6 @@ export type SagaType = {
   fav: boolean
 }
 
-
 const Registration = () => {
 
 
@@ -65,6 +64,8 @@ const Registration = () => {
 
   const { post: createFav } = usePost<{ title: string }, { id: string }>('/fav')  //создание избранного (как корзины содержимого) для пользователя
   const { deleteI: deleteFavDB } = useDelete<any>('/fav')
+
+  const { post: createAIChat } = usePost<{ title: string }, { id: string }>('/ai-chats')
 
   const { register, registerLoading, registerError, clearErrors, googleSignIn, googleError, gitHubSignIn, gitHubError } = useFirebaseAuth();
 
@@ -196,11 +197,16 @@ const Registration = () => {
       favId = data3.id;
       completedOps.fav = true;
 
+      // 6. Создаем AI чат для пользователя
+      await createAIChat(
+        { title: 'BookShop AI' },
+        { idToken: token }
+      );
 
-      // 6. Редирект на главную
+      // 7. Редирект на главную
       navigate('/', { replace: true });
 
-      // 7. Очищаем форму
+      // 8. Очищаем форму
       setInput({ email: '', login: '', pass: '' });
       setErrors({ login: '', email: '', pass: '' });
 
@@ -271,6 +277,10 @@ const Registration = () => {
     );
     await createFav(
       { title: `Fav ${firebaseUser.uid}` },
+      { idToken: token }
+    );
+    await createAIChat(
+      { title: 'BookShop AI' },
       { idToken: token }
     );
   };

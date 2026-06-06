@@ -54,6 +54,13 @@ class HttpActions {
         });
     };
 
+    public deleteWithoutParams = async <T>(
+        url: string,
+        config?: AxiosRequestConfig
+    ): AxiosPromise<T> => {
+        return api.delete(url, config);
+    };
+
 
     public getAccessToken = async (): Promise<AxiosRequestConfig> => {
         const auth = getAuth();

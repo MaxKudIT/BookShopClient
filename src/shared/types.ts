@@ -214,3 +214,44 @@ export type BookViewPreview = {
     PagesCount: number
     ViewedAt: string
 }
+
+export type AIMessageRole = 'user' | 'assistant'
+
+export type AIChat = {
+    Id: string
+    UserId: string
+    Title: string
+    CreatedAt: string
+    UpdatedAt: string
+}
+
+export type AIChatCurrent = {
+    id: string
+    title: string
+    createdAt: string
+    updatedAt: string
+}
+
+export type AIMessage = {
+    Id: string
+    UserId: string
+    ChatId: string
+    Role: AIMessageRole
+    Content: string
+    CreatedAt: string
+}
+
+export type AIChatCreate = {
+    title: string
+}
+
+export type AIMessageCreate = {
+    role: AIMessageRole
+    content: string
+}
+
+export type AIAskResponse = {
+    userMessageId: string
+    assistantMessageId: string
+    answer: string
+}

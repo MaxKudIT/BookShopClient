@@ -34,15 +34,13 @@ export type LoginFormType = {
   pass: string
 }
 
-
-
-
 const Authorization = () => {
 
   const { login, loginLoading, loginError, clearErrors, googleSignIn, googleError, gitHubSignIn, gitHubError } = useFirebaseAuth();
   const { post: createUser } = usePost<{ FirebaseId: string }, { id: string }>('/users/create');
   const { post: createCart } = usePost<{ title: string }, { id: string }>('/cart')
   const { post: createFav } = usePost<{ title: string }, { id: string }>('/fav')
+  const { post: createAIChat } = usePost<{ title: string }, { id: string }>('/ai-chats')
 
 
   const [submitError, setSubmitError] = useState<string>('');
@@ -132,6 +130,10 @@ const Authorization = () => {
     );
     await createFav(
       { title: `Fav ${firebaseUser.uid}` },
+      { idToken: token }
+    );
+    await createAIChat(
+      { title: 'BookShop AI' },
       { idToken: token }
     );
   };
