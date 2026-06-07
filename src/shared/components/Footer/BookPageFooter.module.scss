@@ -45,7 +45,7 @@
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
-    transition: transform 0.2s, background 0.2s, border-color 0.2s, color 0.2s;
+    transition: transform 0.5s, background 0.2s, border-color 0.2s, color 0.2s;
 
     svg {
         font-size: 18px;
@@ -71,7 +71,7 @@
 
 .goto_button {
     padding: 0 18px;
-    background: linear-gradient(135deg, rgba(126, 143, 255, 0.95), rgba(99, 121, 233, 0.95));
+    background: linear-gradient(135deg, rgba(83, 94, 163, 0.95), rgba(65, 81, 158, 0.95));
     color: #ffffff;
     border-color: rgba(204, 214, 255, 0.32);
   

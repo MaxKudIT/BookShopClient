@@ -8,100 +8,27 @@ import {
     TableHead,
     TableRow
 } from '@mui/material';
+import type { BookViewPreview } from '../../types';
 
 
-const HistoryTable = () => {
-    const rows = [
-        {
-            id: 1,
-            title: 'Мастер и Маргарита',
-            author: 'Михаил Булгаков',
-            viewedAt: '24 апреля 2026',
-            genre: 'Роман',
-            rating: '4.9',
-            volume: '512 стр.'
-        },
-        {
-            id: 2,
-            title: '1984',
-            author: 'Джордж Оруэлл',
-            viewedAt: '22 апреля 2026',
-            genre: 'Антиутопия',
-            rating: '4.8',
-            volume: '328 стр.'
-        },
-        {
-            id: 3,
-            title: 'Дюна',
-            author: 'Фрэнк Герберт',
-            viewedAt: '19 апреля 2026',
-            genre: 'Фантастика',
-            rating: '4.7',
-            volume: '688 стр.'
-        },
-        {
-            id: 4,
-            title: 'Дюна',
-            author: 'Фрэнк Герберт',
-            viewedAt: '19 апреля 2026',
-            genre: 'Фантастика',
-            rating: '4.7',
-            volume: '688 стр.'
-        },
-        {
-            id: 5,
-            title: 'Дюна',
-            author: 'Фрэнк Герберт',
-            viewedAt: '19 апреля 2026',
-            genre: 'Фантастика',
-            rating: '4.7',
-            volume: '688 стр.'
-        },
-        {
-            id: 6,
-            title: 'Дюна',
-            author: 'Фрэнк Герберт',
-            viewedAt: '19 апреля 2026',
-            genre: 'Фантастика',
-            rating: '4.7',
-            volume: '688 стр.'
-        },
-        {
-            id: 7,
-            title: 'Дюна',
-            author: 'Фрэнк Герберт',
-            viewedAt: '19 апреля 2026',
-            genre: 'Фантастика',
-            rating: '4.7',
-            volume: '688 стр.'
-        },
-        {
-            id: 7,
-            title: 'Дюна',
-            author: 'Фрэнк Герберт',
-            viewedAt: '19 апреля 2026',
-            genre: 'Фантастика',
-            rating: '4.7',
-            volume: '688 стр.'
-        },
-        {
-            id: 7,
-            title: 'Дюна',
-            author: 'Фрэнк Герберт',
-            viewedAt: '19 апреля 2026',
-            genre: 'Фантастика',
-            rating: '4.7',
-            volume: '688 стр.'
-        },
+const formatDate = (date: string) => {
+    return new Intl.DateTimeFormat('ru-RU', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    }).format(new Date(date));
+};
 
-    ];
+const HistoryTable = ({ books }: { books: BookViewPreview[] }) => {
 
     return (
         <div className={styles.history_table_wrapper}>
             <div className={styles.header_row}>
                 <p className={styles.title}>Полный список книг</p>
                 <div className={styles.border_vertical_style}></div>
-                <p className={styles.count_badge}>ВСЕГО ЗАПИСЕЙ: 120</p>
+                <p className={styles.count_badge}>ВСЕГО ЗАПИСЕЙ: {books.length}</p>
             </div>
 
             <TableContainer
@@ -145,9 +72,9 @@ const HistoryTable = () => {
                     </TableHead>
 
                     <TableBody>
-                        {rows.map((row, index) => (
+                        {books.map((book, index) => (
                             <TableRow
-                                key={`${row.id}-${index}`}
+                                key={`${book.Id}-${index}`}
                                 hover
                                 sx={{
                                     transition: 'background 0.18s ease',
@@ -169,27 +96,27 @@ const HistoryTable = () => {
                                     <div className={styles.book_cell}>
                                         <img
                                             className={styles.preview_image}
-                                            alt={row.title}
-                                            src={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPTPFv3U6ZVvZh0GYlNFWntSw0PJjFvqNwMA&s'}
+                                            alt={book.Title}
+                                            src={book.ImageUrl}
                                         />
                                         <div className={styles.book_meta}>
-                                            <p className={styles.book_title}>{row.title}</p>
-                                            <span className={styles.book_author}>{row.author}</span>
+                                            <p className={styles.book_title}>{book.Title}</p>
+                                            <span className={styles.book_author}>{book.Author}</span>
                                         </div>
                                     </div>
 
                                 </TableCell>
                                 <TableCell sx={{ color: '#C8D0DD', fontSize: 14 }}>
-                                    {row.viewedAt}
+                                    {formatDate(book.ViewedAt)}
                                 </TableCell>
                                 <TableCell>
-                                    <span className={styles.genre_badge}>{row.genre}</span>
+                                    <span className={styles.genre_badge}>{book.Genre}</span>
                                 </TableCell>
                                 <TableCell sx={{ color: '#E9EDF5', fontSize: 14, fontWeight: 600 }}>
-                                    {row.rating}
+                                    {book.Rate}
                                 </TableCell>
                                 <TableCell sx={{ color: '#C8D0DD', fontSize: 14 }}>
-                                    {row.volume}
+                                    {book.PagesCount} стр.
                                 </TableCell>
                             </TableRow>
                         ))}

@@ -34,6 +34,16 @@ const ShopBookList = observer(() => {
       userStats,
       getUserStats,
     },
+    readingStore: {
+      lastReadingBooks,
+      getLastReadingBooks,
+      getLastReadingBooksState,
+    },
+    recommendationStore: {
+      homeRecommendations,
+      getHomeRecommendations,
+      getHomeRecommendationsState,
+    },
   } = useStores();
 
 
@@ -149,7 +159,9 @@ const ShopBookList = observer(() => {
 
   useEffect(() => {
     getUserStats();
-  }, [getUserStats]);
+    getLastReadingBooks(4);
+    getHomeRecommendations(4);
+  }, [getUserStats, getLastReadingBooks, getHomeRecommendations]);
 
 
   const handleClose = (_event: unknown, reason: string) => {
@@ -274,8 +286,21 @@ const ShopBookList = observer(() => {
             </div>
           </div>
 
-          <HistoryRow books={[]} />
-          <RecommsRow books={[]} />
+          {getLastReadingBooksState.loading ? (
+            <p style={{ color: '#BAC1CEFF', fontSize: 15 }}>Загружаем историю чтения...</p>
+          ) : getLastReadingBooksState.error ? (
+            <p style={{ color: '#ff8f8f', fontSize: 15 }}>{getLastReadingBooksState.error}</p>
+          ) : (
+            <HistoryRow books={lastReadingBooks} />
+          )}
+
+          {getHomeRecommendationsState.loading ? (
+            <p style={{ color: '#BAC1CEFF', fontSize: 15 }}>Подбираем рекомендации...</p>
+          ) : getHomeRecommendationsState.error ? (
+            <p style={{ color: '#ff8f8f', fontSize: 15 }}>{getHomeRecommendationsState.error}</p>
+          ) : (
+            <RecommsRow books={homeRecommendations} />
+          )}
         </div>
         <MainFooter />
       </div>

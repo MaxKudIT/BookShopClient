@@ -5,7 +5,7 @@ import { getAuth } from "firebase/auth";
 import { useEffect, useRef, useState, type FC } from "react";
 import { observer } from "mobx-react-lite";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useSearch, useMyBooksSearch } from "../../../../store/context/SearchContext";
 import styles from './SelectionHeader.module.scss'
 import Logo from "../../Logo/Logo";
@@ -25,6 +25,7 @@ type NavItem = {
 
 const SelectionHeader: FC<SelectionHeaderProps> = observer(({ paddingSides }) => {
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
   const [profileOpen, setProfileOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const {
@@ -56,6 +57,8 @@ const SelectionHeader: FC<SelectionHeaderProps> = observer(({ paddingSides }) =>
   const { setsearchingValue } = useSearch()
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get('q') ?? '';
   const { setsearchingValue: setSearchingValueMy } = useMyBooksSearch()
 
   const auth = getAuth();
@@ -81,18 +84,53 @@ const SelectionHeader: FC<SelectionHeaderProps> = observer(({ paddingSides }) =>
   }, [searchOpen]);
 
   useEffect(() => {
+    if (location.pathname === '/search') {
+      setSearchValue(searchQuery);
+      setSearchOpen(Boolean(searchQuery));
+    }
+  }, [location.pathname, searchQuery]);
+
+  useEffect(() => {
     if (user) {
       getStatus();
     }
   }, [user, getStatus]);
 
   const handleSearchChange = (value: string) => {
+    setSearchValue(value);
     setsearchingValue(value);
     setSearchingValueMy(value);
+
+    const nextParams = location.pathname === '/search'
+      ? new URLSearchParams(searchParams)
+      : new URLSearchParams();
+
+    if (value.trim()) {
+      nextParams.set('q', value);
+    } else {
+      nextParams.delete('q');
+    }
+
+    navigate({
+      pathname: '/search',
+      search: nextParams.toString() ? `?${nextParams.toString()}` : '',
+    }, { replace: location.pathname === '/search' });
   };
 
   const closeSearch = () => {
-    handleSearchChange('');
+    setSearchValue('');
+    setsearchingValue('');
+    setSearchingValueMy('');
+
+    if (location.pathname === '/search') {
+      const nextParams = new URLSearchParams(searchParams);
+      nextParams.delete('q');
+      navigate({
+        pathname: '/search',
+        search: nextParams.toString() ? `?${nextParams.toString()}` : '',
+      }, { replace: true });
+    }
+
     setSearchOpen(false);
   };
 
@@ -125,6 +163,7 @@ const SelectionHeader: FC<SelectionHeaderProps> = observer(({ paddingSides }) =>
         {searchOpen ? (
           <div className={styles.search_shell}>
             <TextField
+              value={searchValue}
               inputRef={searchInputRef}
               onChange={(event) => handleSearchChange(event.target.value)}
               onKeyDown={(event) => {

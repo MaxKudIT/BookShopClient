@@ -1,25 +1,23 @@
 import { useEffect, useState } from "react";
 import styles from './HistoryF.module.scss'
 
-import { Alert, Snackbar } from "@mui/material";
+import { Alert, CircularProgress, Snackbar } from "@mui/material";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 import SideBar from "../../shared/components/SideBar/Sidebar";
 import MainHeader from "../../shared/components/Header/MainHeader/MainHeader";
 
-import { FaRegStar } from "react-icons/fa6";
 import { useFirebaseAuth } from "../../shared/hooks/useFirebaseAuth";
 import MainFooter from "../../shared/components/Footer/MainFooter/MainFooter";
-import { AiOutlineDollarCircle } from "react-icons/ai";
-import { LuBookOpenText } from "react-icons/lu";
-import { MdHistory, MdOutlineAccessTime } from "react-icons/md";
-import BookInfoComponent, { type BICProps } from "../../shared/components/BookInfoComponent/BookInfoComponent";
+import { MdHistory } from "react-icons/md";
 import HistoryRecentRows from "../../shared/components/HistoryRecentRows/HistoryRecentRows";
 import HistoryTable from "../../shared/components/HistoryTable/HistoryTable";
+import { observer } from "mobx-react-lite";
+import { useStores } from "../../store/context/GloabalContext";
 
 
-const HistoryF = () => {
+const HistoryF = observer(() => {
 
 
 
@@ -33,6 +31,18 @@ const HistoryF = () => {
 
 
   const navigate = useNavigate();
+  const {
+    bookViewsStore: {
+      bookViews,
+      getLastBookViews,
+      getLastBookViewsState,
+    },
+    readingStore: {
+      lastReadingBooks,
+      getLastReadingBooks,
+      getLastReadingBooksState,
+    },
+  } = useStores();
 
   const handleLogout = async () => {
     try {
@@ -136,43 +146,18 @@ const HistoryF = () => {
     }
   }, [logoutError]);
 
+  useEffect(() => {
+    getLastBookViews(50);
+    getLastReadingBooks(4);
+  }, [getLastBookViews, getLastReadingBooks]);
 
-  const handleClose = (event: any, reason: any) => {
+
+  const handleClose = (_event: unknown, reason: string) => {
     if (reason === 'clickaway') {
       setOpen(false);
       clearErrors?.();
     }
   };
-
-
-
-  const statistics: BICProps[] = [
-    {
-      icon: AiOutlineDollarCircle,
-      title: 'КУПЛЕНО КНИГ',
-      var1: '128',
-      color: 'rgba(63, 128, 214, 0.42)'
-    },
-    {
-      icon: LuBookOpenText,
-      title: 'ПРОЧИТАНО',
-      var1: '84',
-      color: 'rgba(230, 135, 58, 0.47)'
-    },
-    {
-      icon: MdOutlineAccessTime,
-      title: 'ЧАСОВ В ЭТОМ МЕСЯЦЕ',
-      var1: '38',
-      color: 'rgba(214, 63, 133, 0.4)'
-    },
-    {
-      icon: FaRegStar,
-      title: 'СРЕДНЯЯ ОЦЕНКА',
-      var1: '4.7',
-      color: 'rgba(186, 138, 234, 0.51)'
-    }
-
-  ]
 
   return (
     <>
@@ -218,7 +203,7 @@ const HistoryF = () => {
               </div>
             </div>
 
-            <div className={styles.intro_badge}>120 записей</div>
+            <div className={styles.intro_badge}>{bookViews.length} записей</div>
           </section>
 
           <div className={styles.section_header}>
@@ -230,8 +215,18 @@ const HistoryF = () => {
           </div>
 
           <div className={styles.content_stack}>
-            <HistoryRecentRows books={[]} />
-            <HistoryTable />
+            {getLastBookViewsState.loading || getLastReadingBooksState.loading ? (
+              <CircularProgress sx={{ color: '#8da6ff', alignSelf: 'center', mt: 4 }} />
+            ) : getLastBookViewsState.error || getLastReadingBooksState.error ? (
+              <p style={{ color: '#ff8f8f', fontSize: 16 }}>
+                {getLastReadingBooksState.error || getLastBookViewsState.error}
+              </p>
+            ) : (
+              <>
+                <HistoryRecentRows books={lastReadingBooks} />
+                <HistoryTable books={bookViews} />
+              </>
+            )}
           </div>
 
         </div>
@@ -241,6 +236,6 @@ const HistoryF = () => {
     </>
 
   )
-}
+})
 
 export default HistoryF;

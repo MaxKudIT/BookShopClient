@@ -1,6 +1,6 @@
 import type { Api } from "../../../shared/api/api";
 import { makeInitialAxiosSolt } from "../../../shared/helpers/apiSolt/makeInitialAxiosSolt";
-import type { BookInfoT, ErrorResponse, PageInfoT } from "../../../shared/types";
+import type { ErrorResponse, PageInfoT } from "../../../shared/types";
 import { makeAutoObservable, flow } from 'mobx';
 class BookPageStore {
     public page: PageInfoT | null = null;

@@ -8,56 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 const genres: string[] = ['История', 'Детективы', 'Научная фантастика', 'Психология', 'Технологии', 'Философия', 'Документальные'];
 
-const defaultBooks: BookPreviewT[] = [
-    {
-        Id: 'recomm-1',
-        Title: 'Мастер и Маргарита',
-        Author: 'Михаил Булгаков',
-        Genre: 'Драма',
-        Rate: 4.9,
-        ImageUrl: 'https://www.moscowbooks.ru/image/book/805/orig/i805305.jpg?cu=20240222135506',
-        IsMine: true,
-        Price: 800,
-        Discount: 10
-    },
-    {
-        Id: 'recomm-2',
-        Title: 'Пикник на обочине',
-        Author: 'Аркадий и Борис Стругацкие',
-        Genre: 'Фантастика',
-        Rate: 4.8,
-        ImageUrl: 'https://imo10.labirint.ru/books/868684/cover.jpg/242-0',
-        IsMine: true,
-        Price: 640,
-        Discount: 5
-    },
-    {
-        Id: 'recomm-3',
-        Title: 'Шерлок Холмс',
-        Author: 'Артур Конан Дойл',
-        Genre: 'Приключения',
-        Rate: 4.7,
-        ImageUrl: 'https://imo10.labirint.ru/books/540709/cover.jpg/242-0',
-        IsMine: true,
-        Price: 700,
-        Discount: 12
-    },
-    {
-        Id: 'recomm-4',
-        Title: 'Кладбище домашних животных',
-        Author: 'Стивен Кинг',
-        Genre: 'Ужасы',
-        Rate: 4.6,
-        ImageUrl: 'https://imo10.labirint.ru/books/771998/cover.jpg/242-0',
-        IsMine: true,
-        Price: 760,
-        Discount: 8
-    }
-];
-
 const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
-    const visibleBooks = books.length ? books : defaultBooks;
-    const cardColors: Array<'pink' | 'purple' | 'blue'> = ['pink', 'purple', 'blue', 'pink'];
     const navigate = useNavigate();
 
     return (
@@ -81,9 +32,13 @@ const RecommsRow: FC<{ books: BookPreviewT[] }> = ({ books }) => {
                 </div>
 
                 <div className={styles.recomms_row_main}>
-                    {visibleBooks.slice(0, 4).map((book, index) => (
-                        <RecommPreview key={book.Id} color={'pink'} book={book} />
-                    ))}
+                    {books.length ? (
+                        books.slice(0, 4).map((book) => (
+                            <RecommPreview key={book.Id} color={'pink'} book={book} />
+                        ))
+                    ) : (
+                        <p style={{ color: '#BAC1CEFF', fontSize: 15 }}>Рекомендаций пока нет</p>
+                    )}
                 </div>
             </div>
 

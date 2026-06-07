@@ -19,6 +19,18 @@ export type BookPreviewT = {
     Rate: number
 }
 
+export type BookSearchParams = {
+    q?: string
+    query?: string
+    genre?: string
+    minPrice?: number
+    maxPrice?: number
+    minRate?: number
+    sort?: 'rate_desc' | 'price_asc' | 'price_desc' | 'new' | 'title'
+    limit?: number
+    offset?: number
+}
+
 export type BookInfoT = {
     Id: string
     Title: string
@@ -34,7 +46,7 @@ export type BookInfoT = {
     Genre: string
     ImageUrl: string
     Rate: number
-    IsMine: number,
+    IsMine: boolean,
 
     isInCart: boolean
     isInFavs: boolean

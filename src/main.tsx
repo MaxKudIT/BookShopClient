@@ -19,6 +19,7 @@ import History from './pages/History/History'
 import Recomms from './pages/Recomms/Recomms'
 import MainBooksPage from './pages/MainBooks/MainBooksPage'
 import AiChat from './features/AiChat/AiChat'
+import SearchPage from './pages/Search/SearchPage'
 
 const withAiChat = (page: ReactElement) => (
     <>
@@ -41,6 +42,11 @@ const router = createBrowserRouter([
     {
         element: withAiChat(<MainBooksPage/>),
         path: '/mainbooks',
+        loader: protectedLoader
+    },
+    {
+        element: withAiChat(<SearchPage/>),
+        path: '/search',
         loader: protectedLoader
     },
     {

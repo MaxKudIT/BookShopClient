@@ -1,13 +1,19 @@
 import type { FC } from 'react';
 import styles from './HistoryRecentPreview.module.scss'
 import { FaRegStar } from "react-icons/fa";
-import type { BookPreviewT } from '../../../types';
+import type { ReadingBookPreview } from '../../../types';
 import { MdOutlineDateRange } from 'react-icons/md';
 import { LuBookOpenText } from 'react-icons/lu';
 
-const HistoryRecentPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
-    const progress = Math.min(96, Math.max(36, Math.round(book.Rate * 18)));
-    const readPages = Math.round(progress * 5.2);
+const formatDate = (date: string) => {
+    return new Intl.DateTimeFormat('ru-RU', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    }).format(new Date(date));
+};
+
+const HistoryRecentPreview: FC<{ book: ReadingBookPreview }> = ({ book }) => {
     const filledStars = Math.round(book.Rate);
 
     return (
@@ -43,11 +49,11 @@ const HistoryRecentPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
                         <div className={styles.meta_row}>
                             <div className={styles.meta_item}>
                                 <MdOutlineDateRange className={styles.meta_icon} />
-                                <p>24 апр 2026</p>
+                                <p>{formatDate(book.LastStartedAt)}</p>
                             </div>
                             <div className={styles.meta_item}>
                                 <LuBookOpenText className={styles.meta_icon} />
-                                <p>{readPages} стр.</p>
+                                <p>{book.PagesCount} стр.</p>
                             </div>
                         </div>
                     </div>

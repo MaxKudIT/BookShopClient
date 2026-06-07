@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 
 import styles from './BookPage.module.scss'
 import DynamicMarkdownContent from "../../shared/components/DynamicMarkdownContent/DynamicMarkdownContent";
@@ -7,92 +7,81 @@ import { CircularProgress } from "@mui/material";
 import { useStores } from "../../store/context/GloabalContext";
 import { observer } from "mobx-react-lite";
 import BookPageFooter from "../../shared/components/Footer/BookPageFooter";
-import type { BookInfoT, PageInfoT } from "../../shared/types";
 import { IoBookmarkOutline, IoReaderOutline, IoTimeOutline } from "react-icons/io5";
 import SelectionHeader from "../../shared/components/Header/SelectionHeader/SelectionHeader";
 
-const USE_TEST_BOOK_PAGE_DATA = true;
+const leftAsideWidth = 250;
+const rightAsideWidth = 210;
+const readerGap = 32;
+const resizeDistance = 520;
+const hideAsidesAfter = 0.58;
 
-const testBook: BookInfoT = {
-    Id: 'test-book-master-and-margarita',
-    Title: 'Мастер и Маргарита',
-    PagesCount: 384,
-    Description: 'Тестовая книга для страницы чтения.',
-    AboutBook: 'Темная, мистическая и ироничная история о Москве, любви и свободе.',
-    Quote: 'Рукописи не горят.',
-    CreatedDate: '1967',
-    ReadingTime: '7 ч 30 мин',
-    Price: 990,
-    Discount: 15,
-    Author: 'Михаил Булгаков',
-    Genre: 'Драма',
-    ImageUrl: 'https://www.moscowbooks.ru/image/book/805/orig/i805305.jpg?cu=20240222135506',
-    Rate: 4.8,
-    IsMine: 1,
-    isInCart: false,
-    isInFavs: true
-}
-
-const testPage: PageInfoT = {
-    Id: 'test-page-1',
-    Number: 1,
-    Text: `## Глава 1
-
-В час жаркого весеннего заката на Патриарших прудах появились двое граждан. Один из них был одет в летнюю серую пару, был маленького роста, упитан, лыс, свою приличную шляпу пирожком нес в руке.
-
-Второй был плечистый, рыжеватый, вихрастый молодой человек в заломленной на затылок клетчатой кепке. На нем была ковбойка, жеваные белые брюки и черные тапочки.
-
-Солнце опускалось за дома, и город постепенно становился тише. Воздух держал в себе дневное тепло, но уже чувствовалась вечерняя прохлада, та самая, которая делает разговоры длиннее, а случайные встречи значительнее.
-
-**Это тестовый фрагмент**, чтобы можно было оценить верстку страницы чтения без активного сервера.
-
-- Левая панель показывает информацию о книге.
-- Центральная область имитирует страницу reader-а.
-- Нижняя панель управляет переходом между страницами.
-
-В час жаркого весеннего заката на Патриарших прудах появились двое граждан. Один из них был одет в летнюю серую пару, был маленького роста, упитан, лыс, свою приличную шляпу пирожком нес в руке.
-
-Второй был плечистый, рыжеватый, вихрастый молодой человек в заломленной на затылок клетчатой кепке. На нем была ковбойка, жеваные белые брюки и черные тапочки.
-
-Солнце опускалось за дома, и город постепенно становился тише. Воздух держал в себе дневное тепло, но уже чувствовалась вечерняя прохлада, та самая, которая делает разговоры длиннее, а случайные встречи значительнее.
-
-**Это тестовый фрагмент**, чтобы можно было оценить верстку страницы чтения без активного сервера.
-
-- Левая панель показывает информацию о книге.
-- Центральная область имитирует страницу reader-а.
-- Нижняя панель управляет переходом между страницами.
-В час жаркого весеннего заката на Патриарших прудах появились двое граждан. Один из них был одет в летнюю серую пару, был маленького роста, упитан, лыс, свою приличную шляпу пирожком нес в руке.
-
-Второй был плечистый, рыжеватый, вихрастый молодой человек в заломленной на затылок клетчатой кепке. На нем была ковбойка, жеваные белые брюки и черные тапочки.
-
-Солнце опускалось за дома, и город постепенно становился тише. Воздух держал в себе дневное тепло, но уже чувствовалась вечерняя прохлада, та самая, которая делает разговоры длиннее, а случайные встречи значительнее.
-
-**Это тестовый фрагмент**, чтобы можно было оценить верстку страницы чтения без активного сервера.
-
-- Левая панель показывает информацию о книге.
-- Центральная область имитирует страницу reader-а.
-- Нижняя панель управляет переходом между страницами.
-
-`
-
-}
-
-const TEST_PAGES_COUNT = 24;
+const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
 const BookPageF = observer(() => {
-
-
     const { id, pageNumber } = useParams()
     const navigate = useNavigate();
+    const currentPage = Number(pageNumber || 1);
+    const isValidPage = Number.isInteger(currentPage) && currentPage > 0;
+    const currentPageRef = useRef(currentPage);
+    const sessionIdRef = useRef<string | null>(null);
+    const closedSessionIdsRef = useRef(new Set<string>());
+    const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+    const [readerExpand, setReaderExpand] = useState(0);
+    const [isResizing, setIsResizing] = useState(false);
+    const [selectedRating, setSelectedRating] = useState(0);
+    const [isReadingCompleted, setIsReadingCompleted] = useState(false);
+    const resizeStartRef = useRef({ x: 0, expand: 0 });
+    const shouldHideAsides = readerExpand >= hideAsidesAfter;
+    const effectiveReaderExpand = shouldHideAsides ? readerExpand : readerExpand * 0.72;
+
+    const readerShellStyle = useMemo(() => ({
+        '--reader-aside-left': `${Math.round(leftAsideWidth * (1 - effectiveReaderExpand))}px`,
+        '--reader-aside-right': `${Math.round(rightAsideWidth * (1 - effectiveReaderExpand))}px`,
+        '--reader-gap': `${Math.round(readerGap * (1 - effectiveReaderExpand))}px`,
+    }) as CSSProperties, [effectiveReaderExpand]);
+
+    const handleResizePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        setIsResizing(true);
+        resizeStartRef.current = { x: event.clientX, expand: readerExpand };
+    };
+
+    useEffect(() => {
+        if (!isResizing) {
+            return;
+        }
+
+        const handlePointerMove = (event: PointerEvent) => {
+            const delta = resizeStartRef.current.x - event.clientX;
+            setReaderExpand(clamp(resizeStartRef.current.expand + delta / resizeDistance, 0, 1));
+        };
+
+        const handlePointerUp = () => {
+            setIsResizing(false);
+        };
+
+        window.addEventListener('pointermove', handlePointerMove);
+        window.addEventListener('pointerup', handlePointerUp);
+        document.body.style.cursor = 'ew-resize';
+        document.body.style.userSelect = 'none';
+
+        return () => {
+            window.removeEventListener('pointermove', handlePointerMove);
+            window.removeEventListener('pointerup', handlePointerUp);
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+        };
+    }, [isResizing]);
 
 
     const onPageChange = (page: number) => {
-        if (!page) {
+        if (!id || !page || page < 1) {
             console.error('Параметров не обнаружено');
             return
         }
 
-        navigate(`/books/${id || testBook.Id}/pages/${page}`)
+        navigate(`/books/${id}/pages/${page}`)
     }
 
     const {
@@ -106,44 +95,135 @@ const BookPageF = observer(() => {
             getPagesCountState
         },
         bookInfoStore: {
-            book
+            book,
+            getBookById,
+            getBookState
+        },
+        readingStore: {
+            startReading,
+            startReadingState,
+            updateProgress,
+            updateProgressState,
+            finishReading,
+            finishReadingState,
+            closeReadingSession,
+            closeReadingSessionState,
+        },
+        bookRevsStore: {
+            createBookReview,
+            createBookReviewState,
         }
     } = useStores()
 
 
 
     const handleGetBook = useCallback(async () => {
-        if (USE_TEST_BOOK_PAGE_DATA) {
-            return;
-        }
-
-        if (id && pageNumber) {
+        if (id && pageNumber && isValidPage) {
             await Promise.all([
+                getBookById(id),
                 getPageById(id, pageNumber),
                 getPagesCount(id),
-              
-            ]);
 
-            console.log('Оба запроса завершены');
+            ]);
         } else {
             console.error('Параметр id или pageNumber не найден')
         }
-    }, [id, pageNumber, getPagesCount, getPageById])
+    }, [id, pageNumber, isValidPage, getBookById, getPagesCount, getPageById])
 
     useEffect(() => {
         handleGetBook()
 
     }, [handleGetBook]);
 
+    useEffect(() => {
+        currentPageRef.current = currentPage;
+    }, [currentPage]);
 
+    useEffect(() => {
+        let isActive = true;
+        const startedSessionId = { current: null as string | null };
+        setActiveSessionId(null);
+        sessionIdRef.current = null;
 
+        const start = async () => {
+            if (!id || !isValidPage) {
+                return;
+            }
 
-    const activeBook = USE_TEST_BOOK_PAGE_DATA ? testBook : book;
-    const activePage = USE_TEST_BOOK_PAGE_DATA ? testPage : page;
-    const activePagesCount = USE_TEST_BOOK_PAGE_DATA ? TEST_PAGES_COUNT : pagesCount;
-    const currentPage = parseInt(pageNumber || String(activePage?.Number || 1));
+            const reading = await startReading(id);
+            if (!reading) {
+                return;
+            }
 
-    if (!USE_TEST_BOOK_PAGE_DATA && (getPageState.loading || getPagesCountState.loading)) {
+            if (!isActive) {
+                closedSessionIdsRef.current.add(reading.SessionId);
+                closeReadingSession(reading.SessionId);
+                return;
+            }
+
+            sessionIdRef.current = reading.SessionId;
+            startedSessionId.current = reading.SessionId;
+            setActiveSessionId(reading.SessionId);
+        };
+
+        start();
+
+        return () => {
+            isActive = false;
+
+            const sessionId = startedSessionId.current || sessionIdRef.current;
+            if (sessionId && !closedSessionIdsRef.current.has(sessionId)) {
+                closedSessionIdsRef.current.add(sessionId);
+                closeReadingSession(sessionId);
+                sessionIdRef.current = null;
+                setActiveSessionId(null);
+            }
+        };
+    }, [id, isValidPage, startReading, closeReadingSession]);
+
+    useEffect(() => {
+        if (!id || !isValidPage || !activeSessionId) {
+            return;
+        }
+
+        updateProgress(id, currentPage);
+    }, [id, currentPage, isValidPage, activeSessionId, updateProgress]);
+
+    useEffect(() => {
+        setSelectedRating(0);
+        setIsReadingCompleted(false);
+    }, [id]);
+
+    const activeBook = book;
+    const activePage = page;
+    const activePagesCount = pagesCount;
+    const isLastPage = Boolean(activePagesCount && currentPage >= activePagesCount);
+
+    const handleFinishReading = async () => {
+        if (!id || selectedRating === 0) {
+            return;
+        }
+
+        const sessionId = sessionIdRef.current;
+        if (sessionId && !closedSessionIdsRef.current.has(sessionId)) {
+            const finishedReading = await finishReading(sessionId, currentPage);
+
+            if (!finishedReading) {
+                return;
+            }
+
+            closedSessionIdsRef.current.add(sessionId);
+            sessionIdRef.current = null;
+            setActiveSessionId(null);
+        }
+
+        const reviewCreated = await createBookReview(id, selectedRating);
+        if (reviewCreated) {
+            setIsReadingCompleted(true);
+        }
+    };
+
+    if (getBookState.loading || getPageState.loading || getPagesCountState.loading || startReadingState.loading) {
         return (
 
             <CircularProgress
@@ -162,13 +242,13 @@ const BookPageF = observer(() => {
         )
     }
 
-    if (!USE_TEST_BOOK_PAGE_DATA && (getPageState.error || getPagesCountState.error)) {
+    if (getBookState.error || getPageState.error || getPagesCountState.error || startReadingState.error) {
         return (
-            <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>{getPageState.error || getPagesCountState.error}</p>
+            <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>{getBookState.error || getPageState.error || getPagesCountState.error || startReadingState.error}</p>
         )
     }
 
-    if (!activeBook || !activePage || !activePagesCount) {
+    if (!isValidPage || !activeBook || !activePage || !activePagesCount) {
         return (
             <p style={{ color: 'red', marginTop: 20, fontSize: 20 }}>
                 Данные не найдены
@@ -181,7 +261,10 @@ const BookPageF = observer(() => {
             <div className={styles.bookpage_page_style}>
                 <SelectionHeader />
                 <div className={styles.bookpage_main_container}>
-                    <div className={styles.reader_shell}>
+                    <div
+                        className={`${styles.reader_shell} ${shouldHideAsides ? styles.reader_shell_expanded : ''} ${isResizing ? styles.reader_shell_resizing : ''}`}
+                        style={readerShellStyle}
+                    >
                         <aside className={styles.reader_aside}>
                             <div className={styles.aside_card}>
                                 <p className={styles.aside_label}>Сейчас читаете</p>
@@ -195,7 +278,10 @@ const BookPageF = observer(() => {
                                 </div>
                                 <div className={styles.meta_item}>
                                     <IoBookmarkOutline />
-                                    <span>Страница {currentPage}</span>
+                                    <span>
+                                        Страница {currentPage}
+                                        {(updateProgressState.loading || finishReadingState.loading || closeReadingSessionState.loading) && ' · сохраняем'}
+                                    </span>
                                 </div>
                                 <div className={styles.meta_item}>
                                     <IoTimeOutline />
@@ -204,6 +290,11 @@ const BookPageF = observer(() => {
                             </div>
                         </aside>
 
+                        <div
+                            className={styles.reader_resize_zone}
+                            onPointerDown={handleResizePointerDown}
+                        />
+
                         <main className={styles.book_page_block_style}>
                             <div className={styles.book_page_block_style_inner}>
                                 <div className={styles.reader_page_top}>
@@ -211,6 +302,53 @@ const BookPageF = observer(() => {
                                     <span>{currentPage} / {activePagesCount}</span>
                                 </div>
                                 <DynamicMarkdownContent content={activePage.Text} />
+                                {isLastPage && (
+                                    <section className={styles.finish_reading_card}>
+                                        <div>
+                                            <p className={styles.finish_title}>
+                                                Вы дошли до конца книги
+                                            </p>
+                                            <p className={styles.finish_text}>
+                                                Завершите чтение и поставьте оценку, чтобы она учитывалась в рекомендациях и статистике.
+                                            </p>
+                                        </div>
+
+                                        <div className={styles.rating_picker}>
+                                            {[1, 2, 3, 4, 5].map((rating) => (
+                                                <button
+                                                    key={rating}
+                                                    type="button"
+                                                    className={`${styles.rating_button} ${selectedRating >= rating ? styles.rating_button_active : ''}`}
+                                                    onClick={() => setSelectedRating(rating)}
+                                                    disabled={isReadingCompleted || createBookReviewState.loading || finishReadingState.loading}
+                                                >
+                                                    {rating}
+                                                </button>
+                                            ))}
+                                        </div>
+
+                                        {(createBookReviewState.error || finishReadingState.error) && (
+                                            <p className={styles.finish_error}>
+                                                {createBookReviewState.error || finishReadingState.error}
+                                            </p>
+                                        )}
+
+                                        {isReadingCompleted ? (
+                                            <p className={styles.finish_success}>Чтение завершено, оценка сохранена.</p>
+                                        ) : (
+                                            <button
+                                                className={styles.finish_button}
+                                                type="button"
+                                                onClick={handleFinishReading}
+                                                disabled={selectedRating === 0 || createBookReviewState.loading || finishReadingState.loading}
+                                            >
+                                                {createBookReviewState.loading || finishReadingState.loading
+                                                    ? 'Сохраняем...'
+                                                    : 'Завершить чтение'}
+                                            </button>
+                                        )}
+                                    </section>
+                                )}
                             </div>
                         </main>
 

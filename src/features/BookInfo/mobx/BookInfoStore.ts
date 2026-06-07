@@ -8,6 +8,7 @@ class BookInfoStore {
     public physicalBookStockInfo: PhysicalBookStockInfo | null = null;
     public getBookState = makeInitialAxiosSolt();
     public getPhysicalBookStockInfoState = makeInitialAxiosSolt();
+    public buyElectronicBookState = makeInitialAxiosSolt();
 
 
 
@@ -19,6 +20,7 @@ class BookInfoStore {
 
         this.getBookById = this.getBookById.bind(this)
         this.getPhysicalBookStockInfo = this.getPhysicalBookStockInfo.bind(this)
+        this.buyElectronicBook = this.buyElectronicBook.bind(this)
 
          makePersistable(this, {
             name: 'BookInfoStore',
@@ -67,6 +69,27 @@ class BookInfoStore {
             this.physicalBookStockInfo = null
             this.getPhysicalBookStockInfoState = { loading: false, error: err?.message || 'Unknown error' }
             console.error(err)
+        }
+    })
+
+    public buyElectronicBook = flow(function* (this: BookInfoStore, bookId: string)
+        : Generator<Promise<string[] | string>, boolean, string[] | string> {
+        this.buyElectronicBookState = { loading: true, error: null }
+
+        try {
+            const res = yield this.api.usersBooks.buyBooks([bookId])
+
+            if (typeof res === 'string') {
+                this.buyElectronicBookState = { loading: false, error: res || 'Failed to buy electronic book' }
+                return false
+            }
+
+            this.buyElectronicBookState = { loading: false, error: null }
+            return true
+        } catch (err: any) {
+            this.buyElectronicBookState = { loading: false, error: err?.message || 'Failed to buy electronic book' }
+            console.error(err)
+            return false
         }
     })
 

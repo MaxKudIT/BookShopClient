@@ -9,6 +9,7 @@ import { useSearch, useMyBooksSearch } from "../../../../store/context/SearchCon
 import styles from './MainHeader.module.scss'
 import { IoSparklesOutline } from "react-icons/io5";
 import { useStores } from "../../../../store/context/GloabalContext";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 type NotificationItem = {
   id: string;
@@ -30,9 +31,14 @@ const notifications: NotificationItem[] = [
 
 const MainHeader = observer(() => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
   const notificationsRef = useRef<HTMLDivElement>(null);
   const auth = getAuth();
   const [user] = useAuthState(auth);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get('q') ?? '';
   const {
     subscriptionStore: {
       activePlan,
@@ -44,6 +50,11 @@ const MainHeader = observer(() => {
 
   const { setsearchingValue: setSearchingValueMy } = useMyBooksSearch()
 
+  useEffect(() => {
+    if (location.pathname === '/search') {
+      setSearchValue(searchQuery);
+    }
+  }, [location.pathname, searchQuery]);
 
   useEffect(() => {
 
@@ -107,14 +118,35 @@ const MainHeader = observer(() => {
     };
   })();
 
+  const handleSearchChange = (value: string) => {
+    setSearchValue(value);
+    setsearchingValue(value);
+    setSearchingValueMy(value);
+
+    const nextParams = location.pathname === '/search'
+      ? new URLSearchParams(searchParams)
+      : new URLSearchParams();
+
+    if (value.trim()) {
+      nextParams.set('q', value);
+    } else {
+      nextParams.delete('q');
+    }
+
+    navigate({
+      pathname: '/search',
+      search: nextParams.toString() ? `?${nextParams.toString()}` : '',
+    }, { replace: location.pathname === '/search' });
+  };
+
 
   return (
     <div className={styles.main_header}>
       <div className={styles.search_shell}>
         <TextField
+          value={searchValue}
           onChange={(e) => {
-            setsearchingValue(e.target.value)
-
+            handleSearchChange(e.target.value);
           }}
           sx={textFieldStyles}
           variant="filled"

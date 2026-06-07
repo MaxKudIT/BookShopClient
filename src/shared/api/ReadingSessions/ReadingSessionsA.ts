@@ -37,6 +37,19 @@ class ReadingSessionsA {
         return resData
     }
 
+    public closeReadingSession = async (sessionId: string): Promise<ReadingSession | string> => {
+        const config = await this.httpActions.getAccessToken();
+
+        const resData = this.httpActions.patch<{ readingSession: ReadingSession }>(`${this.startUrl}/${sessionId}`, {}, config).
+            then(res => {
+                return res.data.readingSession
+            }).
+            catch((err: any) => {
+                return err?.response?.data?.error || 'Unknown error';
+            })
+        return resData
+    }
+
     public getLastReadingBooks = async (limit?: number): Promise<ReadingBookPreview[] | string> => {
         const config = await this.configWithLimit(limit);
 

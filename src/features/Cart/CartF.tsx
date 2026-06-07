@@ -9,10 +9,11 @@ import { IoShieldCheckmarkOutline } from 'react-icons/io5';
 import SelectionFooter from '../../shared/components/Footer/SelectionFooter/SelectionFooter';
 import type { FC } from 'react';
 import type { IconType } from 'react-icons';
-import RecommsCart from '../../shared/components/RecommsRow/RecommsCart/RecommsCart';
 import type { CartItemsPreview } from '../../shared/types';
 import type { CartSelectedType } from '../../shared/components/CartView/CartView';
 import { useStores } from '../../store/context/GloabalContext';
+import RecommsRowWithDynamic from '../../shared/components/RecommsRow/RecommsRowWithDynamic/RecommsRowWithDynamic';
+import { MdAutoAwesome } from 'react-icons/md';
 
 const benefits = [
   {
@@ -39,6 +40,11 @@ const CartF = observer(() => {
       deleteCartItems,
       deleteCartItemsState,
     },
+    recommendationStore: {
+      cartRecommendations,
+      getCartRecommendations,
+      getCartRecommendationsState,
+    },
   } = useStores();
 
   const cartItems = cartItemsPreview ?? [];
@@ -46,7 +52,8 @@ const CartF = observer(() => {
 
   useEffect(() => {
     getCartItems();
-  }, [getCartItems]);
+    getCartRecommendations(10);
+  }, [getCartItems, getCartRecommendations]);
 
   useEffect(() => {
     setSelectedItems((prev) => prev.filter((item) => cartItems.some((cartItem) => cartItem.Id === item.id)));
@@ -80,6 +87,7 @@ const CartF = observer(() => {
     await deleteCartItems(ids);
     setSelectedItems((prev) => prev.filter((item) => !ids.includes(item.id)));
     await getCartItems();
+    await getCartRecommendations(10);
   };
 
   return (
@@ -204,8 +212,23 @@ const CartF = observer(() => {
             </div>
           </aside>
         </section>
+
+        <section className={styles.cart_recommendations}>
+          {getCartRecommendationsState.loading ? (
+            <div className={styles.state_block}>Подбираем рекомендации...</div>
+          ) : getCartRecommendationsState.error ? (
+            <div className={styles.error_block}>{getCartRecommendationsState.error}</div>
+          ) : (
+            <RecommsRowWithDynamic
+              title="Вам также может понравиться"
+              icon={MdAutoAwesome}
+              description="Подборка книг, которые хорошо дополняют корзину"
+              books={cartRecommendations}
+              color="blue"
+            />
+          )}
+        </section>
       </main>
-      <RecommsCart books={[]} />
       <SelectionFooter />
     </div>
   );

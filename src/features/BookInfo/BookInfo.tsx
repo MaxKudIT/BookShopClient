@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './BookInfo.module.scss'
@@ -6,18 +6,21 @@ import SelectionHeader from "../../shared/components/Header/SelectionHeader/Sele
 import SelectionFooter from "../../shared/components/Footer/SelectionFooter/SelectionFooter";
 import { IoIosArrowBack, IoMdCheckmarkCircleOutline, IoMdInformationCircleOutline } from "react-icons/io";
 import { FaCrown, FaHeart, FaRegHeart, FaRegStar } from "react-icons/fa6";
-import { MdCurrencyRuble, MdOutlineShoppingCart } from "react-icons/md";
+import { MdAutoAwesome, MdCurrencyRuble, MdOutlineShoppingCart } from "react-icons/md";
 import { CircularProgress, Divider, Tooltip } from "@mui/material";
 import type { BookInfoSentenseProps } from "../../shared/components/BookInfoSentense/BookInfoSentense";
 import BookInfoSentense from "../../shared/components/BookInfoSentense/BookInfoSentense";
 import { PiQuotes } from "react-icons/pi";
 import { useStores } from '../../store/context/GloabalContext';
+import SubscriptionModal from '../../shared/components/SubscriptionModal/SubscriptionModal';
+import RecommsRowWithDynamic from '../../shared/components/RecommsRow/RecommsRowWithDynamic/RecommsRowWithDynamic';
 
 const fallbackImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPTPFv3U6ZVvZh0GYlNFWntSw0PJjFvqNwMA&s';
 
 const BookInfo = observer(() => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [subscriptionOpen, setSubscriptionOpen] = useState(false);
 
   const {
     bookInfoStore: {
@@ -27,6 +30,8 @@ const BookInfo = observer(() => {
       getBookState,
       getPhysicalBookStockInfo,
       getPhysicalBookStockInfoState,
+      buyElectronicBook,
+      buyElectronicBookState,
     },
     cartItemsStore: {
       createCartItem,
@@ -36,7 +41,7 @@ const BookInfo = observer(() => {
       postCartItemsState2,
       deleteCartItems,
       deleteCartItemsState,
-      getCountCart,
+      // getCountCart,
     },
     favItemsStore: {
       createFavItem,
@@ -46,7 +51,21 @@ const BookInfo = observer(() => {
       postFavItemsState2,
       deleteFavItems,
       deleteFavItemsState,
-      getCountFav,
+      // getCountFav,
+    },
+    subscriptionStore: {
+      status: subscriptionStatus,
+      activePlan,
+      getStatus,
+      getStatusState,
+    },
+    bookViewsStore: {
+      saveOrUpdateBookView,
+    },
+    recommendationStore: {
+      bookRecommendations,
+      getRecommendationsByBook,
+      getRecommendationsByBookState,
     },
   } = useStores();
 
@@ -56,16 +75,35 @@ const BookInfo = observer(() => {
     { icon: IoMdCheckmarkCircleOutline, title: 'Гарантия качества', text: 'Высококачественная печать на бумаге премиум-класса.' }
   ];
 
-  const physicalBook = useMemo(() => {
+  const physicalBookInStock = useMemo(() => {
     return physicalBookStockInfo?.PhysicalBooks.find((item) => item.StockCount > 0) ?? null;
+  }, [physicalBookStockInfo]);
+
+  const physicalBookForDisplay = useMemo(() => {
+    return physicalBookStockInfo?.PhysicalBooks[0] ?? null;
   }, [physicalBookStockInfo]);
 
   const discountPrice = book
     ? Math.floor(book.Price - (book.Price / 100 * book.Discount))
     : 0;
+  const physicalDiscountPrice = physicalBookForDisplay
+    ? Math.floor(physicalBookForDisplay.Price - (physicalBookForDisplay.Price / 100 * physicalBookForDisplay.Discount))
+    : 0;
+  const canReadElectronic = Boolean(book?.IsMine || subscriptionStatus?.IsActive);
+  const hasPhysicalStock = Boolean(physicalBookInStock && physicalBookInStock.StockCount > 0);
+  const electronicAccessLabel = book?.IsMine
+    ? 'Книга уже в вашей библиотеке'
+    : subscriptionStatus?.IsActive
+      ? `Доступно по ${activePlan?.Title ?? 'Premium'}`
+      : 'Можно купить навсегда или читать по Premium';
+  const physicalAccessLabel = hasPhysicalStock
+    ? `В наличии ${physicalBookInStock?.StockCount} шт.`
+    : physicalBookForDisplay
+      ? 'Печатная версия временно закончилась'
+      : 'Печатная версия пока недоступна';
 
-  const isLoading = getBookState.loading || getPhysicalBookStockInfoState.loading || postFavItemsState2.loading;
-  const error = getBookState.error || getPhysicalBookStockInfoState.error;
+  const isLoading = getBookState.loading || getPhysicalBookStockInfoState.loading || getStatusState.loading;
+  const error = getBookState.error || getPhysicalBookStockInfoState.error || buyElectronicBookState.error;
 
   const loadBookInfo = useCallback(async () => {
     if (!id) {
@@ -76,20 +114,30 @@ const BookInfo = observer(() => {
       getBookById(id),
       getPhysicalBookStockInfo(id),
       isInFavsItem(id),
-      getCountFav(),
-      getCountCart(),
+      // getCountFav(),
+      // getCountCart(),
+      getStatus(),
+      getRecommendationsByBook(id, 10),
     ]);
-  }, [getBookById, getPhysicalBookStockInfo, getCountCart, getCountFav, id, isInFavsItem]);
+  }, [getBookById, getPhysicalBookStockInfo, getRecommendationsByBook, getStatus, id, isInFavsItem]);
 
   useEffect(() => {
     loadBookInfo();
   }, [loadBookInfo]);
 
   useEffect(() => {
-    if (physicalBook?.Id) {
-      isInCartItem(physicalBook.Id);
+    if (!id) {
+      return;
     }
-  }, [isInCartItem, physicalBook?.Id]);
+
+    saveOrUpdateBookView(id);
+  }, [id, saveOrUpdateBookView]);
+
+  useEffect(() => {
+    if (physicalBookInStock?.Id) {
+      isInCartItem(physicalBookInStock.Id);
+    }
+  }, [isInCartItem, physicalBookInStock?.Id]);
 
   const handleFavClick = async () => {
     if (!book || postFavItemsState.loading || deleteFavItemsState.loading) {
@@ -104,25 +152,42 @@ const BookInfo = observer(() => {
 
     await Promise.all([
       isInFavsItem(book.Id),
-      getCountFav(),
+      // getCountFav(),
     ]);
   };
 
   const handleCartClick = async () => {
-    if (!physicalBook || postCartItemsState.loading || deleteCartItemsState.loading) {
+    if (!physicalBookInStock || postCartItemsState.loading || deleteCartItemsState.loading) {
       return;
     }
 
     if (isInCartItems) {
-      await deleteCartItems([physicalBook.Id]);
+      await deleteCartItems([physicalBookInStock.Id]);
     } else {
-      await createCartItem(physicalBook.Id);
+      await createCartItem(physicalBookInStock.Id);
     }
 
     await Promise.all([
-      isInCartItem(physicalBook.Id),
-      getCountCart(),
+      isInCartItem(physicalBookInStock.Id),
+      // getCountCart(),
     ]);
+  };
+
+  const handleElectronicClick = async () => {
+    if (!book || buyElectronicBookState.loading) {
+      return;
+    }
+
+    if (canReadElectronic) {
+      navigate(`/books/${book.Id}/pages/1`);
+      return;
+    }
+
+    const isSuccess = await buyElectronicBook(book.Id);
+    if (isSuccess) {
+      await getBookById(book.Id);
+      navigate(`/books/${book.Id}/pages/1`);
+    }
   };
 
   if (isLoading) {
@@ -188,10 +253,10 @@ const BookInfo = observer(() => {
               <button
                 className={styles.first_column_button}
                 onClick={handleCartClick}
-                disabled={!physicalBook || postCartItemsState.loading || deleteCartItemsState.loading || postCartItemsState2.loading}
+                disabled={!hasPhysicalStock || postCartItemsState.loading || deleteCartItemsState.loading || postCartItemsState2.loading}
               >
                 <MdOutlineShoppingCart />
-                <p>{isInCartItems ? 'В корзине' : physicalBook ? 'В корзину' : 'Нет в наличии'}</p>
+                <p>{isInCartItems ? 'В корзине' : hasPhysicalStock ? 'В корзину' : 'Нет в наличии'}</p>
               </button>
             </div>
           </div>
@@ -217,77 +282,148 @@ const BookInfo = observer(() => {
                   <p className={styles.reviews_text}>Рейтинг</p>
                 </div>
               </div>
-              <div className={styles.price_row}>
-                <div className={styles.price_current}>
-                  <p>{book.Discount !== 0 ? discountPrice : book.Price}</p>
-                  <MdCurrencyRuble style={{ fontSize: 22 }} />
-                </div>
-                {book.Discount !== 0 && (
-                  <div className={styles.price_old}>
-                    <p>{book.Price} ₽</p>
-                  </div>
-                )}
-              </div>
-              <div className={styles.read_button_wrapper}>
-                <button
-                  className={styles.read_button}
-                  onClick={() => {
-                    if (book.IsMine) {
-                      navigate(`/books/${book.Id}/pages/1`);
-                    }
-                  }}
-                >
-                  <span className={styles.read_button_text}>
-                    {book.IsMine ? 'Читать онлайн' : 'Доступ по подписке'}
-                  </span>
-                  <span className={styles.premium_badge}>
-                    <FaCrown />
-                    Premium
-                  </span>
-                </button>
-                <Tooltip
-                  placement="top"
-                  title={
-                    <div className={styles.tooltip_content}>
-                      <p className={styles.tooltip_title}>Варианты чтения</p>
-                      <p>Онлайн-доступ открывается по подписке Premium или после покупки электронной версии.</p>
-                      <p>Печатный экземпляр можно заказать через корзину, если он есть в наличии.</p>
+              <div className={styles.purchase_options}>
+                <div className={styles.purchase_card}>
+                  <div className={styles.purchase_header}>
+                    <div>
+                      <p className={styles.purchase_title}>Электронная версия</p>
+                      <p className={styles.purchase_hint}>{electronicAccessLabel}</p>
                     </div>
-                  }
-                  slotProps={{
-                    popper: {
-                      modifiers: [
-                        {
-                          name: 'offset',
-                          options: {
-                            offset: [0, 10],
-                          },
-                        },
-                      ],
-                    },
-                    tooltip: {
-                      sx: {
-                        backgroundColor: '#21252c',
-                        color: '#ffffff',
-                        fontSize: 12,
-                        lineHeight: 1.5,
-                        padding: '8px 12px',
-                        borderRadius: '8px',
+                    <span className={styles.premium_badge}>
+                      <FaCrown />
+                      Premium
+                    </span>
+                  </div>
 
-                      }
-                    },
-                    arrow: {
-                      sx: {
-                        color: '#333333',
-                      }
-                    }
-                  }}
-                  arrow
-                >
-                  <span className={styles.premium_tooltip_icon}>
-                    <IoMdInformationCircleOutline />
-                  </span>
-                </Tooltip>
+                  <div className={styles.purchase_footer}>
+                    <div className={styles.price_row}>
+                      <div className={styles.price_current}>
+                        <p>{book.Discount !== 0 ? discountPrice : book.Price}</p>
+                        <MdCurrencyRuble style={{ fontSize: 22 }} />
+                      </div>
+                      {book.Discount !== 0 && (
+                        <div className={styles.price_old}>
+                          <p>{book.Price} ₽</p>
+                        </div>
+                      )}
+                    </div>
+                    <div className={styles.read_button_wrapper}>
+                      <button
+                        className={styles.read_button}
+                        onClick={handleElectronicClick}
+                        disabled={buyElectronicBookState.loading}
+                      >
+                        <span className={styles.read_button_text}>
+                          {canReadElectronic
+                            ? 'Читать онлайн'
+                            : buyElectronicBookState.loading
+                              ? 'Покупаем...'
+                              : 'Купить электронную'}
+                        </span>
+                      </button>
+                      <Tooltip
+                        placement="top"
+                        title={
+                          <div className={styles.tooltip_content}>
+                            <p className={styles.tooltip_title}>Электронный доступ</p>
+                            <p>Если книга уже куплена или активен Premium, ее можно читать сразу.</p>
+                            <p>Покупка электронной версии добавит книгу в вашу библиотеку.</p>
+                          </div>
+                        }
+                        slotProps={{
+                          popper: {
+                            modifiers: [
+                              {
+                                name: 'offset',
+                                options: {
+                                  offset: [0, 10],
+                                },
+                              },
+                            ],
+                          },
+                          tooltip: {
+                            sx: {
+                              backgroundColor: '#21252c',
+                              color: '#ffffff',
+                              fontSize: 12,
+                              lineHeight: 1.5,
+                              padding: '8px 12px',
+                              borderRadius: '8px',
+
+                            }
+                          },
+                          arrow: {
+                            sx: {
+                              color: '#333333',
+                            }
+                          }
+                        }}
+                        arrow
+                      >
+                        <span className={styles.premium_tooltip_icon}>
+                          <IoMdInformationCircleOutline />
+                          </span>
+                        </Tooltip>
+                      </div>
+                      {!canReadElectronic && (
+                        <button
+                          className={styles.premium_action_button}
+                          onClick={() => setSubscriptionOpen(true)}
+                          type="button"
+                        >
+                          <FaCrown />
+                          Читать по Premium
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                <div className={styles.purchase_card}>
+                  <div className={styles.purchase_header}>
+                    <div>
+                      <p className={styles.purchase_title}>Печатная версия</p>
+                      <p className={hasPhysicalStock ? styles.purchase_hint : styles.purchase_hint_muted}>
+                        {physicalAccessLabel}
+                      </p>
+                    </div>
+                    {physicalBookForDisplay?.Format && (
+                      <span className={styles.format_badge}>{physicalBookForDisplay.Format}</span>
+                    )}
+                  </div>
+
+                  <div className={styles.purchase_footer}>
+                    {physicalBookForDisplay ? (
+                      <div className={styles.price_row}>
+                        <div className={styles.price_current}>
+                          <p>{physicalBookForDisplay.Discount !== 0 ? physicalDiscountPrice : physicalBookForDisplay.Price}</p>
+                          <MdCurrencyRuble style={{ fontSize: 22 }} />
+                        </div>
+                        {physicalBookForDisplay.Discount !== 0 && (
+                          <div className={styles.price_old}>
+                            <p>{physicalBookForDisplay.Price} ₽</p>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <p className={styles.unavailable_text}>Цена недоступна</p>
+                    )}
+
+                    <button
+                      className={styles.cart_action_button}
+                      onClick={handleCartClick}
+                      disabled={!hasPhysicalStock || postCartItemsState.loading || deleteCartItemsState.loading || postCartItemsState2.loading}
+                    >
+                      <MdOutlineShoppingCart />
+                      <span>
+                        {isInCartItems
+                          ? 'Убрать из корзины'
+                          : hasPhysicalStock
+                            ? 'В корзину'
+                            : 'Нет в наличии'}
+                      </span>
+                    </button>
+                  </div>
+                </div>
               </div>
 
               <div className={styles.content_divider}></div>
@@ -310,7 +446,25 @@ const BookInfo = observer(() => {
         <div className={styles.sentenses_row}>
           {sentensesEls.map(el => (<BookInfoSentense key={el.title} text={el.text} title={el.title} icon={el.icon} />))}
         </div>
+
+        <section className={styles.book_recommendations}>
+          {getRecommendationsByBookState.loading ? (
+            <div className={styles.state_block}>Подбираем похожие книги...</div>
+          ) : getRecommendationsByBookState.error ? (
+            <div className={styles.error_block}>{getRecommendationsByBookState.error}</div>
+          ) : (
+            <RecommsRowWithDynamic
+              title="Похожие книги"
+              icon={MdAutoAwesome}
+              description="Подборка на основе жанра, автора и рейтинга этой книги"
+              books={bookRecommendations}
+              color="blue"
+              itemsPerView={4}
+            />
+          )}
+        </section>
       </div>
+      <SubscriptionModal open={subscriptionOpen} onClose={() => setSubscriptionOpen(false)} />
       <SelectionFooter />
     </div>
   )

@@ -16,6 +16,7 @@ import { ReadingSessionsA } from './ReadingSessions/ReadingSessionsA'
 import { RecommendationA } from './Recommendation/RecommendationA'
 import { StatsA } from './Stats/StatsA'
 import { SubscriptionPlansA } from './SubscriptionPlans/SubscriptionPlansA'
+import { UsersBooksA } from './UsersBooks/UsersBooksA'
 import { UserSubA } from './UserSub/UserSubA'
 
 
@@ -39,6 +40,7 @@ class Api {
     public readonly recommendations: RecommendationA
     public readonly stats: StatsA
     public readonly subscriptionPlans: SubscriptionPlansA
+    public readonly usersBooks: UsersBooksA
     public readonly userSubscriptions: UserSubA
     
     constructor(httpActions: HttpActions) {
@@ -58,6 +60,7 @@ class Api {
         this.recommendations = new RecommendationA(httpActions)
         this.stats = new StatsA(httpActions)
         this.subscriptionPlans = new SubscriptionPlansA(httpActions)
+        this.usersBooks = new UsersBooksA(httpActions)
         this.userSubscriptions = new UserSubA(httpActions)
     }
 }

@@ -1,7 +1,5 @@
-import type { ErrorResponse } from "react-router-dom";
-import type { BookInfoT, PageInfoT } from "../../types";
+import type { PageInfoT } from "../../types";
 import type { HttpActions } from "../httpActions";
-import Book from '../../components/BookPreview/BookPreview';
 
 class BookPageA {
     private httpActions: HttpActions

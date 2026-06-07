@@ -1,10 +1,10 @@
 import type { FC } from 'react';
 import styles from './HistoryPreview.module.scss'
 import { FaRegStar } from "react-icons/fa";
-import type { BookPreviewT } from '../../../types';
+import type { ReadingBookPreview } from '../../../types';
 import { useNavigate } from 'react-router-dom';
 
-const HistoryPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
+const HistoryPreview: FC<{ book: ReadingBookPreview }> = ({ book }) => {
     const progress = Math.min(96, Math.max(36, Math.round(book.Rate * 18)));
 
     const navigate = useNavigate();
