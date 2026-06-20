@@ -44,6 +44,10 @@ const ShopBookList = observer(() => {
       getHomeRecommendations,
       getHomeRecommendationsState,
     },
+    subscriptionStore: {
+      status: subscriptionStatus,
+      getStatus,
+    },
   } = useStores();
 
 
@@ -161,7 +165,8 @@ const ShopBookList = observer(() => {
     getUserStats();
     getLastReadingBooks(4);
     getHomeRecommendations(4);
-  }, [getUserStats, getLastReadingBooks, getHomeRecommendations]);
+    getStatus();
+  }, [getUserStats, getLastReadingBooks, getHomeRecommendations, getStatus]);
 
 
   const handleClose = (_event: unknown, reason: string) => {
@@ -214,6 +219,8 @@ const ShopBookList = observer(() => {
 
   ]
 
+  const shouldShowSubscriptionPromo = subscriptionStatus?.IsActive === false;
+
   return (
     <>
       <Snackbar
@@ -243,40 +250,48 @@ const ShopBookList = observer(() => {
 
 
 
-      <SideBar user={{ email: auth.currentUser?.email || 'none', login: auth.currentUser?.displayName || 'none' }} handleLogout={handleLogout} />
+      <SideBar user={{
+        email: auth.currentUser?.email || 'none',
+        login: auth.currentUser?.displayName || 'none',
+        avatarUrl: auth.currentUser?.photoURL || '',
+      }} handleLogout={handleLogout} />
       <div className={styles.main_container}>
         <MainHeader />
         <div className={styles.main_body}>
 
-          <div className={styles.book_month}>
-            <div className={styles.book_month_content}>
+          {shouldShowSubscriptionPromo && (
+            <>
+              <div className={styles.book_month}>
+                <div className={styles.book_month_content}>
 
-              <div className={styles.book_month_text}>
-                <p className={styles.book_month_title}>Книжные новинки уже здесь!</p>
-                <p className={styles.book_month_description}>Откройте для себя лучшие произведения современных авторов. Читайте без ограничений по подписке Max Premium. Тысячи книг всегда под рукой.
-                </p>
-              </div>
-              <div className={styles.book_month_offer}>
-                <p className={styles.book_month_price}>49 ₽/мес</p>
-                <p className={styles.book_month_price_hint}>и всё включено</p>
-              </div>
-              <div className={styles.book_month_actions}>
-                <button
-                  className={styles.book_month_button_one}
-                  type="button"
-                  onClick={() => setSubscriptionOpen(true)}
-                >
-                  Приобрести подписку
-                </button>
-              </div>
-            </div>
+                  <div className={styles.book_month_text}>
+                    <p className={styles.book_month_title}>Книжные новинки уже здесь!</p>
+                    <p className={styles.book_month_description}>Откройте для себя лучшие произведения современных авторов. Читайте без ограничений по подписке Max Premium. Тысячи книг всегда под рукой.
+                    </p>
+                  </div>
+                  <div className={styles.book_month_offer}>
+                    <p className={styles.book_month_price}>49 ₽/мес</p>
+                    <p className={styles.book_month_price_hint}>и всё включено</p>
+                  </div>
+                  <div className={styles.book_month_actions}>
+                    <button
+                      className={styles.book_month_button_one}
+                      type="button"
+                      onClick={() => setSubscriptionOpen(true)}
+                    >
+                      Приобрести подписку
+                    </button>
+                  </div>
+                </div>
 
-            <div className={styles.book_month_two}></div>
-          </div>
+                <div className={styles.book_month_two}></div>
+              </div>
 
-          <button onClick={scrollToDiv} className={styles.icon_wrapper}>
-            <FaChevronDown style={{ fontSize: 32 }} className={styles.next_or_back} />
-          </button>
+              <button onClick={scrollToDiv} className={styles.icon_wrapper}>
+                <FaChevronDown style={{ fontSize: 32 }} className={styles.next_or_back} />
+              </button>
+            </>
+          )}
 
 
           <div id="info_block" className={styles.info_block}>

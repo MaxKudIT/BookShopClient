@@ -43,6 +43,7 @@ const MyBooksList = observer(() => {
         user={{
           email: auth.currentUser?.email || 'none',
           login: auth.currentUser?.displayName || 'none',
+          avatarUrl: auth.currentUser?.photoURL || '',
         }}
         handleLogout={handleLogout}
       />

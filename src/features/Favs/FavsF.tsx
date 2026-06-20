@@ -4,8 +4,6 @@ import styles from './FavsF.module.scss'
 import SelectionHeader from '../../shared/components/Header/SelectionHeader/SelectionHeader';
 import FavBookPreview from '../../shared/components/Previews/FavBookPreview/FavBookPreview';
 import SelectionFooter from '../../shared/components/Footer/SelectionFooter/SelectionFooter';
-import { MdShoppingCartCheckout } from 'react-icons/md';
-import Banner from '../../shared/components/Banner/Banner';
 import { IoLibraryOutline, IoSparklesOutline } from 'react-icons/io5';
 import { useStores } from '../../store/context/GloabalContext';
 
@@ -118,13 +116,6 @@ const FavsF = observer(() => {
                         </div>
                     )}
                 </section>
-
-                <Banner
-                    icon={MdShoppingCartCheckout}
-                    color='#5269E0FF'
-                    title='Готовы к новому путешествию?'
-                    description='Не оставляйте любимых героев в одиночестве. Оформите подписку сегодня и получите дополнительный месяц бесплатно.'
-                />
             </main>
             <SelectionFooter />
         </div>

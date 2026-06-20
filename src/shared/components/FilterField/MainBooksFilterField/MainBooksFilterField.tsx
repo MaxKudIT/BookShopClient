@@ -1,8 +1,7 @@
 import { TextField, InputAdornment, Divider, FormControl, MenuItem, Select, Tooltip } from "@mui/material";
 import { IoMdInformationCircleOutline, IoMdSearch } from "react-icons/io";
 import { selectStyles, textFieldStyles } from "./muiStyles";
-import { useEffect } from "react";
-import { useSearch, useMyBooksSearch, type GenresDropDown, type DateDropDown } from "../../../../store/context/SearchContext";
+import type { DateDropDown, GenresDropDown } from "../../../../store/context/SearchContext";
 import styles from './MainBooksFilterField.module.scss'
 import { IoColorFilterOutline } from "react-icons/io5";
 import { HiArrowsUpDown } from "react-icons/hi2";
@@ -20,28 +19,23 @@ const menuProps = {
   },
 };
 
-const MainBooksFilterField = () => {
-  const { setsearchingValue } = useSearch()
-  const { setsearchingValue: setSearchingValueMy } = useMyBooksSearch()
+type MainBooksFilterFieldProps = {
+  searchValue: string;
+  selectedGenre: GenresDropDown;
+  selectedSort: DateDropDown;
+  onSearchChange: (value: string) => void;
+  onGenreChange: (value: GenresDropDown) => void;
+  onSortChange: (value: DateDropDown) => void;
+}
 
-
-  useEffect(() => {
-
-
-
-    return () => {
-      setsearchingValue('');
-
-
-      setSearchingValueMy('')
-
-
-    };
-  }, [setSearchingValueMy, setsearchingValue]);
-
-
-
-
+const MainBooksFilterField = ({
+  searchValue,
+  selectedGenre,
+  selectedSort,
+  onSearchChange,
+  onGenreChange,
+  onSortChange,
+}: MainBooksFilterFieldProps) => {
   return (
     <div className={styles.main_container}>
       <div style={{
@@ -52,8 +46,9 @@ const MainBooksFilterField = () => {
         alignItems: 'center'
       }}>
         <TextField
+          value={searchValue}
           onChange={(e) => {
-            setsearchingValue(e.target.value)
+            onSearchChange(e.target.value)
 
           }}
           sx={textFieldStyles}
@@ -102,7 +97,8 @@ const MainBooksFilterField = () => {
         <div style={{ display: 'flex', columnGap: 10, alignItems: 'center' }}>
           <FormControl sx={selectStyles.formControl}>
             <Select
-              defaultValue="Все жанры"
+              value={selectedGenre}
+              onChange={(event) => onGenreChange(event.target.value as GenresDropDown)}
               renderValue={(selected) => (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <IoColorFilterOutline style={{ fontSize: 14 }} />
@@ -123,7 +119,8 @@ const MainBooksFilterField = () => {
 
           <FormControl sx={selectStyles.formControl}>
             <Select
-              defaultValue="Сначала новые"
+              value={selectedSort}
+              onChange={(event) => onSortChange(event.target.value as DateDropDown)}
               renderValue={(selected) => (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <HiArrowsUpDown style={{ fontSize: 14 }} />

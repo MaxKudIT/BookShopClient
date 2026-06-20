@@ -3,7 +3,7 @@ import { MdOutlineGridView, MdOutlineShoppingCart, MdOutlineHistory, MdAutoAweso
 import { FaRegCompass } from "react-icons/fa6";
 import { FaRegBookmark } from "react-icons/fa";
 import { RxExit } from "react-icons/rx";
-import { useState, type FC, type ReactNode } from 'react';
+import { useEffect, useState, type FC, type ReactNode } from 'react';
 import { Tooltip } from '@mui/material';
 import Logo from '../Logo/Logo';
 import { LuLibraryBig } from 'react-icons/lu';
@@ -15,6 +15,7 @@ export type SideBarType = {
     user: {
         login: string;
         email: string;
+        avatarUrl?: string;
     }
 }
 
@@ -29,6 +30,7 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [profileOpen, setProfileOpen] = useState(false);
+    const [profileUser, setProfileUser] = useState(user);
 
     const navigationMenu: NavItem[] = [
         { icon: <MdOutlineGridView style={{ fontSize: 16 }} />, title: 'Главная', path: '/' },
@@ -47,6 +49,10 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
         { title: 'ОСНОВНОЕ', items: navigationMenu },
         { title: 'ПЕРСОНАЛЬНОЕ', items: libraryMenu },
     ];
+
+    useEffect(() => {
+        setProfileUser(user);
+    }, [user]);
 
     return (
         <div className={styles.sidebar_main}>
@@ -92,10 +98,16 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
                         type="button"
                         onClick={() => setProfileOpen(true)}
                     >
-                        <div className={styles.avatar_circle}>{user.login[0]}</div>
+                        <div className={styles.avatar_circle}>
+                            {profileUser.avatarUrl ? (
+                                <img className={styles.avatar_image} src={profileUser.avatarUrl} alt={profileUser.login} />
+                            ) : (
+                                profileUser.login[0]
+                            )}
+                        </div>
                         <div className={styles.profile_info}>
-                            <p className={styles.profile_name}>{user.login}</p>
-                            <span className={styles.profile_email}>{user.email}</span>
+                            <p className={styles.profile_name}>{profileUser.login}</p>
+                            <span className={styles.profile_email}>{profileUser.email}</span>
                         </div>
                     </button>
 
@@ -128,7 +140,7 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
 
 
             </div>
-            <Profile open={profileOpen} onClose={() => setProfileOpen(false)} user={user} />
+            <Profile open={profileOpen} onClose={() => setProfileOpen(false)} onProfileUpdated={setProfileUser} user={profileUser} />
         </div>
     )
 }

@@ -33,12 +33,15 @@ const MainBookPreview: FC<{ book: BookPreviewT }> = ({ book }) => {
 
             <div className={styles.preview_footer}>
                 <div className={styles.price_group}>
-                    {book.Discount !== 0 && (
+                    {book.Discount !== 0 ? (
                         <p className={styles.old_price}>
                             {book.Price}
                             <MdCurrencyRuble />
                         </p>
-                    )}
+                    ) :   <p className={styles.old_price} style={{opacity: 0}}>
+                            {book.Price}
+                            <MdCurrencyRuble />
+                        </p>}
                     <p className={styles.price}>
                         {book.Discount !== 0 ? discountPrice : book.Price}
                         <MdCurrencyRuble />

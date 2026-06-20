@@ -8,10 +8,10 @@ import { BsMagic } from 'react-icons/bs';
 import RecommsRowWithDynamic from '../../shared/components/RecommsRow/RecommsRowWithDynamic/RecommsRowWithDynamic';
 import { AiOutlineRise } from 'react-icons/ai';
 import { RiShoppingBag4Line, RiTimerFlashLine } from 'react-icons/ri';
-import Banner from '../../shared/components/Banner/Banner';
 import { useEffect } from 'react';
 import { CircularProgress } from '@mui/material';
 import { useStores } from '../../store/context/GloabalContext';
+import Banner from '../../shared/components/Banner/Banner';
 
 const RecommsF = observer(() => {
     const {
@@ -20,11 +20,18 @@ const RecommsF = observer(() => {
             getRecommendationsPage,
             getRecommendationsPageState,
         },
+        subscriptionStore: {
+            status: subscriptionStatus,
+            getStatus,
+        },
     } = useStores();
 
     useEffect(() => {
         getRecommendationsPage(10);
-    }, [getRecommendationsPage]);
+        getStatus();
+    }, [getRecommendationsPage, getStatus]);
+
+    const shouldShowSubscriptionBanner = subscriptionStatus?.IsActive === false;
 
     // const {
     //     favItemsStore: {
@@ -182,9 +189,14 @@ const RecommsF = observer(() => {
                         </>
                     )}
 
-                    <Banner icon={RiShoppingBag4Line} color='#3470df' title='Что скрывают следующие страницы?' description='Книги ждут своего часа. Не дайте историям оборваться.  Подпишитесь сейчас — откроется доступ ко всем новинкам, а первый месяц за наш счёт.' />
-
-
+                    {shouldShowSubscriptionBanner && (
+                        <Banner
+                            icon={RiShoppingBag4Line}
+                            color='#3470df'
+                            title='Что скрывают следующие страницы?'
+                            description='Книги ждут своего часа. Не дайте историям оборваться. Подпишитесь сейчас — откроется доступ ко всем новинкам, а первый месяц за наш счёт.'
+                        />
+                    )}
                 </div>
                 <SelectionFooter />
             </div>

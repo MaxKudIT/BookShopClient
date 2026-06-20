@@ -33,6 +33,7 @@ const MainHeader = observer(() => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const notificationsRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const auth = getAuth();
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
@@ -53,6 +54,12 @@ const MainHeader = observer(() => {
   useEffect(() => {
     if (location.pathname === '/search') {
       setSearchValue(searchQuery);
+
+      if (searchQuery) {
+        window.requestAnimationFrame(() => {
+          searchInputRef.current?.focus();
+        });
+      }
     }
   }, [location.pathname, searchQuery]);
 
@@ -145,6 +152,7 @@ const MainHeader = observer(() => {
       <div className={styles.search_shell}>
         <TextField
           value={searchValue}
+          inputRef={searchInputRef}
           onChange={(e) => {
             handleSearchChange(e.target.value);
           }}

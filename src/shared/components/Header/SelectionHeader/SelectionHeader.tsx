@@ -27,6 +27,11 @@ const SelectionHeader: FC<SelectionHeaderProps> = observer(({ paddingSides }) =>
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [profileOpen, setProfileOpen] = useState(false);
+  const [profileOverride, setProfileOverride] = useState<{
+    login: string;
+    email: string;
+    avatarUrl: string;
+  } | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const {
     subscriptionStore: {
@@ -64,9 +69,10 @@ const SelectionHeader: FC<SelectionHeaderProps> = observer(({ paddingSides }) =>
   const auth = getAuth();
 
   const [user] = useAuthState(auth)
-  const profileUser = {
+  const profileUser = profileOverride ?? {
     login: user?.displayName || user?.email?.split('@')[0] || 'Profile',
     email: user?.email || 'none',
+    avatarUrl: user?.photoURL || '',
   };
   const avatarLetter = profileUser.login[0]?.toUpperCase() || 'P';
 
@@ -79,9 +85,11 @@ const SelectionHeader: FC<SelectionHeaderProps> = observer(({ paddingSides }) =>
 
   useEffect(() => {
     if (searchOpen) {
-      searchInputRef.current?.focus();
+      window.requestAnimationFrame(() => {
+        searchInputRef.current?.focus();
+      });
     }
-  }, [searchOpen]);
+  }, [location.pathname, searchOpen, searchQuery]);
 
   useEffect(() => {
     if (location.pathname === '/search') {
@@ -93,6 +101,7 @@ const SelectionHeader: FC<SelectionHeaderProps> = observer(({ paddingSides }) =>
   useEffect(() => {
     if (user) {
       getStatus();
+      setProfileOverride(null);
     }
   }, [user, getStatus]);
 
@@ -231,12 +240,23 @@ const SelectionHeader: FC<SelectionHeaderProps> = observer(({ paddingSides }) =>
           </div>
 
           <button className={styles.avatar_button} type="button" aria-label="Открыть профиль" onClick={() => setProfileOpen(true)}>
-            {avatarLetter}
+            {profileUser.avatarUrl ? (
+              <img className={styles.avatar_image} src={profileUser.avatarUrl} alt={profileUser.login} />
+            ) : (
+              avatarLetter
+            )}
           </button>
         </div>
       </div>
 
-      {profileOpen && <Profile open={profileOpen} onClose={() => setProfileOpen(false)} user={profileUser} />}
+      {profileOpen && (
+        <Profile
+          open={profileOpen}
+          onClose={() => setProfileOpen(false)}
+          onProfileUpdated={setProfileOverride}
+          user={profileUser}
+        />
+      )}
     </>
   )
 })

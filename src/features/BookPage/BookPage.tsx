@@ -26,6 +26,10 @@ const BookPageF = observer(() => {
     const currentPageRef = useRef(currentPage);
     const sessionIdRef = useRef<string | null>(null);
     const closedSessionIdsRef = useRef(new Set<string>());
+    const isMountedRef = useRef(false);
+    const isStartingSessionRef = useRef(false);
+    const startReadingRef = useRef<((bookId: string) => Promise<any>) | null>(null);
+    const closeReadingSessionRef = useRef<((sessionId: string) => Promise<any>) | null>(null);
     const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
     const [readerExpand, setReaderExpand] = useState(0);
     const [isResizing, setIsResizing] = useState(false);
@@ -115,6 +119,65 @@ const BookPageF = observer(() => {
         }
     } = useStores()
 
+    startReadingRef.current = startReading;
+    closeReadingSessionRef.current = closeReadingSession;
+
+    useEffect(() => {
+        isMountedRef.current = true;
+
+        return () => {
+            isMountedRef.current = false;
+        };
+    }, []);
+
+    const closeActiveSession = useCallback(() => {
+        const sessionId = sessionIdRef.current;
+
+        if (!sessionId || closedSessionIdsRef.current.has(sessionId)) {
+            return;
+        }
+
+        closedSessionIdsRef.current.add(sessionId);
+        sessionIdRef.current = null;
+
+        if (isMountedRef.current) {
+            setActiveSessionId(null);
+        }
+
+        closeReadingSessionRef.current?.(sessionId);
+    }, []);
+
+    const startActiveSession = useCallback(async () => {
+        if (!id || !isValidPage || sessionIdRef.current || isStartingSessionRef.current || document.hidden) {
+            return;
+        }
+
+        let reading = null;
+
+        try {
+            isStartingSessionRef.current = true;
+            reading = await startReadingRef.current?.(id);
+        } finally {
+            isStartingSessionRef.current = false;
+        }
+
+        if (!reading) {
+            return;
+        }
+
+        if (!isMountedRef.current || document.hidden) {
+            if (!closedSessionIdsRef.current.has(reading.SessionId)) {
+                closedSessionIdsRef.current.add(reading.SessionId);
+                closeReadingSessionRef.current?.(reading.SessionId);
+            }
+            return;
+        }
+
+        closedSessionIdsRef.current.delete(reading.SessionId);
+        sessionIdRef.current = reading.SessionId;
+        setActiveSessionId(reading.SessionId);
+    }, [id, isValidPage]);
+
 
 
     const handleGetBook = useCallback(async () => {
@@ -140,46 +203,33 @@ const BookPageF = observer(() => {
     }, [currentPage]);
 
     useEffect(() => {
-        let isActive = true;
-        const startedSessionId = { current: null as string | null };
         setActiveSessionId(null);
         sessionIdRef.current = null;
-
-        const start = async () => {
-            if (!id || !isValidPage) {
-                return;
-            }
-
-            const reading = await startReading(id);
-            if (!reading) {
-                return;
-            }
-
-            if (!isActive) {
-                closedSessionIdsRef.current.add(reading.SessionId);
-                closeReadingSession(reading.SessionId);
-                return;
-            }
-
-            sessionIdRef.current = reading.SessionId;
-            startedSessionId.current = reading.SessionId;
-            setActiveSessionId(reading.SessionId);
-        };
-
-        start();
+        startActiveSession();
 
         return () => {
-            isActive = false;
-
-            const sessionId = startedSessionId.current || sessionIdRef.current;
-            if (sessionId && !closedSessionIdsRef.current.has(sessionId)) {
-                closedSessionIdsRef.current.add(sessionId);
-                closeReadingSession(sessionId);
-                sessionIdRef.current = null;
-                setActiveSessionId(null);
-            }
+            closeActiveSession();
         };
-    }, [id, isValidPage, startReading, closeReadingSession]);
+    }, [id, isValidPage, startActiveSession, closeActiveSession]);
+
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                closeActiveSession();
+                return;
+            }
+
+            startActiveSession();
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('pagehide', closeActiveSession);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('pagehide', closeActiveSession);
+        };
+    }, [startActiveSession, closeActiveSession]);
 
     useEffect(() => {
         if (!id || !isValidPage || !activeSessionId) {

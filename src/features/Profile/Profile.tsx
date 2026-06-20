@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ChangeEvent, type FC } from 'react';
+import { useEffect, useState, type FC } from 'react';
 import {
     Alert,
     Avatar,
@@ -9,15 +9,15 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    IconButton,
     Stack,
     TextField,
     Typography,
 } from '@mui/material';
-import { FaCamera } from 'react-icons/fa';
+import { updateEmail, updateProfile } from 'firebase/auth';
 import { FaGithub } from 'react-icons/fa6';
 import { FcGoogle } from 'react-icons/fc';
 import { auth } from '../../shared/hooks/configs/firebase-config';
+import { validateEmail, validateLogin } from '../../shared/helpers/validateForm';
 import { useFirebaseAuth } from '../../shared/hooks/useFirebaseAuth';
 
 type ProfileForm = {
@@ -29,28 +29,19 @@ type ProfileForm = {
 type ProfileProps = {
     open: boolean;
     onClose: () => void;
+    onProfileUpdated?: (profile: ProfileForm) => void;
     user?: {
         login: string;
         email: string;
+        avatarUrl?: string;
     };
 };
 
-const fallbackProfile: ProfileForm = {
-    login: 'Monten22',
-    email: 'kudinovmaks143@gmail.com',
-    avatarUrl: '',
-};
-
 const createInitialProfile = (user?: ProfileProps['user']): ProfileForm => ({
-    login: user?.login || fallbackProfile.login,
-    email: user?.email || fallbackProfile.email,
-    avatarUrl: fallbackProfile.avatarUrl,
+    login: auth.currentUser?.displayName || user?.login || auth.currentUser?.email?.split('@')[0] || '',
+    email: auth.currentUser?.email || user?.email || '',
+    avatarUrl: auth.currentUser?.photoURL || user?.avatarUrl || '',
 });
-
-const saveProfileMock = async (profile: ProfileForm) => {
-    await new Promise((resolve) => setTimeout(resolve, 450));
-    return profile;
-};
 
 const dialogPaperSx = {
     background: 'linear-gradient(180deg, rgb(22, 27, 36) 0%, #0e1122 100%)',
@@ -75,15 +66,8 @@ const avatarSx = {
     width: 96,
 };
 
-const avatarButtonSx = {
-    bgcolor: '#6379e9',
-    bottom: -4,
-    color: '#fff',
-    position: 'absolute',
-    right: -4,
-    '&:hover': {
-        bgcolor: '#5a6ed6',
-    },
+const helperTextSx = {
+    color: '#ffb4b4',
 };
 
 const inputLabelSx = {
@@ -131,6 +115,10 @@ const saveButtonSx = {
     '&:hover': {
         bgcolor: '#4959aad0',
     },
+    '&.Mui-disabled': {
+        bgcolor: 'rgba(99, 121, 233, 0.35)',
+        color: 'rgba(255, 255, 255, 0.55)',
+    },
 };
 
 const providerButtonSx = {
@@ -150,35 +138,74 @@ const providerButtonSx = {
     },
 };
 
+const firebaseProfileErrorMessages: Record<string, string> = {
+    'auth/email-already-in-use': 'Этот email уже используется другим аккаунтом',
+    'auth/invalid-email': 'Неверный формат email',
+    'auth/requires-recent-login': 'Для смены email нужно заново войти в аккаунт',
+    'auth/user-token-expired': 'Сессия истекла. Войдите в аккаунт заново',
+    'auth/network-request-failed': 'Ошибка сети. Проверьте подключение',
+};
+
+const getFirebaseProfileErrorMessage = (err: unknown) => {
+    const code = typeof err === 'object' && err !== null && 'code' in err
+        ? String((err as { code?: string }).code)
+        : '';
+
+    return firebaseProfileErrorMessages[code] || 'Не удалось обновить профиль';
+};
+
+const validateAvatarUrl = (avatarUrl: string) => {
+    const trimmedAvatarUrl = avatarUrl.trim();
+
+    if (!trimmedAvatarUrl) {
+        return '';
+    }
+
+    try {
+        const url = new URL(trimmedAvatarUrl);
+
+        if (!['http:', 'https:'].includes(url.protocol)) {
+            return 'Ссылка должна начинаться с http:// или https://';
+        }
+    } catch {
+        return 'Введите корректную ссылку на изображение';
+    }
+
+    return '';
+};
+
 const dialogBackdropSx = {
     backgroundColor: 'rgba(8, 11, 18, 0.62)',
     backdropFilter: 'blur(12px)',
     WebkitBackdropFilter: 'blur(12px)',
 };
-const Profile: FC<ProfileProps> = ({ open, onClose, user }) => {
+const Profile: FC<ProfileProps> = ({ open, onClose, onProfileUpdated, user }) => {
     const {
         googleLoading,
         gitHubLoading,
         linkGoogleProvider,
         linkGitHubProvider,
     } = useFirebaseAuth();
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const [savedProfile, setSavedProfile] = useState<ProfileForm>(() => createInitialProfile(user));
     const [form, setForm] = useState<ProfileForm>(() => createInitialProfile(user));
     const [isSaving, setIsSaving] = useState(false);
     const [message, setMessage] = useState('');
     const [messageSeverity, setMessageSeverity] = useState<'success' | 'error'>('success');
+    const loginError = validateLogin(form.login);
+    const emailError = validateEmail(form.email);
+    const avatarError = validateAvatarUrl(form.avatarUrl);
     const linkedProviderIds = auth.currentUser?.providerData.map((provider) => provider.providerId) ?? [];
     const isGoogleLinked = linkedProviderIds.includes('google.com');
     const isGitHubLinked = linkedProviderIds.includes('github.com');
 
     useEffect(() => {
         if (open) {
-            setForm(savedProfile);
+            const nextProfile = createInitialProfile(user);
+
+            setForm(nextProfile);
             setMessage('');
             setMessageSeverity('success');
         }
-    }, [open]);
+    }, [open, user?.avatarUrl, user?.email, user?.login]);
 
     const handleClose = () => {
         if (!isSaving) {
@@ -186,30 +213,71 @@ const Profile: FC<ProfileProps> = ({ open, onClose, user }) => {
         }
     };
 
-    const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
+    const handleSave = async () => {
+        const currentUser = auth.currentUser;
 
-        if (!file) {
+        if (!currentUser) {
+            setMessageSeverity('error');
+            setMessage('Сначала войдите в аккаунт');
             return;
         }
 
-        setForm((prev) => ({
-            ...prev,
-            avatarUrl: URL.createObjectURL(file),
-        }));
-    };
+        if (loginError || emailError || avatarError) {
+            setMessageSeverity('error');
+            setMessage(loginError || emailError || avatarError);
+            return;
+        }
 
-    const handleSave = async () => {
         setIsSaving(true);
         setMessage('');
 
         try {
-            const nextProfile = await saveProfileMock(form);
+            const requestedProfile: ProfileForm = {
+                login: form.login.trim(),
+                email: form.email.trim(),
+                avatarUrl: form.avatarUrl.trim(),
+            };
 
-            setSavedProfile(nextProfile);
+            await updateProfile(currentUser, {
+                displayName: requestedProfile.login,
+                photoURL: requestedProfile.avatarUrl || null,
+            });
+
+            if (currentUser.email !== requestedProfile.email) {
+                try {
+                    await updateEmail(currentUser, requestedProfile.email);
+                } catch (err) {
+                    await currentUser.reload();
+
+                    const syncedProfile: ProfileForm = {
+                        login: currentUser.displayName || requestedProfile.login,
+                        email: currentUser.email || form.email.trim(),
+                        avatarUrl: currentUser.photoURL || requestedProfile.avatarUrl,
+                    };
+
+                    setForm(syncedProfile);
+                    onProfileUpdated?.(syncedProfile);
+                    setMessageSeverity('error');
+                    setMessage(getFirebaseProfileErrorMessage(err));
+                    return;
+                }
+            }
+
+            await currentUser.reload();
+
+            const nextProfile: ProfileForm = {
+                login: currentUser.displayName || requestedProfile.login,
+                email: currentUser.email || requestedProfile.email,
+                avatarUrl: currentUser.photoURL || requestedProfile.avatarUrl,
+            };
+
             setForm(nextProfile);
+            onProfileUpdated?.(nextProfile);
             setMessageSeverity('success');
             setMessage('Профиль обновлен');
+        } catch (err) {
+            setMessageSeverity('error');
+            setMessage(getFirebaseProfileErrorMessage(err));
         } finally {
             setIsSaving(false);
         }
@@ -260,18 +328,10 @@ const Profile: FC<ProfileProps> = ({ open, onClose, user }) => {
             <DialogContent>
                 <Stack spacing={3} sx={{ pt: 1 }}>
                     <Box sx={{ alignItems: 'center', display: 'flex', gap: 2.5 }}>
-                        <Box sx={{ position: 'relative' }}>
+                        <Box>
                             <Avatar src={form.avatarUrl} alt={form.login} sx={avatarSx}>
                                 {form.login[0]?.toUpperCase()}
                             </Avatar>
-
-                            <IconButton
-                                aria-label="Добавить аватарку"
-                                onClick={() => fileInputRef.current?.click()}
-                                sx={avatarButtonSx}
-                            >
-                                <FaCamera size={16} />
-                            </IconButton>
                         </Box>
 
                         <Box>
@@ -282,17 +342,9 @@ const Profile: FC<ProfileProps> = ({ open, onClose, user }) => {
                                 {form.email}
                             </Typography>
                             <Typography sx={{ color: '#6379e9d0', fontSize: 13, mt: 1 }}>
-                                JPG, PNG или WEBP
+                                Вставьте ссылку на изображение ниже
                             </Typography>
                         </Box>
-
-                        <input
-                            ref={fileInputRef}
-                            hidden
-                            accept="image/png,image/jpeg,image/webp"
-                            type="file"
-                            onChange={handleAvatarChange}
-                        />
                     </Box>
 
                     <TextField
@@ -301,6 +353,9 @@ const Profile: FC<ProfileProps> = ({ open, onClose, user }) => {
                         onChange={(event) => setForm((prev) => ({ ...prev, login: event.target.value }))}
                         fullWidth
                         variant="filled"
+                        error={Boolean(loginError)}
+                        helperText={loginError}
+                        FormHelperTextProps={{ sx: helperTextSx }}
                         InputLabelProps={{ sx: inputLabelSx }}
                         InputProps={{ disableUnderline: true }}
                         sx={textFieldSx}
@@ -313,6 +368,25 @@ const Profile: FC<ProfileProps> = ({ open, onClose, user }) => {
                         fullWidth
                         variant="filled"
                         type="email"
+                        error={Boolean(emailError)}
+                        helperText={emailError}
+                        FormHelperTextProps={{ sx: helperTextSx }}
+                        InputLabelProps={{ sx: inputLabelSx }}
+                        InputProps={{ disableUnderline: true }}
+                        sx={textFieldSx}
+                    />
+
+                    <TextField
+                        label="Ссылка на аватарку"
+                        value={form.avatarUrl}
+                        onChange={(event) => setForm((prev) => ({ ...prev, avatarUrl: event.target.value }))}
+                        fullWidth
+                        variant="filled"
+                        type="url"
+                        placeholder="https://example.com/avatar.png"
+                        error={Boolean(avatarError)}
+                        helperText={avatarError || 'Аватарка обновится в окне сразу после ввода ссылки'}
+                        FormHelperTextProps={{ sx: avatarError ? helperTextSx : { color: '#9eb4f1' } }}
                         InputLabelProps={{ sx: inputLabelSx }}
                         InputProps={{ disableUnderline: true }}
                         sx={textFieldSx}
@@ -364,7 +438,7 @@ const Profile: FC<ProfileProps> = ({ open, onClose, user }) => {
                 <Button
                     variant="contained"
                     onClick={handleSave}
-                    disabled={isSaving || !form.login.trim() || !form.email.trim()}
+                    disabled={isSaving || Boolean(loginError || emailError || avatarError)}
                     sx={saveButtonSx}
                 >
                     {isSaving ? <CircularProgress size={22} sx={{ color: '#fff' }} /> : 'Сохранить'}

@@ -30,7 +30,7 @@
     box-shadow:
         0 22px 42px rgba(0, 0, 0, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    overflow: hidden;
+    overflow: visible;
 }
 
 .search_header::before {
@@ -98,81 +98,66 @@
 
 .filters_panel {
     position: relative;
-    padding: 24px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    min-width: 700px;
+    min-height: 90px;
+    padding: 0 30px;
     margin-bottom: 34px;
-    border-radius: 24px;
-    background:
-        radial-gradient(circle at top left, rgba(99, 121, 233, 0.12), transparent 32%),
-        linear-gradient(145deg, rgba(30, 36, 50, 0.92), rgba(18, 23, 31, 0.96));
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    box-shadow:
-        0 18px 36px rgba(0, 0, 0, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.045);
-    overflow: hidden;
+    border-radius: 20px;
+    background: rgba(22, 26, 34, 0.8);
+    border: 1px solid #353746FF;
+    overflow: visible;
 }
 
-.filters_panel::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.018) 48%, transparent 100%);
-    pointer-events: none;
-}
-
-.filters_top,
 .filters_grid {
-    position: relative;
-    z-index: 2;
-}
-
-.filters_top {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    column-gap: 20px;
-    margin-bottom: 22px;
+    gap: 18px;
+    overflow: visible;
 }
 
-.filters_title {
+.select_group,
+.number_group {
     display: flex;
     align-items: center;
-    column-gap: 14px;
-    min-width: 0;
+}
 
-    p {
-        color: #f9fafb;
-        font-size: 18px;
-        font-weight: 850;
-        line-height: 1.2;
+.select_group {
+    column-gap: 10px;
+    flex: 0 0 auto;
+}
+
+.filter_divider {
+    flex: 0 0 auto;
+}
+
+.number_group {
+    column-gap: 12px;
+    flex: 1;
+    justify-content: flex-end;
+    min-width: 0;
+}
+
+.select_value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    svg {
+        flex: 0 0 auto;
+        font-size: 14px;
     }
 
     span {
-        display: block;
-        margin-top: 4px;
-        color: #9fa8ba;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-size: 13px;
-        font-weight: 600;
-        line-height: 1.35;
-    }
-}
-
-.filters_icon {
-    width: 46px;
-    height: 46px;
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 16px;
-    background: rgba(141, 166, 255, 0.12);
-    border: 1px solid rgba(141, 166, 255, 0.18);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-
-    svg {
-        color: #8da6ff;
-        font-size: 35px;
-        margin-left: 5px;
-        margin-top: 5px;
     }
 }
 
@@ -184,85 +169,23 @@
     justify-content: center;
     column-gap: 8px;
     padding: 0 14px;
-    border-radius: 13px;
-    color: #cfd7e6;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.82);
     font-size: 13px;
-    font-weight: 800;
-    background: rgba(255, 255, 255, 0.045);
-    border: 1px solid rgba(255, 255, 255, 0.075);
+    font-weight: 600;
+    background: rgba(38, 42, 63, 0.28);
+    border: 1px solid #353746FF;
     cursor: pointer;
-    transition: transform 0.16s, background 0.16s, border-color 0.16s, color 0.16s;
+    transition: background 0.16s, border-color 0.16s, color 0.16s;
 
     svg {
         font-size: 17px;
     }
 
     &:hover {
-        color: #f9fafb;
-        background: rgba(141, 166, 255, 0.1);
-        border-color: rgba(141, 166, 255, 0.18);
-        transform: translateY(-1px);
-    }
-}
-
-.filters_grid {
-    display: grid;
-    grid-template-columns: minmax(190px, 1.1fr) minmax(200px, 1.2fr) repeat(3, minmax(150px, 0.8fr));
-    gap: 14px;
-}
-
-.filter_field {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    row-gap: 9px;
-    min-width: 0;
-    padding: 12px;
-    border-radius: 18px;
-    background: rgba(12, 16, 28, 0.34);
-    border: 1px solid rgba(255, 255, 255, 0.055);
-    transition: background 0.16s, border-color 0.16s;
-
-    span {
-        color: #bac1ce;
-        font-size: 13px;
-        font-weight: 750;
-        padding-left: 2px;
-    }
-
-    select,
-    input {
-        width: 100%;
-        height: 46px;
-        padding: 0 14px;
-        border-radius: 14px;
-        color: #f9fafb;
-        font-size: 14px;
-        font-weight: 700;
-        background: rgba(7, 11, 20, 0.62);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        outline: none;
-        transition: border-color 0.16s, background 0.16s, box-shadow 0.16s;
-    }
-
-    select {
-        cursor: pointer;
-    }
-
-    select:focus,
-    input:focus {
-        border-color: rgba(141, 166, 255, 0.38);
-        background: rgba(16, 22, 38, 0.78);
-        box-shadow: 0 0 0 4px rgba(99, 121, 233, 0.12);
-    }
-
-    &:focus-within {
-        background: rgba(20, 27, 43, 0.5);
-        border-color: rgba(141, 166, 255, 0.16);
-    }
-
-    option {
-        color: #111827;
+        color: #ffffff;
+        background: rgba(58, 65, 97, 0.28);
+        border-color: #45485aff;
     }
 }
 
@@ -300,7 +223,13 @@
     }
 
     .filters_grid {
-        grid-template-columns: repeat(3, minmax(160px, 1fr));
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .number_group {
+        justify-content: flex-start;
+        flex-wrap: wrap;
     }
 }
 
@@ -318,13 +247,34 @@
         flex-direction: column;
     }
 
-    .filters_top {
-        align-items: flex-start;
-        flex-direction: column;
-        row-gap: 16px;
+    .filters_panel {
+        min-width: 0;
+        min-height: auto;
+        padding: 18px;
     }
 
-    .filters_grid {
+    .filters_grid,
+    .select_group,
+    .number_group {
+        width: 100%;
+    }
+
+    .select_group {
+        align-items: flex-start;
+        flex-direction: column;
+        row-gap: 12px;
+    }
+
+    .filter_divider {
+        display: none;
+    }
+
+    .number_group {
+        display: grid;
         grid-template-columns: 1fr;
+    }
+
+    .reset_button {
+        width: 100%;
     }
 }

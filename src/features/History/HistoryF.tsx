@@ -188,7 +188,11 @@ const HistoryF = observer(() => {
 
 
 
-      <SideBar user={{ email: auth.currentUser?.email || 'none', login: auth.currentUser?.displayName || 'none' }} handleLogout={handleLogout} />
+      <SideBar user={{
+        email: auth.currentUser?.email || 'none',
+        login: auth.currentUser?.displayName || 'none',
+        avatarUrl: auth.currentUser?.photoURL || '',
+      }} handleLogout={handleLogout} />
       <div className={styles.main_container}>
         <MainHeader />
         <div className={styles.main_body}>

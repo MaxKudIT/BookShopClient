@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './MainBooksF.module.scss'
 
 
@@ -16,13 +16,15 @@ import { useFirebaseAuth } from '../../shared/hooks/useFirebaseAuth';
 
 import BookList from '../../shared/components/BookList/BookList';
 import MainBooksFilterField from '../../shared/components/FilterField/MainBooksFilterField/MainBooksFilterField';
-import Banner from '../../shared/components/Banner/Banner';
-import { IoSparklesOutline } from 'react-icons/io5';
 import { useStores } from '../../store/context/GloabalContext';
+import type { DateDropDown, GenresDropDown } from '../../store/context/SearchContext';
 
 
 
 const MainBooksF = observer(() => {
+    const [searchValue, setSearchValue] = useState('');
+    const [selectedGenre, setSelectedGenre] = useState<GenresDropDown>('Все жанры');
+    const [selectedSort, setSelectedSort] = useState<DateDropDown>('Сначала новые');
 
     const { logout } = useFirebaseAuth();
     const {
@@ -107,6 +109,31 @@ const MainBooksF = observer(() => {
         getNotMyBooks();
     }, [getNotMyBooks]);
 
+    const filteredBooks = useMemo(() => {
+        const normalizedSearch = searchValue.trim().toLowerCase();
+
+        const filtered = notmybooks.filter((book) => {
+            const matchesSearch = !normalizedSearch ||
+                book.Title.toLowerCase().includes(normalizedSearch) ||
+                book.Author.toLowerCase().includes(normalizedSearch) ||
+                book.Genre.toLowerCase().includes(normalizedSearch);
+
+            const matchesGenre = selectedGenre === 'Все жанры' || book.Genre === selectedGenre;
+
+            return matchesSearch && matchesGenre;
+        });
+
+        if (selectedSort === 'В алфавитном порядке') {
+            return [...filtered].sort((firstBook, secondBook) => (
+                firstBook.Title.localeCompare(secondBook.Title, 'ru')
+            ));
+        }
+
+        return filtered;
+    }, [notmybooks, searchValue, selectedGenre, selectedSort]);
+
+    const hasActiveFilters = Boolean(searchValue.trim() || selectedGenre !== 'Все жанры' || selectedSort !== 'Сначала новые');
+
 
 
 
@@ -117,7 +144,11 @@ const MainBooksF = observer(() => {
 
 
 
-            <SideBar user={{ email: auth.currentUser?.email || 'none', login: auth.currentUser?.displayName || 'none' }} handleLogout={handleLogout} />
+            <SideBar user={{
+                email: auth.currentUser?.email || 'none',
+                login: auth.currentUser?.displayName || 'none',
+                avatarUrl: auth.currentUser?.photoURL || '',
+            }} handleLogout={handleLogout} />
             <div className={styles.main_container}>
                 <MainHeader />
                 <div className={styles.main_body}>
@@ -150,7 +181,14 @@ const MainBooksF = observer(() => {
                             <p style={{ fontSize: 14, color: '#C0C2C8FF' }}>Собирайте, храните и перечитывайте любимые книги.</p>
                         </div>
                     </div>
-                    <MainBooksFilterField />
+                    <MainBooksFilterField
+                        searchValue={searchValue}
+                        selectedGenre={selectedGenre}
+                        selectedSort={selectedSort}
+                        onSearchChange={setSearchValue}
+                        onGenreChange={setSelectedGenre}
+                        onSortChange={setSelectedSort}
+                    />
                     <div className={styles.books_content}>
                         {getNotMyBooksState.loading && (
                             <div className={styles.state_block}>Загружаем книги...</div>
@@ -164,16 +202,16 @@ const MainBooksF = observer(() => {
                             <div className={styles.state_block}>Новых книг пока нет</div>
                         )}
 
-                        {!getNotMyBooksState.loading && !getNotMyBooksState.error && notmybooks.length > 0 && (
-                            <BookList list={notmybooks} viewPage={'home'} />
+                        {!getNotMyBooksState.loading && !getNotMyBooksState.error && notmybooks.length > 0 && filteredBooks.length === 0 && (
+                            <div className={styles.state_block}>
+                                {hasActiveFilters ? 'По этим фильтрам книги не найдены' : 'Новых книг пока нет'}
+                            </div>
                         )}
 
-                        <Banner
-                            icon={IoSparklesOutline}
-                            title='Найдите следующую книгу для своей полки'
-                            description='Откройте рекомендации, добавляйте интересные истории в избранное и возвращайтесь к ним тогда, когда появится настроение читать.'
-                            color='#8da6ff'
-                        />
+                        {!getNotMyBooksState.loading && !getNotMyBooksState.error && filteredBooks.length > 0 && (
+                            <BookList list={filteredBooks} viewPage={'home'} />
+                        )}
+
                     </div>
 
                 </div>
