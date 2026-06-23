@@ -12,6 +12,7 @@ import Logo from "../../Logo/Logo";
 import { IoClose, IoSearchOutline, IoSparklesOutline } from "react-icons/io5";
 import Profile from "../../../../features/Profile/Profile";
 import { useStores } from "../../../../store/context/GloabalContext";
+import { useAdminAccess } from "../../../hooks/useAdminAccess";
 
 
 type SelectionHeaderProps = {
@@ -39,6 +40,7 @@ const SelectionHeader: FC<SelectionHeaderProps> = observer(({ paddingSides }) =>
       getStatus,
     },
   } = useStores();
+  const { isAdmin } = useAdminAccess();
 
   const navigationMenu: NavItem[] = [
     {
@@ -57,7 +59,11 @@ const SelectionHeader: FC<SelectionHeaderProps> = observer(({ paddingSides }) =>
       title: 'Рекомендации',
       path: '/recomms'
     },
-  ]
+  ];
+
+  const visibleNavigationMenu = isAdmin
+    ? [...navigationMenu, { title: 'Админ', path: '/admin' }]
+    : navigationMenu;
 
   const { setsearchingValue } = useSearch()
   const navigate = useNavigate();
@@ -202,7 +208,7 @@ const SelectionHeader: FC<SelectionHeaderProps> = observer(({ paddingSides }) =>
           </div>
         ) : (
           <div className={styles.header_refs_container}>
-            {navigationMenu.map(el => (
+            {visibleNavigationMenu.map(el => (
               <button
                 key={el.path}
                 type="button"

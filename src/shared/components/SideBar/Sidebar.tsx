@@ -1,5 +1,5 @@
 import styles from './Sidebar.module.scss'
-import { MdOutlineGridView, MdOutlineShoppingCart, MdOutlineHistory, MdAutoAwesome } from "react-icons/md";
+import { MdAdminPanelSettings, MdOutlineGridView, MdOutlineShoppingCart, MdOutlineHistory, MdAutoAwesome } from "react-icons/md";
 import { FaRegCompass } from "react-icons/fa6";
 import { FaRegBookmark } from "react-icons/fa";
 import { RxExit } from "react-icons/rx";
@@ -9,6 +9,7 @@ import Logo from '../Logo/Logo';
 import { LuLibraryBig } from 'react-icons/lu';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Profile from '../../../features/Profile/Profile';
+import { useAdminAccess } from '../../hooks/useAdminAccess';
 
 export type SideBarType = {
     handleLogout: () => void,
@@ -31,6 +32,7 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
     const location = useLocation();
     const [profileOpen, setProfileOpen] = useState(false);
     const [profileUser, setProfileUser] = useState(user);
+    const { isAdmin } = useAdminAccess();
 
     const navigationMenu: NavItem[] = [
         { icon: <MdOutlineGridView style={{ fontSize: 16 }} />, title: 'Главная', path: '/' },
@@ -45,9 +47,14 @@ const SideBar: FC<SideBarType> = ({ handleLogout, user }) => {
         { icon: <MdOutlineHistory style={{ fontSize: 16 }} />, title: 'История чтения', path: '/history', meta: 'Новое' },
     ];
 
+    const adminMenu: NavItem[] = isAdmin
+        ? [{ icon: <MdAdminPanelSettings style={{ fontSize: 17 }} />, title: 'Админ', path: '/admin', meta: 'Panel' }]
+        : [];
+
     const menuSections = [
         { title: 'ОСНОВНОЕ', items: navigationMenu },
         { title: 'ПЕРСОНАЛЬНОЕ', items: libraryMenu },
+        ...(adminMenu.length ? [{ title: 'УПРАВЛЕНИЕ', items: adminMenu }] : []),
     ];
 
     useEffect(() => {

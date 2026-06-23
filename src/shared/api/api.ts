@@ -18,6 +18,7 @@ import { StatsA } from './Stats/StatsA'
 import { SubscriptionPlansA } from './SubscriptionPlans/SubscriptionPlansA'
 import { UsersBooksA } from './UsersBooks/UsersBooksA'
 import { UserSubA } from './UserSub/UserSubA'
+import { AdminA } from './Admin/AdminA'
 
 
 export const api = axios.create({baseURL: 'http://192.168.0.109:3000/'})
@@ -42,6 +43,7 @@ class Api {
     public readonly subscriptionPlans: SubscriptionPlansA
     public readonly usersBooks: UsersBooksA
     public readonly userSubscriptions: UserSubA
+    public readonly admin: AdminA
     
     constructor(httpActions: HttpActions) {
         this.aiChats = new AIChatA(httpActions)
@@ -62,6 +64,7 @@ class Api {
         this.subscriptionPlans = new SubscriptionPlansA(httpActions)
         this.usersBooks = new UsersBooksA(httpActions)
         this.userSubscriptions = new UserSubA(httpActions)
+        this.admin = new AdminA(httpActions)
     }
 }
 

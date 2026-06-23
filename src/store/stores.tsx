@@ -14,6 +14,7 @@ import { BookRevsStore } from "../features/BookRevs/mobx/BookRevsStore";
 import { BookViewsStore } from "../features/BookViews/mobx/BookViewsStore";
 import { RecommendationStore } from "../features/Recommendation/mobx/RecommendationStore";
 import { BookSearchStore } from "../features/Search/mobx/BookSearchStore";
+import { AdminStore } from "../features/Admin/mobx/AdminStore";
 
 export type Stores = {
     readonly aiChatStore: AiChatStore
@@ -29,6 +30,7 @@ export type Stores = {
     readonly bookViewsStore: BookViewsStore
     readonly recommendationStore: RecommendationStore
     readonly bookSearchStore: BookSearchStore
+    readonly adminStore: AdminStore
 }
 
 const httpActions = new HttpActions();
@@ -48,7 +50,8 @@ const stores: Stores = {
     bookRevsStore: new BookRevsStore(api),
     bookViewsStore: new BookViewsStore(api),
     recommendationStore: new RecommendationStore(api),
-    bookSearchStore: new BookSearchStore(api)
+    bookSearchStore: new BookSearchStore(api),
+    adminStore: new AdminStore(api)
 }
 
 export {stores}

@@ -31,6 +31,25 @@ export type BookSearchParams = {
     offset?: number
 }
 
+export type AdminBookCreate = {
+    title: string
+    author: string
+    genre: Genres
+    price: number
+    discount: number
+    imageUrl: string
+    description: string
+    aboutBook: string
+    quote: string
+    readingTime: string
+    pages: string[]
+}
+
+export type AdminBookCreateResult = {
+    bookId: string
+    pagesCount: number
+}
+
 export type BookInfoT = {
     Id: string
     Title: string

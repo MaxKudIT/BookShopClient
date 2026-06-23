@@ -1,8 +1,8 @@
 // app/routing/loaders.ts
 import { redirect, type LoaderFunctionArgs } from 'react-router-dom';
 import { getAuth } from 'firebase/auth';
-import axios from 'axios';
 import { api } from '../api/api';
+import { isAdminUser } from '../helpers/adminAccess';
 
 
 const waitForAuth = async () => {
@@ -74,4 +74,23 @@ export const publicLoader = async () => {
   }
 
   return null;
+};
+
+export const adminLoader = async () => {
+  const user = await waitForAuth();
+
+  if (!user) {
+    const response = redirect('/auth');
+    response.headers.set('X-Replace-History', 'true');
+    return response;
+  }
+
+  const isAdmin = await isAdminUser(user);
+  if (!isAdmin) {
+    const response = redirect('/');
+    response.headers.set('X-Replace-History', 'true');
+    return response;
+  }
+
+  return { user };
 };

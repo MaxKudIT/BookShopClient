@@ -10,7 +10,7 @@ import { MyBooksSearchingProvider, SearchingProvider } from './store/context/Sea
 import BookInfoPage from './pages/BookInfo/BookInfoPage'
 import MyBooksPage from './pages/MyBooks/MyBooksPage'
 import BookPage from './pages/BookPage/BookPage'
-import { protectedLoader, protectedPurchaseLoader, publicLoader } from './shared/routing/loaders'
+import { adminLoader, protectedLoader, publicLoader } from './shared/routing/loaders'
 import { StoreContext } from './store/context/GloabalContext'
 import { stores } from './store/stores'
 import Cart from './pages/Cart/Cart'
@@ -20,6 +20,7 @@ import Recomms from './pages/Recomms/Recomms'
 import MainBooksPage from './pages/MainBooks/MainBooksPage'
 import AiChat from './features/AiChat/AiChat'
 import SearchPage from './pages/Search/SearchPage'
+import AdminPage from './pages/Admin/AdminPage'
 
 const withAiChat = (page: ReactElement) => (
     <>
@@ -83,6 +84,11 @@ const router = createBrowserRouter([
         element: withAiChat(<History/>),
         path: '/history',
         loader: protectedLoader
+    },
+    {
+        element: <AdminPage />,
+        path: '/admin',
+        loader: adminLoader
     }
 ])
 
