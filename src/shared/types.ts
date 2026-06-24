@@ -191,6 +191,7 @@ export type ReadingBookPreview = {
     Genre: Genres
     CreatedDate: string
     PagesCount: number
+    ProgressPercent: number
     LastStartedAt: string
 }
 

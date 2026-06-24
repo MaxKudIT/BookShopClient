@@ -5,7 +5,12 @@ import type { ReadingBookPreview } from '../../../types';
 import { useNavigate } from 'react-router-dom';
 
 const HistoryPreview: FC<{ book: ReadingBookPreview }> = ({ book }) => {
-    const progress = Math.min(96, Math.max(36, Math.round(book.Rate * 18)));
+    const rawBook = book as ReadingBookPreview & {
+        progressPercent?: number;
+        progress_percent?: number;
+    };
+    const progressValue = rawBook.ProgressPercent ?? rawBook.progressPercent ?? rawBook.progress_percent ?? 10;
+    const progress = Math.min(100, Math.max(0, Math.round(progressValue)));
 
     const navigate = useNavigate();
 

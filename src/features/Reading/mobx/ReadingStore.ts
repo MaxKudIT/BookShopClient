@@ -16,6 +16,62 @@ class ReadingStore {
 
     private api: Api;
 
+    private getBookProgress(book: ReadingBookPreview): number {
+        const rawBook = book as ReadingBookPreview & {
+            progressPercent?: number;
+            progress_percent?: number;
+        };
+
+        return rawBook.ProgressPercent ?? rawBook.progressPercent ?? rawBook.progress_percent ?? 10;
+    }
+
+    private normalizeLastReadingBooks(books: ReadingBookPreview[]): ReadingBookPreview[] {
+        return books.map((book) => ({
+            ...book,
+            ProgressPercent: this.getBookProgress(book),
+        }));
+    }
+
+    private getReadingProgress(reading: ReadingState): number {
+        const rawReading = reading as ReadingState & {
+            progressPercent?: number;
+            progress_percent?: number;
+        };
+
+        return rawReading.ProgressPercent ?? rawReading.progressPercent ?? rawReading.progress_percent ?? 10;
+    }
+
+    private calculateProgress(currentPage: number, pagesCount: number): number {
+        if (!pagesCount || pagesCount <= 0) {
+            return 10;
+        }
+
+        const clampedPage = Math.min(Math.max(currentPage, 1), pagesCount);
+        return Math.min(100, Math.max(10, Math.floor((clampedPage * 100) / pagesCount)));
+    }
+
+    private syncLastReadingBookProgress(bookId: string, progressPercent: number) {
+        this.lastReadingBooks = this.lastReadingBooks.map((book) => (
+            book.Id === bookId
+                ? { ...book, ProgressPercent: progressPercent }
+                : book
+        ));
+    }
+
+    public setLocalReadingProgress(bookId: string, currentPage: number, pagesCount: number) {
+        const progressPercent = this.calculateProgress(currentPage, pagesCount);
+        const clampedPage = pagesCount > 0 ? Math.min(Math.max(currentPage, 1), pagesCount) : currentPage;
+
+        this.readingState = {
+            SessionId: this.readingState?.SessionId || '',
+            BookId: bookId,
+            Status: progressPercent >= 100 ? 'finished' : 'reading',
+            CurrentPage: clampedPage,
+            ProgressPercent: progressPercent,
+        };
+        this.syncLastReadingBookProgress(bookId, progressPercent);
+    }
+
     constructor(api: Api) {
         makeAutoObservable(this);
         this.api = api;
@@ -25,6 +81,7 @@ class ReadingStore {
         this.finishReading = this.finishReading.bind(this);
         this.closeReadingSession = this.closeReadingSession.bind(this);
         this.getLastReadingBooks = this.getLastReadingBooks.bind(this);
+        this.setLocalReadingProgress = this.setLocalReadingProgress.bind(this);
     }
 
     public startReading = flow(function* (this: ReadingStore, bookId: string)
@@ -39,7 +96,9 @@ class ReadingStore {
                 return null;
             }
 
-            this.readingState = result;
+            const progressPercent = this.getReadingProgress(result);
+            this.readingState = { ...result, ProgressPercent: progressPercent };
+            this.syncLastReadingBookProgress(bookId, progressPercent);
             this.startReadingState = { loading: false, error: null };
             return result;
         } catch (err: any) {
@@ -64,7 +123,9 @@ class ReadingStore {
                 ? result.SessionId
                 : this.readingState?.SessionId || '';
 
-            this.readingState = { ...result, SessionId: sessionId };
+            const progressPercent = this.getReadingProgress(result);
+            this.readingState = { ...result, SessionId: sessionId, ProgressPercent: progressPercent };
+            this.syncLastReadingBookProgress(bookId, progressPercent);
             this.updateProgressState = { loading: false, error: null };
             return this.readingState;
         } catch (err: any) {
@@ -85,7 +146,9 @@ class ReadingStore {
                 return null;
             }
 
-            this.readingState = result;
+            const progressPercent = this.getReadingProgress(result);
+            this.readingState = { ...result, ProgressPercent: progressPercent };
+            this.syncLastReadingBookProgress(result.BookId, progressPercent);
             this.finishReadingState = { loading: false, error: null };
             return result;
         } catch (err: any) {
@@ -133,7 +196,7 @@ class ReadingStore {
                 return;
             }
 
-            this.lastReadingBooks = result;
+            this.lastReadingBooks = this.normalizeLastReadingBooks(result);
             this.getLastReadingBooksState = { loading: false, error: null };
         } catch (err: any) {
             this.getLastReadingBooksState = { loading: false, error: err?.message || 'Failed to get last reading books' };

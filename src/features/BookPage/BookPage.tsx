@@ -28,6 +28,7 @@ const BookPageF = observer(() => {
     const closedSessionIdsRef = useRef(new Set<string>());
     const isMountedRef = useRef(false);
     const isStartingSessionRef = useRef(false);
+    const lastProgressRequestRef = useRef<string | null>(null);
     const startReadingRef = useRef<((bookId: string) => Promise<any>) | null>(null);
     const closeReadingSessionRef = useRef<((sessionId: string) => Promise<any>) | null>(null);
     const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
@@ -78,16 +79,6 @@ const BookPageF = observer(() => {
         };
     }, [isResizing]);
 
-
-    const onPageChange = (page: number) => {
-        if (!id || !page || page < 1) {
-            console.error('Параметров не обнаружено');
-            return
-        }
-
-        navigate(`/books/${id}/pages/${page}`)
-    }
-
     const {
         bookPageStore: {
             page,
@@ -108,6 +99,7 @@ const BookPageF = observer(() => {
             startReadingState,
             updateProgress,
             updateProgressState,
+            setLocalReadingProgress,
             finishReading,
             finishReadingState,
             closeReadingSession,
@@ -121,6 +113,37 @@ const BookPageF = observer(() => {
 
     startReadingRef.current = startReading;
     closeReadingSessionRef.current = closeReadingSession;
+
+    const saveReadingProgress = useCallback((page: number) => {
+        if (!id || !isValidPage || !page || page < 1 || !pagesCount) {
+            return;
+        }
+
+        const normalizedPage = Math.min(page, pagesCount);
+        setLocalReadingProgress(id, normalizedPage, pagesCount);
+
+        if (!activeSessionId) {
+            return;
+        }
+
+        const progressRequestKey = `${id}:${activeSessionId}:${normalizedPage}`;
+        if (lastProgressRequestRef.current === progressRequestKey) {
+            return;
+        }
+
+        lastProgressRequestRef.current = progressRequestKey;
+        updateProgress(id, normalizedPage);
+    }, [activeSessionId, id, isValidPage, pagesCount, setLocalReadingProgress, updateProgress]);
+
+    const onPageChange = useCallback((page: number) => {
+        if (!id || !page || page < 1 || (pagesCount && page > pagesCount)) {
+            console.error('Параметров не обнаружено');
+            return;
+        }
+
+        saveReadingProgress(page);
+        navigate(`/books/${id}/pages/${page}`);
+    }, [id, navigate, pagesCount, saveReadingProgress]);
 
     useEffect(() => {
         isMountedRef.current = true;
@@ -236,8 +259,8 @@ const BookPageF = observer(() => {
             return;
         }
 
-        updateProgress(id, currentPage);
-    }, [id, currentPage, isValidPage, activeSessionId, updateProgress]);
+        saveReadingProgress(currentPage);
+    }, [id, currentPage, isValidPage, activeSessionId, saveReadingProgress]);
 
     useEffect(() => {
         setSelectedRating(0);
